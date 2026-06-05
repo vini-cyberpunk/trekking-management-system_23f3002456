@@ -1,0 +1,113 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+	<meta charset="UTF-8">
+	<meta name="viewport" content="width=device-width, initial-scale=1.0">
+	
+	<link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.8/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384
+	sRIl4kxILFvY47J16cr9ZwB07vP4J8+LH7qKQnuqkuIAvNWLzeN8tE5YBujZqJLB" crossorigin="anonymous">
+	
+	<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.13.1/font/bootstrap-icons.min.css">
+	
+	<link href="{{ url_for('static', filename='css/style.css') }}" rel="stylesheet">
+	
+	<title>
+		{% block title %}
+		TREKO
+		{% endblock %}
+	</title>
+	
+</head>
+<body>
+	{% block navbar %}
+	<nav class="navbar navbar-expand-lg ps-2 pe-2 border-bottom shadow-sm bg-body-tertiary">
+		<div class="container-fluid">
+			<a class="navbar-brand" href="/">TREKO</a>
+			<div class="ms-auto">
+				{% if current_user.is_authenticated %}
+					<a class="btn btn-danger auth-btn" href="{{url_for('auth.logout')}}">Logout</a>
+				{% else %}
+					<a class="btn btn-outline-primary auth-btn me-2" href="{{url_for('auth.login')}}">Login</a>
+					<a class="btn btn-outline-secondary auth-btn" href="{{url_for('auth.register')}}">Register</a>
+				{% endif %}
+			</div>
+		</div>
+	</nav>
+	{% endblock %}
+	
+	{% block body_middle %}
+	<div class="container my-4">
+		<div id="carouselTrekkingAutoplaying" class="carousel slide rounded-5 shadow-lg overflow-hidden" data-bs-ride="carousel">
+			<div class="carousel-inner">
+				<div class="carousel-item">
+					<img src="static/images/carousel5.jpg" class="d-block w-100" alt="...">
+					
+					<div class="position-absolute bottom-0 start-0 w-100"
+						style="height: 40%; background: linear-gradient(to top, rgba(0,0,0,0.8), transparent);">
+					</div>
+					
+					<div class="carousel-caption d-none d-md-block">
+						<h5>Chadar Trek, Ladakh</h5>
+						<p>A trek through Ladakh's frozen wilderness.</p>
+					</div>
+				</div>
+				<div class="carousel-item active">
+					<img src="static/images/carousel6_ValleyOfFlowers.jpg" class="d-block w-100" alt="...">
+					
+					<div class="position-absolute bottom-0 start-0 w-100"
+						style="height: 40%; background: linear-gradient(to top, rgba(0,0,0,0.8), transparent);">
+					</div>
+					
+					<div class="carousel-caption d-none d-md-block">
+						<h5>Valley of Flowers, Chamoli Uttarakhand</h5>
+						<p>Nature's most colorful Himalayan trek.</p>
+					</div>
+				</div>
+				<div class="carousel-item">
+					<img src="static/images/carousel8_TharDessert.jpg" class="d-block w-100" alt="...">
+					
+					<div class="position-absolute bottom-0 start-0 w-100"
+						style="height: 40%; background: linear-gradient(to top, rgba(0,0,0,0.8), transparent);">
+					</div>
+					
+					<div class="carousel-caption d-none d-md-block">
+						<h5>Thar Dessert, Jaisalmer Rajasthan</h5>
+						<p>A trek through endless golden sands.</p>
+					</div>
+				</div>
+				<div class="carousel-item">
+					<img src="static/images/carousel7_MountAbu.jpg" class="d-block w-100" alt="...">
+					
+					<div class="position-absolute bottom-0 start-0 w-100"
+						style="height: 40%; background: linear-gradient(to top, rgba(0,0,0,0.8), transparent);">
+					</div>
+					
+					<div class="carousel-caption d-none d-md-block">
+						<h5>Mount Abu, Rajasthan</h5>
+						<p>A scenic trek through the Aravallis.</p>
+					</div>
+				</div>
+			</div>
+			<button class="carousel-control-prev" type="button" data-bs-target="#carouselTrekkingAutoplaying" data-bs-slide="prev">
+				<span class="carousel-control-prev-icon" aria-hidden="true"></span>
+				<span class="visually-hidden">Previous</span>
+			</button>
+			<button class="carousel-control-next" type="button" data-bs-target="#carouselTrekkingAutoplaying" data-bs-slide="next">
+				<span class="carousel-control-next-icon" aria-hidden="true"></span>
+				<span class="visually-hidden">Next</span>
+			</button>
+		</div>
+	</div>
+	
+	<div class="container-fluid mt-2">
+		<h1> Get Started! </h1>
+		<p> Your Trekking Buddy Right Here </p>
+		<p> Login </p>
+		<p> Get Started </p>
+	</div>
+	{% endblock %}
+	
+	<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.8/dist/js/bootstrap.bundle.min.js" integrity="sha384-FKyoEForCGlyvwx9Hj09JcYn3nv7wiPVlz7YYwJrWVcXK/BmnVDxM+D2scQbITxI" crossorigin="anonymous"></script>
+</body>
+</html>
+

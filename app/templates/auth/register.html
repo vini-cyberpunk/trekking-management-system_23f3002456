@@ -1,0 +1,90 @@
+{% extends "base.html" %}
+
+{% block title %}
+Register
+{% endblock %}
+
+{% block body_middle %}
+<div class="container-fluid vh-100">
+    <div class="row h-100">
+
+        <div class="col-md-6 d-none d-md-flex justify-content-center align-items-center bg-light">
+            <img src="{{ url_for('static', filename='images/register.svg') }}"
+                 class="img-fluid"
+                 alt="Register Illustration">
+        </div>
+
+        <div class="col-md-6 d-flex justify-content-center align-items-center">
+            <div class="card auth-card shadow-lg rounded-4 p-5">
+            
+                <h3 class="text-center mb-4">
+                    Welcome to TREKO
+                </h3>
+                
+                <form action="{{ url_for('auth.login') }}" method="POST">
+                    <div class="mb-3">
+                        <input
+                            type="text"
+                            name="username"
+                            class="form-control form-control-lg"
+                            placeholder="Username"
+                            required>
+                    </div>
+                    
+                    <div class="mb-3">
+                        <input
+                            type="email"
+                            name="email"
+                            class="form-control form-control-lg"
+                            placeholder="E-mail"
+                            required>
+                    </div>
+                    
+                    <div class="mb-3">
+                        <input
+                            type="tel"
+                            name="phone"
+                            class="form-control form-control-lg"
+                            placeholder="Contact No. (optional)"
+                            pattern="[0-9]{10}">
+                    </div>
+
+                    <div class="mb-3">
+                        <input
+                            type="password"
+                            name="password"
+                            class="form-control form-control-lg"
+                            placeholder="Password"
+                            required>
+                    </div>
+                    
+					<div class="mb-3">
+						<label class="form-label">Register As</label>
+
+						<select name="role" class="form-select" required>
+							<option value="" selected disabled>
+								Select Role
+							</option>
+
+							<option value="trekker">
+								Trekker
+							</option>
+
+							<option value="staff">
+								Staff
+							</option>
+						</select>
+					</div>
+
+                    <button
+                        type="submit"
+                        class="btn btn-primary w-100 btn-lg mt-5">
+                        Register
+                    </button>
+                </form>
+                
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}

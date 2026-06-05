@@ -1,0 +1,54 @@
+{% extends "base.html" %}
+
+{% block title %}
+Login
+{% endblock %}
+
+{% block body_middle %}
+<div class="container-fluid vh-100">
+    <div class="row h-100">
+
+        <div class="col-md-6 d-none d-md-flex justify-content-center align-items-center bg-light">
+            <img src="{{ url_for('static', filename='images/login.svg') }}"
+                 class="img-fluid"
+                 alt="Login Illustration">
+        </div>
+
+        <div class="col-md-6 d-flex justify-content-center align-items-center">
+            <div class="card auth-card shadow-lg rounded-4 p-5">
+            
+                <h3 class="text-center mb-4">
+                    Login to your account
+                </h3>
+                
+                <form action="{{ url_for('auth.login') }}" method="POST">
+                    <div class="mb-3">
+                        <input
+                            type="email"
+                            name="email"
+                            class="form-control form-control-lg"
+                            placeholder="Email"
+                            required>
+                    </div>
+
+                    <div class="mb-4">
+                        <input
+                            type="password"
+                            name="password"
+                            class="form-control form-control-lg"
+                            placeholder="Password"
+                            required>
+                    </div>
+
+                    <button
+                        type="submit"
+                        class="btn btn-primary w-100 btn-lg mt-5">
+                        Login
+                    </button>
+                </form>
+                
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}

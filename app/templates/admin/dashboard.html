@@ -1,0 +1,51 @@
+{% extends "base.html" %}
+
+{% block title %}
+Admin
+{% endblock %}
+
+{% block body_middle %}
+<div class="container-fluid">
+	<div class="row">
+		<div class="col-auto admin-sidebar min-vh-100 bg-light" style="min-width:180px;">
+
+			<div class="sidebar-header">
+				<button id="sidebar-toggle" style="border: none;">
+					<i class="bi bi-layout-sidebar"></i>
+				</button>
+			</div>
+
+			<div class="sidebar-nav d-flex flex-column gap-4">
+				<a class="nav-link" href="#"> 
+					<i class="bi bi-house-door fs-4 me-1"></i>
+					<span class="fs-5">Dashboard</span>
+				</a>
+			
+				<a class="nav-link" href="#">
+					<i class="bi bi-people fs-4 me-1"></i>
+					<span class="fs-5"> Users </span>
+				</a>
+				
+				<a class="nav-link" href="#">
+					<i class="bi bi-person-workspace fs-4 me-1"></i>
+					<span class="fs-5"> Staff </span>
+				</a>
+				
+				<a class="nav-link" href="#">
+					<i class="bi bi-leaf fs-4 me-1"></i>
+					<span class="fs-5"> Treks </span>
+				</a>
+				
+				<a class="nav-link" href="#">
+					<i class="bi bi-journal-text fs-4 me-1"></i>
+					<span class="fs-5"> Booking </span>
+				</a>
+			</div>
+		</div>
+		
+		<div class="col min-vh-100">
+			<h1 class="dashboard-header text-left"> Admin Dashboard </h1>
+		</div>
+	</div>
+</div>	
+{% endblock %}
