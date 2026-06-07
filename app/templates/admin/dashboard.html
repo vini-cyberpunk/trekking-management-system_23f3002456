@@ -1,13 +1,13 @@
 {% extends "base.html" %}
 
 {% block title %}
-Admin
+Dashboard
 {% endblock %}
 
 {% block body_middle %}
 <div class="container-fluid">
 	<div class="row">
-		<div class="col-auto admin-sidebar min-vh-100 bg-light" style="min-width:180px;">
+		<div class="col-auto admin-sidebar min-vh-100 bg-light" style="min-width:175px;">
 
 			<div class="sidebar-header">
 				<button id="sidebar-toggle" style="border: none;">
@@ -16,9 +16,9 @@ Admin
 			</div>
 
 			<div class="sidebar-nav d-flex flex-column gap-4">
-				<a class="nav-link" href="#"> 
+				<a class="nav-link active" href="#"> 
 					<i class="bi bi-house-door fs-4 me-1"></i>
-					<span class="fs-5">Dashboard</span>
+					<span class="fs-5"> Dashboard </span>
 				</a>
 			
 				<a class="nav-link" href="#">
@@ -45,6 +45,34 @@ Admin
 		
 		<div class="col min-vh-100">
 			<h1 class="dashboard-header text-left"> Admin Dashboard </h1>
+			<div class="row">
+				<div class="col">
+					<div class="card d-flex flex-column align-items-center">
+						<div class="card-body">Total Bookings</div>
+						<div class="card-body">{{ total_bookings }}</div>
+					</div>
+				</div>
+				
+				<div class="col">
+					<div class="card d-flex flex-column align-items-center">
+						<div class="card-body">Total Treks</div>
+						<div class="card-body">{{ total_treks }}</div>
+					</div>
+				</div>
+				
+				<div class="col">
+					<div class="card d-flex flex-column align-items-center">
+						<div class="card-body">Total Users</div>
+						<div class="card-body">{{ total_users }}</div>
+					</div>
+				</div>
+				
+				<div class="col">
+					<div class="card d-flex flex-column align-items-center">
+						<div class="card-body">Total Staff</div>
+						<div class="card-body">{{ total_staff }}</div>
+					</div>
+				</div>
 		</div>
 	</div>
 </div>	

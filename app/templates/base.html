@@ -22,7 +22,10 @@
 	{% block navbar %}
 	<nav class="navbar navbar-expand-lg ps-2 pe-2 border-bottom shadow-sm bg-body-tertiary">
 		<div class="container-fluid">
-			<a class="navbar-brand" href="/">TREKO</a>
+			<a class="navbar-brand" href="/">
+				<span>TREKO</span>
+				<span class="d-none d-lg-inline"> - Your Trekking Buddy</span>
+			</a>
 			<div class="ms-auto">
 				{% if current_user.is_authenticated %}
 					<a class="btn btn-danger auth-btn" href="{{url_for('auth.logout')}}">Logout</a>
