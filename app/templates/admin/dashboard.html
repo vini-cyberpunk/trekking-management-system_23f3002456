@@ -1,394 +1,319 @@
-{% extends "base.html" %}
+{% extends "admin/admin_base.html" %}
 
 {% block title %}
 Dashboard
 {% endblock %}
 
-{% block body_middle %}
-<div class="container-fluid">
-	<div class="row">
-		<div class="col-auto admin-sidebar min-vh-100 bg-light">
+{% block main_content %}
 
-			<div class="sidebar-nav d-flex flex-column gap-4">
-				<a class="nav-link active" href="#"> 
-					<i class="bi bi-house-door fs-4 me-1"></i>
-					<span class="fs-5"> Dashboard </span>
-				</a>
-			
-				<a class="nav-link" href="#">
-					<i class="bi bi-people fs-4 me-1"></i>
-					<span class="fs-5"> Users </span>
-				</a>
-				
-				<a class="nav-link" href="#">
-					<i class="bi bi-person-workspace fs-4 me-1"></i>
-					<span class="fs-5"> Staff </span>
-				</a>
-				
-				<a class="nav-link" href="#">
-					<i class="bi bi-leaf fs-4 me-1"></i>
-					<span class="fs-5"> Treks </span>
-				</a>
-				
-				<a class="nav-link" href="#">
-					<i class="bi bi-journal-text fs-4 me-1"></i>
-					<span class="fs-5"> Booking </span>
-				</a>
-			</div>
+<h1 class="dashboard-header text-left"> Admin Dashboard </h1>
+
+<div class="row">
+	<div class="col">
+		<div class="card d-flex flex-column align-items-center">
+			<div class="card-body">Total Bookings</div>
+			<div class="card-body">{{ total_bookings }}</div>
 		</div>
-		
-		<div class="col min-vh-100">
-		
-			<div class="nav">
-				<div class="sidebar-toggle d-flex align-items-center">
-					<button id="sidebar-toggle" class="btn">
-						<i class="bi bi-list"></i>
-					</button>
-				</div>
+	</div>
+	
+	<div class="col">
+		<div class="card d-flex flex-column align-items-center">
+			<div class="card-body">Total Treks</div>
+			<div class="card-body">{{ total_treks }}</div>
+		</div>
+	</div>
+	
+	<div class="col">
+		<div class="card d-flex flex-column align-items-center">
+			<div class="card-body">Total Users</div>
+			<div class="card-body">{{ total_users }}</div>
+		</div>
+	</div>
+	
+	<div class="col">
+		<div class="card d-flex flex-column align-items-center">
+			<div class="card-body">Total Staff</div>
+			<div class="card-body">{{ total_staff }}</div>
+		</div>
+	</div>
+</div>
 
-				<h1 class="dashboard-header text-left"> Admin Dashboard </h1>
+<div class="row mt-3">
+	<div class="col">
+		<div class="card">
+		
+			<div class="card-header"> Recent Bookings </div>
+		
+			<div class="card-body">
+				<table class="table">
+					<thead>
+						<tr>
+							<th scope="col"> Booking ID </th>
+							<th scope="col"> User ID </th>
+							<th scope="col"> Trek ID </th>
+							<th scope="col"> Booking Date </th>
+							<th scope="col"> Status </th>
+							<th scope="col"> Action </th>
+						</tr>
+					</thead>
+					
+					<tbody>
+						{% if recent_bookings %}
+							{% for booking in recent_bookings %}
+							<tr>
+								<td>{{ booking.booking_id }}</td>
+								<td>{{ booking.user_id }}</td>
+								<td>{{ booking.trek_id }}</td>
+								<td>{{ booking.booking_date }}</td>
+								<td>
+									<select class="form-select form-select-sm">
+										<option value="booked"
+										{% if trek.status == "booked" %}selected{% endif %} >
+											Booked 
+										</option>
+										
+										<option value="cancelled"
+										{% if trek.status == "cancelled" %}selected{% endif %} >
+											Cancelled 
+										</option>
+										
+										<option value="completed"
+										{% if trek.status == "completed" %}selected{% endif %} >
+											Completed 
+										</option>
+									</select>
+								</td>
+								<td>
+									<button class="btn"> <i class="bi bi-floppy"></i> </button>
+									<button class="btn"> <i class="bi bi-pencil-square"></i> </button>
+									<button class="btn"> <i class="bi bi-trash"></i> </button>
+								</td>
+							</tr>
+							{% endfor %}
+						{% else %}
+						<tr> 
+							<td colspan="6">No Bookings yet </td>
+						</tr>
+						{% endif %}
+					</tbody>
+				</table>
 			</div>
 			
-			<div class="row">
-				<div class="col">
-					<div class="card d-flex flex-column align-items-center">
-						<div class="card-body">Total Bookings</div>
-						<div class="card-body">{{ total_bookings }}</div>
-					</div>
-				</div>
-				
-				<div class="col">
-					<div class="card d-flex flex-column align-items-center">
-						<div class="card-body">Total Treks</div>
-						<div class="card-body">{{ total_treks }}</div>
-					</div>
-				</div>
-				
-				<div class="col">
-					<div class="card d-flex flex-column align-items-center">
-						<div class="card-body">Total Users</div>
-						<div class="card-body">{{ total_users }}</div>
-					</div>
-				</div>
-				
-				<div class="col">
-					<div class="card d-flex flex-column align-items-center">
-						<div class="card-body">Total Staff</div>
-						<div class="card-body">{{ total_staff }}</div>
-					</div>
-				</div>
-			</div>
-			
-			<div class="row mt-3">
-				<div class="col">
-					<div class="card">
-					
-						<div class="card-header"> Recent Bookings </div>
-					
-						<div class="card-body">
-							<table class="table">
-								<thead>
-									<tr>
-										<th scope="col"> Booking ID </th>
-										<th scope="col"> User ID </th>
-										<th scope="col"> Trek ID </th>
-										<th scope="col"> Booking Date </th>
-										<th scope="col"> Status </th>
-										<th scope="col"> Action </th>
-									</tr>
-								</thead>
-								
-								<tbody>
-									{% if recent_bookings %}
-										{% for booking in recent_bookings %}
-										<tr>
-											<td>{{ booking.booking_id }}</td>
-											<td>{{ booking.user_id }}</td>
-											<td>{{ booking.trek_id }}</td>
-											<td>{{ booking.booking_date }}</td>
-											<td>
-												<select class="form-select form-select-sm">
-													<option value="booked"
-													{% if trek.status == "booked" %}selected{% endif %} >
-														Booked 
-													</option>
-													
-													<option value="cancelled"
-													{% if trek.status == "cancelled" %}selected{% endif %} >
-														Cancelled 
-													</option>
-													
-													<option value="completed"
-													{% if trek.status == "completed" %}selected{% endif %} >
-														Completed 
-													</option>
-												</select>
-											</td>
-											<td> <button class="btn"> View </button>
-										</tr>
-										{% endfor %}
-									{% else %}
-									<tr> 
-										<td colspan="6">No Bookings yet </td>
-									</tr>
-									{% endif %}
-								</tbody>
-							</table>
-						</div>
-
-					</div>
-				</div>
-
-				<div class="col">
-					<div class="card">
-						<div class="card-header"> Recent Staff Registrations </div>
-
-						<div class="card-body">
-
-							<table class="table">
-								<thead>
-									<tr>
-										<th scope="col"> Staff ID </th>
-										<th scope="col"> Name </th>
-										<th scope="col"> Contact </th>
-										<th scope="col"> Status </th>
-										<th scope="col"> Action </th>
-									</tr>
-								</thead>
-								
-								<tbody>
-									{% if recent_staff %}
-										{% for staff in recent_staff %}
-										<tr>
-											<td>{{ staff.staff_id }}</td>
-											<td>{{ staff.staff_name }}</td>
-											<td>{{ staff.staff_contact }}</td>
-											<td>
-												<select class="form-select form-select-sm">
-													<option value="active"
-													{% if trek.status == "active" %}selected{% endif %} >
-														Active 
-													</option>
-													
-													<option value="inactive"
-													{% if trek.status == "inactive" %}selected{% endif %} >
-														Inactive 
-													</option>
-													
-													<option value="pending"
-													{% if trek.status == "pending" %}selected{% endif %} >
-														Pending 
-													</option>
-												</select>
-											</td>
-											<td> <button class="btn"> View </button>
-										</tr>
-										{% endfor %}
-									{% else %}
-									<tr> 
-										<td colspan="6">No Staff Available </td>
-									</tr>
-									{% endif %}
-								</tbody>
-							</table>
-
-						</div>
-					</div>
-				</div>
-
-			</div>
-
-			<div class="row mt-3">
-				<div class="col">
-					<div class="card">
-
-						<div class="card-header"> Recent Treks </div>
-
-						<div class="card-body">
-							<table class="table">
-								<thead>
-									<tr>
-										<th scope="col"> Trek ID </th>
-										<th scope="col"> Location </th>
-										<th scope="col"> Start Date </th>
-										<th scope="col"> End Date </th>
-										<th scope="col"> Status </th>
-										<th scope="col"> Action </th>
-									</tr>
-								</thead>
-								<tbody>
-									{% if recent_treks %}
-										{% for trek in recent_treks %}
-										<tr>
-											<td>{{ trek.trek_id }}</td>
-											<td>{{ trek.trek_location }}</td>
-											<td>{{ trek.start_date }}</td>
-											<td>{{ trek.end_date }}</td>
-											<td>
-												<select class="form-select form-select-sm">
-													<option value="pending"
-													{% if trek.status == "pending" %}selected{% endif %} >
-														Pending 
-													</option>
-													
-													<option value="approved"
-													{% if trek.status == "approved" %}selected{% endif %} >
-														Approved 
-													</option>
-													
-													<option value="open"
-													{% if trek.status == "open" %}selected{% endif %} >
-														Open 
-													</option>
-													
-													<option value="close"
-													{% if trek.status == "close" %}selected{% endif %} >
-														Close 
-													</option>
-													
-													<option value="completed"
-													{% if trek.status == "completed" %}selected{% endif %} >
-														Completed 
-													</option>
-												</select>
-											</td>
-											<td> <button class="btn"> View </button>
-										</tr>
-										{% endfor %}
-									{% else %}
-									<tr> 
-										<td colspan="6">No treks available </td>
-									</tr>
-									{% endif %}
-								</tbody>
-							</table>
-						</div>
-					</div>
-				</div>
-
-				<div class="col">
-					<div class="card">
-
-						<div class="card-header"> Recent User Registrations </div>
-
-						<div class="card-body">
-							<table class="table">
-								<thead>
-									<tr>
-										<th scope="col"> User ID </th>
-										<th scope="col"> Name </th>
-										<th scope="col"> Contact </th>
-										<th scope="col"> Status </th>
-										<th scope="col"> Action </th>
-									</tr>
-								</thead>
-								
-								<tbody>
-									{% if recent_users %}
-										{% for user in recent_users %}
-										<tr>
-											<td>{{ user.user_id }}</td>
-											<td>{{ user.user_name }}</td>
-											<td>{{ user.user_contact }}</td>
-											<td>
-												<select class="form-select form-select-sm">
-													<option value="active"
-													{% if trek.status == "active" %}selected{% endif %} >
-														Active 
-													</option>
-													
-													<option value="inactive"
-													{% if trek.status == "inactive" %}selected{% endif %} >
-														Inactive 
-													</option>
-												</select>
-											</td>
-											<td> <button class="btn"> View </button>
-										</tr>
-										{% endfor %}
-									{% else %}
-									<tr> 
-										<td colspan="6">No Users Available </td>
-									</tr>
-									{% endif %}
-								</tbody>
-							</table>
-						</div>
-
-					</div>
-				</div>
-
+			<div class="card-footer">
+				<button class="btn btn-primary"> View All </button>
 			</div>
 
 		</div>
 	</div>
-</div>	
+
+	<div class="col">
+		<div class="card">
+			<div class="card-header"> Recent Staff Registrations </div>
+
+			<div class="card-body">
+
+				<table class="table">
+					<thead>
+						<tr>
+							<th scope="col"> Staff ID </th>
+							<th scope="col"> Name </th>
+							<th scope="col"> Contact </th>
+							<th scope="col"> Status </th>
+							<th scope="col"> Action </th>
+						</tr>
+					</thead>
+					
+					<tbody>
+						{% if recent_staff %}
+							{% for staff in recent_staff %}
+							<tr>
+								<td>{{ staff.staff_id }}</td>
+								<td>{{ staff.staff_name }}</td>
+								<td>{{ staff.staff_contact }}</td>
+								<td>
+									<select class="form-select form-select-sm">
+										<option value="active"
+										{% if trek.status == "active" %}selected{% endif %} >
+											Active 
+										</option>
+										
+										<option value="inactive"
+										{% if trek.status == "inactive" %}selected{% endif %} >
+											Inactive 
+										</option>
+										
+										<option value="pending"
+										{% if trek.status == "pending" %}selected{% endif %} >
+											Pending 
+										</option>
+									</select>
+								</td>
+								<td>
+									<button class="btn"> <i class="bi bi-floppy"></i> </button>
+									<button class="btn"> <i class="bi bi-pencil-square"></i> </button>
+									<button class="btn"> <i class="bi bi-trash"></i> </button>
+								</td>
+							</tr>
+							{% endfor %}
+						{% else %}
+						<tr> 
+							<td colspan="6">No Staff Available </td>
+						</tr>
+						{% endif %}
+					</tbody>
+				</table>
+			</div>
+			
+			<div class="card-footer">
+				<button class="btn btn-primary"> View All </button>
+			</div>
+			
+		</div>
+	</div>
+
+</div>
+
+<div class="row mt-3">
+	<div class="col">
+		<div class="card">
+
+			<div class="card-header"> Recent Treks </div>
+
+			<div class="card-body">
+				<table class="table">
+					<thead>
+						<tr>
+							<th scope="col"> Trek ID </th>
+							<th scope="col"> Location </th>
+							<th scope="col"> Start Date </th>
+							<th scope="col"> End Date </th>
+							<th scope="col"> Status </th>
+							<th scope="col"> Action </th>
+						</tr>
+					</thead>
+					<tbody>
+						{% if recent_treks %}
+							{% for trek in recent_treks %}
+							<tr>
+								<td>{{ trek.trek_id }}</td>
+								<td>{{ trek.trek_location }}</td>
+								<td>{{ trek.start_date }}</td>
+								<td>{{ trek.end_date }}</td>
+								<td>
+									<select class="form-select form-select-sm">
+										<option value="pending"
+										{% if trek.status == "pending" %}selected{% endif %} >
+											Pending 
+										</option>
+										
+										<option value="approved"
+										{% if trek.status == "approved" %}selected{% endif %} >
+											Approved 
+										</option>
+										
+										<option value="open"
+										{% if trek.status == "open" %}selected{% endif %} >
+											Open 
+										</option>
+										
+										<option value="close"
+										{% if trek.status == "close" %}selected{% endif %} >
+											Close 
+										</option>
+										
+										<option value="completed"
+										{% if trek.status == "completed" %}selected{% endif %} >
+											Completed 
+										</option>
+									</select>
+								</td>
+								<td>
+									<button class="btn"> <i class="bi bi-floppy"></i> </button>
+									<button class="btn"> <i class="bi bi-pencil-square"></i> </button>
+									<button class="btn"> <i class="bi bi-trash"></i> </button>
+								</td>
+							</tr>
+							{% endfor %}
+						{% else %}
+						<tr> 
+							<td colspan="6">No treks available </td>
+						</tr>
+						{% endif %}
+					</tbody>
+				</table>
+			</div>
+			
+			<div class="card-footer">
+				<button class="btn btn-primary"> Add Trek </button>
+				<button class="btn btn-primary"> View All </button>
+			</div>
+
+		</div>
+	</div>
+
+	<div class="col">
+		<div class="card">
+
+			<div class="card-header"> Recent User Registrations </div>
+
+			<div class="card-body">
+				<table class="table">
+					<thead>
+						<tr>
+							<th scope="col"> User ID </th>
+							<th scope="col"> Name </th>
+							<th scope="col"> Contact </th>
+							<th scope="col"> Status </th>
+							<th scope="col"> Action </th>
+						</tr>
+					</thead>
+					
+					<tbody>
+						{% if recent_users %}
+							{% for user in recent_users %}
+							<tr>
+								<td>{{ user.user_id }}</td>
+								<td>{{ user.user_name }}</td>
+								<td>{{ user.user_contact }}</td>
+								<td>
+									<select class="form-select form-select-sm">
+										<option value="active"
+										{% if trek.status == "active" %}selected{% endif %} >
+											Active 
+										</option>
+										
+										<option value="inactive"
+										{% if trek.status == "inactive" %}selected{% endif %} >
+											Inactive 
+										</option>
+									</select>
+								</td>
+								<td>
+									<button class="btn"> <i class="bi bi-floppy"></i> </button>
+									<button class="btn"> <i class="bi bi-pencil-square"></i> </button>
+									<button class="btn"> <i class="bi bi-trash"></i> </button>
+								</td>
+							</tr>
+							{% endfor %}
+						{% else %}
+						<tr> 
+							<td colspan="6">No Users Available </td>
+						</tr>
+						{% endif %}
+					</tbody>
+				</table>
+			</div>
+			
+			<div class="card-footer">
+				<button class="btn btn-primary"> View All </button>
+			</div>
+
+		</div>
+	</div>
+
+</div>
+
 {% endblock %}
 
 
-
-
-
-from app import db
-from flask_login import UserMixin
-
-class Login(UserMixin, db.Model):
-	__tablename__ = 'login'
-	login_id = db.Column(db.Integer, primary_key=True)
-	email = db.Column(db.String(50), nullable=False, unique=True)
-	password = db.Column(db.String(255), nullable=False)
-	role = db.Column(db.Enum('admin','trekker','staff'), nullable=False)
-	
-	def get_id(self):
-		return str(self.login_id)
-
-class User(db.Model):
-	__tablename__ = 'user'
-	user_id = db.Column(db.Integer, primary_key=True)
-	login_id = db.Column(db.Integer, db.ForeignKey('login.login_id', ondelete='CASCADE'), unique=True, nullable=False)
-	username = db.Column(db.String(50), nullable=False)
-	user_contact = db.Column(db.String(10), nullable=True)
-	status = db.Column(db.Enum('active', 'inactive'), nullable=False)
-
-class Staff(db.Model):
-	__tablename__ = 'staff'
-	staff_id = db.Column(db.Integer, primary_key=True)
-	login_id = db.Column(db.Integer, db.ForeignKey('login.login_id', ondelete='CASCADE'), unique=True, nullable=False)
-	staff_name = db.Column(db.String(50), nullable=False)
-	staff_contact = db.Column(db.String(10), nullable=True)
-	status = db.Column(db.Enum('active', 'inactive', 'pending'), nullable=False)
-
-class Trek(db.Model):
-	__tablename__ = 'trek'
-	trek_id = db.Column(db.Integer, primary_key=True)
-	trek_name = db.Column(db.String(150), nullable=False)
-	trek_location = db.Column(db.String(300), nullable=False)
-	difficulty = db.Column(db.Enum('easy','moderate','hard'), nullable=False)
-	available_slots = db.Column(db.Integer, nullable=False)
-	assigned_staff_id = db.Column(db.Integer, db.ForeignKey('staff.staff_id', ondelete='SET NULL'), nullable=True)
-	duration = db.Column(db.Integer, nullable=False)
-	start_date = db.Column(db.DateTime, nullable=False)
-	end_date = db.Column(db.DateTime, nullable=False)
-	status = db.Column(db.Enum('pending','approved','open','closed','completed'), nullable=False)
-	
-	__table_args__ = (
-		db.CheckConstraint(
-			'available_slots >= 0',
-			name = 'check_slots_positive',
-		),
-		
-		db.CheckConstraint(
-			'end_date > start_date',
-			name = 'check_date_valid'
-		),
-	)
-
-class Booking(db.Model):
-	__tablename__ = 'booking'
-	booking_id = db.Column(db.Integer, primary_key=True)
-	user_id = db.Column(db.Integer, db.ForeignKey('user.user_id', ondelete='RESTRICT'), nullable=False)
-	trek_id = db.Column(db.Integer, db.ForeignKey('trek.trek_id', ondelete='SET NULL'), nullable=True)
-	booking_date = db.Column(db.DateTime, nullable=False)
-	status = db.Column(db.Enum('booked','cancelled','completed'), nullable=False)
-	
 	

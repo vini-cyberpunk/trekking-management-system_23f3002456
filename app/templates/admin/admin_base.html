@@ -1,0 +1,84 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+	<meta charset="UTF-8">
+	<meta name="viewport" content="width=device-width, initial-scale=1.0">
+	
+	<link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.8/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384
+	sRIl4kxILFvY47J16cr9ZwB07vP4J8+LH7qKQnuqkuIAvNWLzeN8tE5YBujZqJLB" crossorigin="anonymous">
+	
+	<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.13.1/font/bootstrap-icons.min.css">
+	
+	<link href="{{ url_for('static', filename='css/style.css') }}" rel="stylesheet">
+	
+	<title>
+		{% block title %}
+		Admin
+		{% endblock %}
+	</title>
+	
+</head>
+<body>
+
+	<nav class="navbar navbar-expand-lg ps-2 pe-2 border-bottom shadow-sm bg-body-tertiary">
+
+			<button id="admin-sidebar" class="btn">
+				<i class="bi bi-list"></i>
+			</button>
+	
+			<a class="navbar-brand" href="/">
+				<span>TREKO</span>
+				<span class="d-none d-lg-inline"> - Your Trekking Buddy</span>
+			</a>
+			
+			<div class="ms-auto">
+				<a class="btn btn-danger auth-btn" href="{{url_for('auth.logout')}}">Logout</a>
+			</div>
+	</nav>
+	
+	<div class="container-fluid">
+		<div class="row">
+			<div class="col-auto admin-sidebar min-vh-100 bg-light">
+
+				<div class="sidebar-nav d-flex flex-column gap-4">
+					<a class="nav-link" href="{{ url_for('admin.dashboard') }}"> 
+						<i class="bi bi-house-door fs-4 me-1"></i>
+						<span class="fs-5"> Dashboard </span>
+					</a>
+				
+					<a class="nav-link" href="{{ url_for('admin.users') }}">
+						<i class="bi bi-people fs-4 me-1"></i>
+						<span class="fs-5"> Users </span>
+					</a>
+					
+					<a class="nav-link" href="{{ url_for('admin.staff') }}">
+						<i class="bi bi-person-workspace fs-4 me-1"></i>
+						<span class="fs-5"> Staff </span>
+					</a>
+					
+					<a class="nav-link" href="{{ url_for('admin.treks') }}">
+						<i class="bi bi-leaf fs-4 me-1"></i>
+						<span class="fs-5"> Treks </span>
+					</a>
+					
+					<a class="nav-link" href="{{ url_for('admin.bookings') }}">
+						<i class="bi bi-journal-text fs-4 me-1"></i>
+						<span class="fs-5"> Bookings </span>
+					</a>
+				</div>
+			</div>
+			
+			<div class="col min-vh-100">
+				{% block main_content %}
+				
+				{% endblock %}
+			</div>
+			
+		</div>
+	</div>	
+
+	
+	<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.8/dist/js/bootstrap.bundle.min.js" integrity="sha384-FKyoEForCGlyvwx9Hj09JcYn3nv7wiPVlz7YYwJrWVcXK/BmnVDxM+D2scQbITxI" crossorigin="anonymous"></script>
+</body>
+</html>
+
