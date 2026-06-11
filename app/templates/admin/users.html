@@ -3,3 +3,100 @@
 {% block title %}
 Manage Users
 {% endblock %}
+
+{% block main_content %}
+
+<div class="row">
+
+	<div class="col">
+	
+		<div class="card d-flex align-items-center">
+		
+			<div class="card-body">
+				Total Users
+			</div>
+			
+			<div class="card-body">
+				{{ total_users }}
+			</div>
+			
+		</div>
+			
+	</div>
+	
+	<div class="col">
+	
+		<div class="card d-flex align-items-center">
+		
+			<div class="card-body">
+				Active Users
+			</div>
+			
+			<div class="card-body">
+				{{ active_users }}
+			</div>
+			
+		</div>
+		
+	</div>
+	
+	<div class="col">
+		
+		<div class="card d-flex align-items-center">
+		
+			<div class="card-body">
+				Blacklisted Users
+			</div>
+			
+			<div class="card-body">
+				{{ inactive_users }}
+			</div>
+			
+		</div>
+	</div>
+
+</div>
+
+<div class="row">
+
+	<div class="col-md-4">
+		<div class="input-group">
+			<input
+				type="text"
+				class="form-control"
+				placeholder="Search User By Name">
+
+			<button id="user-search" class="input-group-text">
+				<i class="bi bi-search"></i>
+			</button>
+		</div>
+	</div>
+	
+	<div class="col-md-3">
+		search by ID
+	</div>
+	
+	<div class="col-md-3">
+	seacrh by contact
+	</div>
+	
+	<div class="col-md-2">
+	search by status
+	</div>
+	
+</div>
+
+{% endblock %}
+
+
+
+
+
+
+
+
+
+
+
+
+
