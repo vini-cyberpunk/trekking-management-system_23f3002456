@@ -1,4 +1,4 @@
-from flask import Blueprint, render_template
+from flask import Blueprint, render_template, request
 from flask_login import login_required
 
 admin = Blueprint('admin', __name__)
@@ -22,11 +22,56 @@ def dashboard():
 		total_treks=total_treks
 	)
 
-@admin.route('/users', methods=["GET"])
+@admin.route('/users', methods=['GET'])
 @login_required
 def users():
 
-	return render_template('admin/users.html')
+    from app.models import User
+    
+    query = User.query
+    
+    total_users = query.count()
+    active_users = query.filter_by(status="active").count()
+    inactive_users = query.filter_by(status="inactive").count()
+
+    username = request.args.get('username', '').strip()
+    user_id = request.args.get('user_id', '').strip()
+    user_contact = request.args.get('user_contact', '').strip()
+    status = request.args.get('status', '').strip()
+
+    query = User.query
+
+    if username:
+        query = query.filter(
+            User.username.ilike(f"%{username}%")
+        )
+
+    if user_id:
+        query = query.filter(
+            User.user_id == user_id
+        )
+
+    if user_contact:
+        query = query.filter(
+            User.user_contact.ilike(f"%{user_contact}%")
+        )
+
+    if status:
+        query = query.filter(
+            User.status == status
+        )
+
+    users = query.order_by(
+        User.user_id.desc()
+    ).all()
+
+    return render_template(
+        'admin/users.html',
+        total_users=total_users,
+        active_users=active_users,
+        inactive_users=inactive_users,
+        users=users
+    )
 	
 @admin.route('/staff', methods=["GET"])
 @login_required

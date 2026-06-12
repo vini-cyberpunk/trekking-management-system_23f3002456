@@ -6,7 +6,7 @@ Manage Users
 
 {% block main_content %}
 
-<div class="row">
+<div class="row p-3 mt-2">
 
 	<div class="col">
 	
@@ -57,34 +57,166 @@ Manage Users
 
 </div>
 
-<div class="row">
 
-	<div class="col-md-4">
-		<div class="input-group">
+<form method="GET" action="{{ url_for('admin.users') }}">
+	<div class="row mt-2 g-3 align-items-end">
+	
+		<div class="col-lg-2">
+			<label class="form-label">User ID</label>
+
+			<input
+				type="number"
+				class="form-control"
+				name="user_id"
+				value="{{ request.args.get('user_id', '') }}"
+				placeholder="ID">
+		</div>
+
+
+		<div class="col-lg-4">
+			<label class="form-label">User Name</label>
+
+			<div class="input-group">
+				<span class="input-group-text">
+				    <i class="bi bi-search"></i>
+				</span>
+
+				<input
+				    type="text"
+				    class="form-control"
+				    name="username"
+				    value="{{ request.args.get('username', '') }}"
+				    placeholder="Search by name">
+			</div>
+		</div>
+
+		<div class="col-lg-2">
+			<label class="form-label">Contact</label>
+
 			<input
 				type="text"
 				class="form-control"
-				placeholder="Search User By Name">
-
-			<button id="user-search" class="input-group-text">
-				<i class="bi bi-search"></i>
-			</button>
+				name="user_contact"
+				value="{{ request.args.get('user_contact', '') }}"
+				placeholder="Phone no.">
 		</div>
+
+		<div class="col-lg-2">
+			<label class="form-label">Status</label>
+
+			<select class="form-select" name="status">
+				<option value="" {% if request.args.get('status', '') == '' %} selected {% endif %} >All</option>
+				<option value="active" {% if request.args.get('status', '') == 'active' %} selected {% endif %} >Active</option>
+				<option value="inactive" {% if request.args.get('status', '') == 'inactive' %} selected {% endif %} >Inactive</option>
+			</select>
+		</div>
+
+		<div class="col-lg-2">
+			<div class="d-flex gap-2 justify-content-end">
+
+				<button type="submit" class="btn btn-primary">
+				    Search
+				</button>
+
+				<a class="btn btn-outline-secondary" href="{{ url_for('admin.users') }}">
+				    Reset
+				</a>
+
+			</div>
+		</div>
+
 	</div>
-	
-	<div class="col-md-3">
-		search by ID
+</form>
+
+
+<div class="card shadow-sm mt-4">
+
+	<div class="card-header d-flex justify-content-end align-items-center">
+		<span class="small text-muted">
+		    {{ users|length }} record(s)
+		</span>
 	</div>
-	
-	<div class="col-md-3">
-	seacrh by contact
+
+	<div class="table-responsive">
+
+		<table class="table table-hover align-middle mb-0">
+
+		    <thead>
+		        <tr>
+		            <th scope="col">ID</th>
+		            <th scope="col">Name</th>
+		            <th scope="col">Contact</th>
+		            <th scope="col">Email</th>
+		            <th scope="col">Status</th>
+		            <th scope="col" class="text-center">Action</th>
+		        </tr>
+		    </thead>
+
+		    <tbody>
+
+		        {% for user in users %}
+
+		        <tr>
+
+		            <td>{{ user.user_id }}</td>
+
+		            <td>{{ user.name }}</td>
+
+		            <td>{{ user.contact }}</td>
+
+		            <td>{{ user.email }}</td>
+
+		            <td>
+						
+		                <span class="badge {% if user.status=='active' %} text-bg-success {% else %} text-bg-secondary {% endif %}">
+		                    {{ user.status }}
+		                </span>
+		                
+		            </td>
+
+		            <td>
+
+		                <div class="d-flex justify-content-center gap-2">
+
+		                    <button
+		                        class="btn btn-sm btn-outline-primary"
+		                        title="Edit">
+		                        <i class="bi bi-pencil-square"></i>
+		                    </button>
+
+		                    <button
+		                        class="btn btn-sm btn-outline-danger"
+		                        title="Delete">
+		                        <i class="bi bi-trash"></i>
+		                    </button>
+
+		                </div>
+
+		            </td>
+
+		        </tr>
+
+		        {% else %}
+
+		        <tr>
+
+		            <td colspan="7" class="text-center py-4">
+		                No users found.
+		            </td>
+
+		        </tr>
+
+		        {% endfor %}
+
+		    </tbody>
+
+		</table>
+
 	</div>
-	
-	<div class="col-md-2">
-	search by status
-	</div>
-	
+
+
 </div>
+
 
 {% endblock %}
 
