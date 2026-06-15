@@ -26,6 +26,7 @@ class Staff(db.Model):
 	staff_name = db.Column(db.String(50), nullable=False)
 	staff_contact = db.Column(db.String(10), nullable=True)
 	status = db.Column(db.Enum('active', 'inactive', 'pending'), nullable=False)
+	assigned_treks = db.relationship('Trek', backref='staff', lazy=True)
 
 class Trek(db.Model):
 	__tablename__ = 'trek'
