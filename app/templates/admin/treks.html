@@ -1,1 +1,255 @@
 {% extends "admin/admin_base.html" %}
+
+{% block title %}
+Manage Staff
+{% endblock %}
+
+{% block main_content %}
+
+<div class="row p-3 mt-2">
+
+	<div class="col">
+	
+		<div class="card d-flex align-items-center">
+		
+			<div class="card-body">
+				Total Staff
+			</div>
+			
+			<div class="card-body">
+				{{ total_staff }}
+			</div>
+			
+		</div>
+			
+	</div>
+	
+	<div class="col">
+	
+		<div class="card d-flex align-items-center">
+		
+			<div class="card-body">
+				Active Staff
+			</div>
+			
+			<div class="card-body">
+				{{ active_staff }}
+			</div>
+			
+		</div>
+		
+	</div>
+
+	<div class="col">
+		
+		<div class="card d-flex align-items-center">
+		
+			<div class="card-body">
+				Pending Staff
+			</div>
+			
+			<div class="card-body">
+				{{ pending_staff }}
+			</div>
+			
+		</div>
+		
+	</div>
+	
+	<div class="col">
+		
+		<div class="card d-flex align-items-center">
+		
+			<div class="card-body">
+				Blacklisted Staff
+			</div>
+			
+			<div class="card-body">
+				{{ inactive_staff }}
+			</div>
+			
+		</div>
+		
+	</div>
+
+</div>
+
+
+<form method="GET" action="{{ url_for('admin.users') }}">
+	<div class="row mt-2 g-3 align-items-end">
+	
+		<div class="col-lg-1">
+			<label class="form-label">Staff ID</label>
+
+			<input
+				type="number"
+				class="form-control"
+				name="staff_id"
+				value="{{ request.args.get('staff_id', '') }}"
+				placeholder="ID">
+		</div>
+
+
+		<div class="col-lg-4">
+			<label class="form-label">Staff Name</label>
+
+			<div class="input-group">
+				<span class="input-group-text">
+				    <i class="bi bi-search"></i>
+				</span>
+
+				<input
+				    type="text"
+				    class="form-control"
+				    name="staff_name"
+				    value="{{ request.args.get('staff_name', '') }}"
+				    placeholder="Search by name">
+			</div>
+		</div>
+
+		<div class="col-lg-2">
+			<label class="form-label">Contact</label>
+
+			<input
+				type="text"
+				class="form-control"
+				name="staff_contact"
+				value="{{ request.args.get('staff_contact', '') }}"
+				placeholder="Phone no.">
+		</div>
+		
+		<div class="col-lg-1">
+			<label class="form-label">Trek ID</label>
+
+			<input
+				type="number"
+				class="form-control"
+				name="trek_id"
+				value="{{ request.args.get('trek_id', '') }}"
+				placeholder="Trek ID">
+		</div>
+
+		<div class="col-lg-2">
+			<label class="form-label">Status</label>
+
+			<select class="form-select" name="status">
+				<option value="" {% if request.args.get('status', '') == '' %} selected {% endif %} >All</option>
+				<option value="active" {% if request.args.get('status', '') == 'active' %} selected {% endif %} >Active</option>
+				<option value="inactive" {% if request.args.get('status', '') == 'inactive' %} selected {% endif %} >Inactive</option>
+				<option value="pending" {% if request.args.get('status', '') == 'pending' %} selected {% endif %} >Pending</option>
+			</select>
+		</div>
+
+		<div class="col-lg-2">
+			<div class="d-flex gap-2 justify-content-end">
+
+				<button type="submit" class="btn btn-primary">
+				    Search
+				</button>
+
+				<a class="btn btn-outline-secondary" href="{{ url_for('admin.users') }}">
+				    Reset
+				</a>
+
+			</div>
+		</div>
+
+	</div>
+</form>
+
+
+<div class="card shadow-sm mt-4">
+
+	<div class="card-header d-flex justify-content-end align-items-center">
+		<span class="small text-muted">
+		    {{ staff|length }} record(s)
+		</span>
+	</div>
+
+	<div class="table-responsive">
+
+		<table class="table table-hover align-middle mb-0">
+
+		    <thead>
+		        <tr>
+		            <th scope="col">ID</th>
+		            <th scope="col">Name</th>
+		            <th scope="col">Contact</th>
+		            <th scope="col">Assigned Treks</th>
+		            <th scope="col">Status</th>
+		            <th scope="col" class="text-center">Action</th>
+		        </tr>
+		    </thead>
+
+		    <tbody>
+
+		        {% for s in staff %}
+
+		        <tr>
+
+		            <td>{{ s.staff_id }}</td>
+
+		            <td>{{ s.staff_name }}</td>
+
+		            <td>{{ s.staff_contact }}</td>
+
+		            <td>{{ s.assigned_treks }}</td>
+
+		            <td>
+						
+		                <span class="badge {% if user.status=='active' %} text-bg-success {% else %} text-bg-secondary {% endif %}">
+		                    {{ s.status }}
+		                </span>
+		                
+		            </td>
+
+		            <td>
+
+		                <div class="d-flex justify-content-center gap-2">
+
+		                    <button
+		                        class="btn btn-sm btn-outline-primary"
+		                        title="Edit">
+		                        <i class="bi bi-pencil-square"></i>
+		                    </button>
+
+		                    <button
+		                        class="btn btn-sm btn-outline-danger"
+		                        title="Delete">
+		                        <i class="bi bi-trash"></i>
+		                    </button>
+
+		                </div>
+
+		            </td>
+
+		        </tr>
+
+		        {% else %}
+
+		        <tr>
+
+		            <td colspan="7" class="text-center py-4">
+		                No staff found.
+		            </td>
+
+		        </tr>
+
+		        {% endfor %}
+
+		    </tbody>
+
+		</table>
+
+	</div>
+
+
+</div>
+
+
+{% endblock %}
+
+
+
+
+
