@@ -1,10 +1,12 @@
 {% extends "admin/admin_base.html" %}
 
 {% block title %}
-Manage Staff
+Manage Treks
 {% endblock %}
 
 {% block main_content %}
+
+<h1 class="dashboard-header text-left"> Manage Treks </h1>
 
 <div class="row p-3 mt-2">
 
@@ -13,11 +15,11 @@ Manage Staff
 		<div class="card d-flex align-items-center">
 		
 			<div class="card-body">
-				Total Staff
+				Total Treks
 			</div>
 			
 			<div class="card-body">
-				{{ total_staff }}
+				{{ total_treks }}
 			</div>
 			
 		</div>
@@ -29,11 +31,11 @@ Manage Staff
 		<div class="card d-flex align-items-center">
 		
 			<div class="card-body">
-				Active Staff
+				Open Treks
 			</div>
 			
 			<div class="card-body">
-				{{ active_staff }}
+				{{ open_treks }}
 			</div>
 			
 		</div>
@@ -45,11 +47,11 @@ Manage Staff
 		<div class="card d-flex align-items-center">
 		
 			<div class="card-body">
-				Pending Staff
+				Closed Treks
 			</div>
 			
 			<div class="card-body">
-				{{ pending_staff }}
+				{{ closed_treks }}
 			</div>
 			
 		</div>
@@ -61,11 +63,11 @@ Manage Staff
 		<div class="card d-flex align-items-center">
 		
 			<div class="card-body">
-				Blacklisted Staff
+				Unassigned Treks
 			</div>
 			
 			<div class="card-body">
-				{{ inactive_staff }}
+				{{ unassigned_treks }}
 			</div>
 			
 		</div>
@@ -79,19 +81,19 @@ Manage Staff
 	<div class="row mt-2 g-3 align-items-end">
 	
 		<div class="col-lg-1">
-			<label class="form-label">Staff ID</label>
+			<label class="form-label">Trek ID</label>
 
 			<input
 				type="number"
 				class="form-control"
-				name="staff_id"
-				value="{{ request.args.get('staff_id', '') }}"
+				name="trek_id"
+				value="{{ request.args.get('trek_id', '') }}"
 				placeholder="ID">
 		</div>
 
 
 		<div class="col-lg-4">
-			<label class="form-label">Staff Name</label>
+			<label class="form-label">Trek Name</label>
 
 			<div class="input-group">
 				<span class="input-group-text">
@@ -101,43 +103,47 @@ Manage Staff
 				<input
 				    type="text"
 				    class="form-control"
-				    name="staff_name"
-				    value="{{ request.args.get('staff_name', '') }}"
+				    name="trek_name"
+				    value="{{ request.args.get('trek_name', '') }}"
 				    placeholder="Search by name">
 			</div>
 		</div>
 
 		<div class="col-lg-2">
-			<label class="form-label">Contact</label>
+			<label class="form-label">Location</label>
 
 			<input
 				type="text"
 				class="form-control"
-				name="staff_contact"
-				value="{{ request.args.get('staff_contact', '') }}"
-				placeholder="Phone no.">
+				name="trek_location"
+				value="{{ request.args.get('trek_location', '') }}"
+				placeholder="Location">
 		</div>
 		
 		<div class="col-lg-1">
-			<label class="form-label">Trek ID</label>
+			<label class="form-label">Staff ID</label>
 
 			<input
 				type="number"
 				class="form-control"
-				name="trek_id"
-				value="{{ request.args.get('trek_id', '') }}"
+				name="staff_id"
+				value="{{ request.args.get('staff_id', '') }}"
 				placeholder="Trek ID">
 		</div>
 
 		<div class="col-lg-2">
+		
 			<label class="form-label">Status</label>
 
 			<select class="form-select" name="status">
 				<option value="" {% if request.args.get('status', '') == '' %} selected {% endif %} >All</option>
-				<option value="active" {% if request.args.get('status', '') == 'active' %} selected {% endif %} >Active</option>
-				<option value="inactive" {% if request.args.get('status', '') == 'inactive' %} selected {% endif %} >Inactive</option>
 				<option value="pending" {% if request.args.get('status', '') == 'pending' %} selected {% endif %} >Pending</option>
+				<option value="approved" {% if request.args.get('status', '') == 'approved' %} selected {% endif %} >Approved</option>
+				<option value="open" {% if request.args.get('status', '') == 'open' %} selected {% endif %} >Open</option>
+				<option value="closed" {% if request.args.get('status', '') == 'closed' %} selected {% endif %} >Closed</option>
+				<option value="completed" {% if request.args.get('status', '') == 'completed' %} selected {% endif %} >Completed</option>
 			</select>
+			
 		</div>
 
 		<div class="col-lg-2">
@@ -161,8 +167,21 @@ Manage Staff
 <div class="card shadow-sm mt-4">
 
 	<div class="card-header d-flex justify-content-end align-items-center">
+	
+		<div class="me-auto">
+
+			<a href="#" class="btn btn-primary">
+
+				<i class="bi bi-plus me-1"></i>
+
+				Create Trek
+
+			</a>
+
+		</div>
+	
 		<span class="small text-muted">
-		    {{ staff|length }} record(s)
+		    {{ treks|length }} record(s)
 		</span>
 	</div>
 
@@ -174,8 +193,12 @@ Manage Staff
 		        <tr>
 		            <th scope="col">ID</th>
 		            <th scope="col">Name</th>
-		            <th scope="col">Contact</th>
-		            <th scope="col">Assigned Treks</th>
+		            <th scope="col">Location</th>
+		            <th scope="col">Difficulty</th>
+		            <th scope="col">Available Slots<th>
+		            <th scope="col">Assigned Staff</th>
+		            <th scope="col">Start Date</th>
+		            <th scope="col">End Date</th>
 		            <th scope="col">Status</th>
 		            <th scope="col" class="text-center">Action</th>
 		        </tr>
@@ -183,23 +206,57 @@ Manage Staff
 
 		    <tbody>
 
-		        {% for s in staff %}
+		        {% for trek in treks %}
 
 		        <tr>
 
-		            <td>{{ s.staff_id }}</td>
+		            <td>{{ trek.trek_id }}</td>
 
-		            <td>{{ s.staff_name }}</td>
+		            <td>{{ trek.trek_name }}</td>
 
-		            <td>{{ s.staff_contact }}</td>
+		            <td>{{ trek.trek_location }}</td>
 
-		            <td>{{ s.assigned_treks }}</td>
+		            <td>{{ trek.difficulty }}</td>
+		            
+		            <td>{{ trek.available_slots }}</td>
+		            
+		            <td>{{ trek.assigned_staff_id }}</td>
+		            
+		            <td>{{ trek.start_date }}</td>
+		            
+		            <td>{{ trek.end_date }}</td>
 
 		            <td>
 						
-		                <span class="badge {% if user.status=='active' %} text-bg-success {% else %} text-bg-secondary {% endif %}">
-		                    {{ s.status }}
-		                </span>
+						<span class="badge
+
+							{% if trek.status == 'pending' %}
+
+								text-bg-warning
+
+							{% elif trek.status == 'approved' %}
+
+								text-bg-primary
+
+							{% elif trek.status == 'open' %}
+
+								text-bg-success
+
+							{% elif trek.status == 'closed' %}
+
+								text-bg-danger
+
+							{% elif trek.status == 'completed' %}
+
+								text-bg-secondary
+
+							{% endif %}
+
+						">
+
+							{{ trek.status.title() }}
+
+						</span>
 		                
 		            </td>
 
@@ -229,8 +286,8 @@ Manage Staff
 
 		        <tr>
 
-		            <td colspan="7" class="text-center py-4">
-		                No staff found.
+		            <td colspan="12" class="text-center py-4">
+		                No Trek found.
 		            </td>
 
 		        </tr>
@@ -242,7 +299,6 @@ Manage Staff
 		</table>
 
 	</div>
-
 
 </div>
 

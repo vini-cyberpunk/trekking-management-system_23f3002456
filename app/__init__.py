@@ -23,13 +23,13 @@ def create_app():
 	app.register_blueprint(auth)
 
 	from app.routes.admin import admin
-	app.register_blueprint(admin)
+	app.register_blueprint(admin, url_prefix='/admin')
 
 	from app.routes.user import user
-	app.register_blueprint(user)
+	app.register_blueprint(user, url_prefix='/user')
 
 	from app.routes.staff import staff
-	app.register_blueprint(staff)
+	app.register_blueprint(staff, url_prefix='/staff')
 
 	with app.app_context():
 		from app import models

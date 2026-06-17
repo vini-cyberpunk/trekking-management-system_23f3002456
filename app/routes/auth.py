@@ -38,6 +38,7 @@ def register():
 			new_user = User(login_id=login_id, username=name, user_contact=contact, status="active")
 			db.session.add(new_user)
 			db.session.commit()
+			
 		elif role=="staff":
 			new_staff = Staff(login_id=login_id, staff_name=name, staff_contact=contact, status="pending")
 			db.session.add(new_staff)

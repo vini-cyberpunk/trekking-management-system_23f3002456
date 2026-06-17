@@ -1,10 +1,12 @@
 {% extends "admin/admin_base.html" %}
 
 {% block title %}
-Manage Staff
+Manage Bookings
 {% endblock %}
 
 {% block main_content %}
+
+<h1 class="dashboard-header text-left"> Manage Bookings </h1>
 
 <div class="row p-3 mt-2">
 
@@ -13,11 +15,11 @@ Manage Staff
 		<div class="card d-flex align-items-center">
 		
 			<div class="card-body">
-				Total Staff
+				Total Bookings
 			</div>
 			
 			<div class="card-body">
-				{{ total_staff }}
+				{{ total_bookinigs }}
 			</div>
 			
 		</div>
@@ -29,11 +31,11 @@ Manage Staff
 		<div class="card d-flex align-items-center">
 		
 			<div class="card-body">
-				Active Staff
+				Confirmed
 			</div>
 			
 			<div class="card-body">
-				{{ active_staff }}
+				{{ confirmed_bookings }}
 			</div>
 			
 		</div>
@@ -45,11 +47,11 @@ Manage Staff
 		<div class="card d-flex align-items-center">
 		
 			<div class="card-body">
-				Pending Staff
+				Cancelled
 			</div>
 			
 			<div class="card-body">
-				{{ pending_staff }}
+				{{ cancelled_bookings }}
 			</div>
 			
 		</div>
@@ -61,11 +63,11 @@ Manage Staff
 		<div class="card d-flex align-items-center">
 		
 			<div class="card-body">
-				Blacklisted Staff
+				Completed
 			</div>
 			
 			<div class="card-body">
-				{{ inactive_staff }}
+				{{ completed_bookings }}
 			</div>
 			
 		</div>
@@ -78,47 +80,32 @@ Manage Staff
 <form method="GET" action="{{ url_for('admin.users') }}">
 	<div class="row mt-2 g-3 align-items-end">
 	
-		<div class="col-lg-1">
-			<label class="form-label">Staff ID</label>
+		<div class="col-lg-2">
+			<label class="form-label">Booking ID</label>
 
 			<input
 				type="number"
 				class="form-control"
-				name="staff_id"
-				value="{{ request.args.get('staff_id', '') }}"
-				placeholder="ID">
+				name="bookinng_id"
+				value="{{ request.args.get('booking_id', '') }}"
+				placeholder="Enter ID">
 		</div>
 
 
-		<div class="col-lg-4">
-			<label class="form-label">Staff Name</label>
+		<div class="col-lg-2">
+			<label class="form-label">User ID</label>
 
-			<div class="input-group">
-				<span class="input-group-text">
-				    <i class="bi bi-search"></i>
-				</span>
-
-				<input
-				    type="text"
-				    class="form-control"
-				    name="staff_name"
-				    value="{{ request.args.get('staff_name', '') }}"
-				    placeholder="Search by name">
-			</div>
+				
+			<input
+				type="number"
+				class="form-control"
+				name="user_id"
+				value="{{ request.args.get('user_id', '') }}"
+				placeholder="Enter ID">
+		
 		</div>
 
 		<div class="col-lg-2">
-			<label class="form-label">Contact</label>
-
-			<input
-				type="text"
-				class="form-control"
-				name="staff_contact"
-				value="{{ request.args.get('staff_contact', '') }}"
-				placeholder="Phone no.">
-		</div>
-		
-		<div class="col-lg-1">
 			<label class="form-label">Trek ID</label>
 
 			<input
@@ -126,18 +113,31 @@ Manage Staff
 				class="form-control"
 				name="trek_id"
 				value="{{ request.args.get('trek_id', '') }}"
+				placeholder="Enter ID">
+		</div>
+		
+		<div class="col-lg-2">
+			<label class="form-label">Staff ID</label>
+
+			<input
+				type="number"
+				class="form-control"
+				name="staff_id"
+				value="{{ request.args.get('staff_id', '') }}"
 				placeholder="Trek ID">
 		</div>
 
 		<div class="col-lg-2">
+		
 			<label class="form-label">Status</label>
 
 			<select class="form-select" name="status">
 				<option value="" {% if request.args.get('status', '') == '' %} selected {% endif %} >All</option>
-				<option value="active" {% if request.args.get('status', '') == 'active' %} selected {% endif %} >Active</option>
-				<option value="inactive" {% if request.args.get('status', '') == 'inactive' %} selected {% endif %} >Inactive</option>
-				<option value="pending" {% if request.args.get('status', '') == 'pending' %} selected {% endif %} >Pending</option>
+				<option value="booked" {% if request.args.get('status', '') == 'booked' %} selected {% endif %} >Booked</option>
+				<option value="cancelled" {% if request.args.get('status', '') == 'cancelled' %} selected {% endif %} >Cancelled</option>
+				<option value="completed" {% if request.args.get('status', '') == 'completed' %} selected {% endif %} >Completed</option>
 			</select>
+			
 		</div>
 
 		<div class="col-lg-2">
@@ -162,7 +162,7 @@ Manage Staff
 
 	<div class="card-header d-flex justify-content-end align-items-center">
 		<span class="small text-muted">
-		    {{ staff|length }} record(s)
+		    {{ bookings|length }} record(s)
 		</span>
 	</div>
 
@@ -172,10 +172,10 @@ Manage Staff
 
 		    <thead>
 		        <tr>
-		            <th scope="col">ID</th>
-		            <th scope="col">Name</th>
-		            <th scope="col">Contact</th>
-		            <th scope="col">Assigned Treks</th>
+		            <th scope="col">Booking ID</th>
+		            <th scope="col">User ID</th>
+		            <th scope="col">Trek ID</th>
+		            <th scope="col">Booking Date</th>
 		            <th scope="col">Status</th>
 		            <th scope="col" class="text-center">Action</th>
 		        </tr>
@@ -183,23 +183,41 @@ Manage Staff
 
 		    <tbody>
 
-		        {% for s in staff %}
+		        {% for booking in bookings %}
 
 		        <tr>
 
-		            <td>{{ s.staff_id }}</td>
+		            <td>{{ booking.booking_id }}</td>
 
-		            <td>{{ s.staff_name }}</td>
+		            <td>{{ booking.user_id }}</td>
 
-		            <td>{{ s.staff_contact }}</td>
+		            <td>{{ booking.trek_id }}</td>
 
-		            <td>{{ s.assigned_treks }}</td>
+		            <td>{{ booking.bookng_date }}</td>
 
 		            <td>
 						
-		                <span class="badge {% if user.status=='active' %} text-bg-success {% else %} text-bg-secondary {% endif %}">
-		                    {{ s.status }}
-		                </span>
+						<span class="badge
+
+							{% if booking.status == 'booked' %}
+
+								text-bg-success
+
+							{% elif booking.status == 'cancelled' %}
+
+								text-bg-danger
+
+							{% elif booking.status == 'completed' %}
+
+								text-bg-secondary
+
+							{% endif %}
+
+						">
+
+							{{ booking.status.title() }}
+
+						</span>
 		                
 		            </td>
 
@@ -229,8 +247,8 @@ Manage Staff
 
 		        <tr>
 
-		            <td colspan="7" class="text-center py-4">
-		                No staff found.
+		            <td colspan="10" class="text-center py-4">
+		                No Bookings Yet.
 		            </td>
 
 		        </tr>
@@ -243,19 +261,10 @@ Manage Staff
 
 	</div>
 
-
 </div>
 
 
 {% endblock %}
-
-
-
-
-
-
-
-
 
 
 
