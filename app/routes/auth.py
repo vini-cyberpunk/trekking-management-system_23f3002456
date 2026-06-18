@@ -13,7 +13,7 @@ def register():
 	if request.method == 'GET':
 		return render_template('auth/register.html')
 
-	if request.method == 'POST':
+	elif request.method == 'POST':
 		email = request.form.get('email')
 		name = request.form.get('name')
 		contact = request.form.get('contact')
@@ -44,7 +44,8 @@ def register():
 			db.session.add(new_staff)
 			db.session.commit()
 			
-		return redirect(url_for('auth.login'))
+		else:
+			return redirect(url_for('auth.login'))
 
 @auth.route('/login', methods=['GET','POST'])
 def login():
@@ -76,14 +77,16 @@ def login():
 						logout_user(user)
 						return redirect(url_for('auth.login'))
 				
-					return redirect(url_for('staff.dashboard'))
+					else:
+						return redirect(url_for('staff.dashboard'))
 				
 				else:
 					if current_user.status == "inactive":
 						logout_user(user)
 						return redirect(url_for('auth.login'))
 						
-					return redirect(url_for('user.dashboard'))
+					else:
+						return redirect(url_for('user.dashboard'))
 					
 			else:
 				return render_template('auth/login.html')
