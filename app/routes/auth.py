@@ -1,4 +1,4 @@
-from flask import Blueprint, request, redirect, url_for, render_template
+from flask import Blueprint, request, redirect, url_for, render_template, flash
 from flask_login import current_user, login_user, logout_user
 from werkzeug.security import check_password_hash, generate_password_hash
 
@@ -44,8 +44,8 @@ def register():
 			db.session.add(new_staff)
 			db.session.commit()
 			
-		else:
-			return redirect(url_for('auth.login'))
+		
+		return redirect(url_for('auth.login'))
 
 @auth.route('/login', methods=['GET','POST'])
 def login():
@@ -65,15 +65,22 @@ def login():
 		password = request.form.get('password')
 
 		from app.models import Login
-		user = Login.query.filter_by(email=email).first()
-		if user:
-			if check_password_hash(user.password, password):
-				login_user(user)
+		login = Login.query.filter_by(email=email).first()
+		
+		if login:
+		
+			if check_password_hash(login.password, password):
+				login_user(login)
+				
 				if current_user.role == 'admin':
 					return redirect(url_for('admin.dashboard'))
 				
 				elif current_user.role == 'staff':
-					if current_user.status in ["inactive", "pending"]:
+				
+					from app.models import Staff
+					staff = Staff.query.filter_by(login_id=current_user.login_id).first()
+					
+					if staff.status in ["inactive", "pending"]:
 						logout_user(user)
 						return redirect(url_for('auth.login'))
 				
@@ -81,7 +88,13 @@ def login():
 						return redirect(url_for('staff.dashboard'))
 				
 				else:
-					if current_user.status == "inactive":
+				
+					from app.models import User
+					user = User.query.filter_by(login_id=current_user.login_id).first()
+					
+					print(user)
+					
+					if user.status == "inactive":
 						logout_user(user)
 						return redirect(url_for('auth.login'))
 						
@@ -90,6 +103,7 @@ def login():
 					
 			else:
 				return render_template('auth/login.html')
+				
 		else:
 			return render_template('auth/login.html')
 			

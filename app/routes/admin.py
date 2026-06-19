@@ -14,12 +14,22 @@ def dashboard():
 	total_staff = Staff.query.count()
 	total_treks = Trek.query.count()
 	
+	recent_users = User.query.order_by(User.user_id.desc()).limit(5).all()
+	recent_staff = Staff.query.order_by(Staff.staff_id.desc()).limit(5).all()
+	recent_treks = Trek.query.order_by(Trek.trek_id.desc()).limit(5).all()
+	recent_bookings = Booking.query.order_by(Booking.booking_id.desc()).limit(5).all()
+	
 	return render_template(
 		'admin/dashboard.html',
 		total_bookings=total_bookings,
 		total_users=total_users,
 		total_staff=total_staff,
-		total_treks=total_treks
+		total_treks=total_treks,
+		
+		recent_users=recent_users,
+		recent_staff=recent_staff,
+		recent_treks=recent_treks,
+		recent_bookings=recent_bookings
 	)
 
 @admin.route('/users', methods=['GET'])

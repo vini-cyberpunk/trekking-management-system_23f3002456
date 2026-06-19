@@ -273,17 +273,17 @@ Dashboard
 							{% for user in recent_users %}
 							<tr>
 								<td>{{ user.user_id }}</td>
-								<td>{{ user.user_name }}</td>
+								<td>{{ user.username }}</td>
 								<td>{{ user.user_contact }}</td>
 								<td>
 									<select class="form-select form-select-sm">
 										<option value="active"
-										{% if trek.status == "active" %}selected{% endif %} >
+										{% if user.status == "active" %}selected{% endif %} >
 											Active 
 										</option>
 										
 										<option value="inactive"
-										{% if trek.status == "inactive" %}selected{% endif %} >
+										{% if user.status == "inactive" %}selected{% endif %} >
 											Inactive 
 										</option>
 									</select>
