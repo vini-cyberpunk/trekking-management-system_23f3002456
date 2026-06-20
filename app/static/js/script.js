@@ -1,6 +1,6 @@
 document.addEventListener('DOMContentLoaded', function () {
 
-    const menuButton = document.getElementById('admin-sidebar');
+    const menuButton = document.getElementById('sidebar');
 
     if (!menuButton) {
         return;
@@ -15,3 +15,4 @@ document.addEventListener('DOMContentLoaded', function () {
     });
 
 });
+

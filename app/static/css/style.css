@@ -48,6 +48,12 @@
     transition:width 0.3s ease;
 }
 
+.user-sidebar{
+    width:180px;
+    overflow:hidden;
+    transition:width 0.3s ease;
+}
+
 .sidebar-item{
 	white-space: nowrap;
 }
@@ -56,7 +62,10 @@
     width:30px;
 }
 
-.sidebar-collapsed .admin-sidebar span{
+.sidebar-collapsed .user-sidebar{
+    width:30px;
+}
+.sidebar-collapsed .admin-sidebar .user-sidebar span{
     display:none;
 }
 
