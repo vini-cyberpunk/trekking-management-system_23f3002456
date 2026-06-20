@@ -1,3 +1,187 @@
-{% extends "base.html" %}
+{% extends "user/user_base.html" %}
+
+{% block title %}
+Dashboard
+{% endblock %}
+
+{% block main_content %}
+
+<h1 class="text-left mb-0 mt-2"> Welcome {{username}} ! </h1>
+
+<div class="row mt-5">
+
+	<div class="col">
+		<div class="card d-flex flex-column align-items-center">
+			<div class="card-body">Available Treks</div>
+			<div class="card-body">{{ available_treks }}</div>
+		</div>
+	</div>
+	
+	<div class="col">
+		<div class="card d-flex flex-column align-items-center">
+			<div class="card-body">Booked Treks</div>
+			<div class="card-body">{{ booked_treks }}</div>
+		</div>
+	</div>
+	
+	<div class="col">
+		<div class="card d-flex flex-column align-items-center">
+			<div class="card-body">Completed Treks</div>
+			<div class="card-body">{{ complated_treks }}</div>
+		</div>
+	</div>
+	
+	<div class="col">
+		<div class="card d-flex flex-column align-items-center">
+			<div class="card-body">Upcoming Treks</div>
+			<div class="card-body">{{ upcoming_treks }}</div>
+		</div>
+	</div>
+	
+</div>
 
 
+<div class="row mt-5">
+
+    <div class="col-12">
+
+        <div class="card shadow-sm">
+
+
+            <div class="card-header">
+
+                <h5 class="mb-0">
+
+                    Recent Bookings
+
+                </h5>
+
+            </div>
+
+
+
+            <div class="card-body">
+
+
+                <div class="table-responsive">
+
+
+                    <table class="table table-hover align-middle mb-0">
+
+
+                        <thead>
+
+                            <tr>
+
+                                <th>
+
+                                    Trek
+
+                                </th>
+
+
+                                <th>
+
+                                    Status
+
+                                </th>
+
+
+                                <th>
+
+                                    Dates
+
+                                </th>
+
+
+                                <th>
+
+                                </th>
+
+
+                            </tr>
+
+                        </thead>
+
+
+
+                        <tbody>
+
+
+                            {% for booking in recent_bookings %}
+
+
+                            <tr>
+
+
+                                <td>
+
+                                    {{ booking.trek.trek_name }}
+
+                                </td>
+
+
+
+                                <td>
+
+
+                                    <span class="badge text-bg-success">
+
+                                        {{ booking.trek.status.title() }}
+
+                                    </span>
+
+
+                                </td>
+
+
+
+                                <td>
+
+                                    {{ booking.trek.start_date }}
+
+                                </td>
+
+
+
+                                <td class="text-end">
+
+
+                                    <a
+                                        href="#"
+                                        class="btn btn-sm btn-outline-primary">
+
+                                        Details
+
+                                    </a>
+
+
+                                </td>
+
+
+                            </tr>
+
+
+                            {% endfor %}
+
+
+                        </tbody>
+
+
+                    </table>
+
+
+                </div>
+
+
+            </div>
+
+
+        </div>
+
+
+    </div>
+
+</div>
+
+{% endblock %}
