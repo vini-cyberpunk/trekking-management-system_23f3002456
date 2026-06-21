@@ -133,17 +133,17 @@ Dashboard
 								<td>
 									<select class="form-select form-select-sm">
 										<option value="active"
-										{% if trek.status == "active" %}selected{% endif %} >
+										{% if staff.status == "active" %}selected{% endif %} >
 											Active 
 										</option>
 										
 										<option value="inactive"
-										{% if trek.status == "inactive" %}selected{% endif %} >
+										{% if staff.status == "inactive" %}selected{% endif %} >
 											Inactive 
 										</option>
 										
 										<option value="pending"
-										{% if trek.status == "pending" %}selected{% endif %} >
+										{% if staff.status == "pending" %}selected{% endif %} >
 											Pending 
 										</option>
 									</select>
