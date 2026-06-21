@@ -1,0 +1,246 @@
+{% extends 'user/user_base.html' %}
+
+
+{% block title %}
+
+My Bookings
+
+{% endblock %}
+
+
+
+{% block main_content %}
+
+
+<div class="card shadow-sm">
+
+
+    <div class="card-header">
+
+
+        <h4 class="mb-0">
+
+            My Bookings
+
+        </h4>
+
+
+    </div>
+
+
+
+    <div class="card-body">
+
+
+        <div class="table-responsive">
+
+
+            <table class="table table-hover align-middle mb-0">
+
+
+                <thead>
+
+
+                    <tr>
+
+
+                        <th>
+
+                            Booking ID
+
+                        </th>
+
+
+                        <th>
+
+                            Trek Name
+
+                        </th>
+
+
+                        <th>
+
+                            Location
+
+                        </th>
+
+
+                        <th>
+
+                            Booking Date
+
+                        </th>
+
+
+                        <th>
+
+                            Status
+
+                        </th>
+
+
+                        <th>
+
+                            Action
+
+                        </th>
+
+
+                    </tr>
+
+
+                </thead>
+
+
+
+                <tbody>
+
+
+                    {% for booking in bookings %}
+
+
+                    <tr>
+
+
+                        <td>
+
+                            {{ booking.booking_id }}
+
+                        </td>
+
+
+
+                        <td>
+
+                            {{ booking.trek.trek_name }}
+
+                        </td>
+
+
+
+                        <td>
+
+                            {{ booking.trek.trek_location }}
+
+                        </td>
+
+
+
+                        <td>
+
+                            {{ booking.booking_date }}
+
+                        </td>
+
+
+
+                        <td>
+
+
+                            <span class="badge
+
+                                {% if booking.status == 'pending' %}
+
+                                    text-bg-warning
+
+
+                                {% elif booking.status == 'confirmed' %}
+
+                                    text-bg-success
+
+
+                                {% elif booking.status == 'cancelled' %}
+
+                                    text-bg-danger
+
+
+                                {% elif booking.status == 'completed' %}
+
+                                    text-bg-secondary
+
+
+                                {% endif %}
+
+                            ">
+
+
+                                {{ booking.status.title() }}
+
+
+                            </span>
+
+
+                        </td>
+
+
+
+                        <td>
+
+
+                            <a
+
+                                href="#"
+
+                                class="btn btn-sm btn-outline-primary">
+
+
+                                View Details
+
+
+                            </a>
+
+
+                        </td>
+
+
+
+                    </tr>
+
+
+
+                    {% else %}
+
+
+
+                    <tr>
+
+
+                        <td
+                            colspan="6"
+                            class="text-center text-muted">
+
+
+                            No bookings found.
+
+
+                        </td>
+
+
+                    </tr>
+
+
+
+                    {% endfor %}
+
+
+
+                </tbody>
+
+
+
+            </table>
+
+
+
+        </div>
+
+
+
+    </div>
+
+
+
+</div>
+
+
+{% endblock %}

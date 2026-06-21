@@ -40,124 +40,124 @@ Dashboard
 	
 </div>
 
+<!-- Available Treks -->
 
-<div class="row mt-5">
+<div class="row mt-4">
 
     <div class="col-12">
 
         <div class="card shadow-sm">
 
-
             <div class="card-header">
 
                 <h5 class="mb-0">
 
-                    Recent Bookings
+                    Available Treks
 
                 </h5>
 
             </div>
 
 
-
             <div class="card-body">
-
 
                 <div class="table-responsive">
 
-
-                    <table class="table table-hover align-middle mb-0">
-
+                    <table class="table table-hover align-middle">
 
                         <thead>
 
                             <tr>
 
-                                <th>
+                                <th>Trek ID</th>
 
-                                    Trek
+                                <th>Trek Name</th>
 
-                                </th>
+                                <th>Location</th>
 
+                                <th>Duration</th>
 
-                                <th>
+                                <th>Start Date</th>
 
-                                    Status
+                                <th>End Date</th>
 
-                                </th>
-
-
-                                <th>
-
-                                    Dates
-
-                                </th>
-
-
-                                <th>
-
-                                </th>
-
+                                <th>Slots</th>
 
                             </tr>
 
                         </thead>
 
 
-
                         <tbody>
 
+                            {% for trek in available_treks %}
 
-                            {% for booking in recent_bookings %}
+                            <tr>
+
+                                <td>
+
+                                    {{ trek.trek_id }}
+
+                                </td>
+
+
+                                <td>
+
+                                    {{ trek.trek_name }}
+
+                                </td>
+
+
+                                <td>
+
+                                    {{ trek.trek_location }}
+
+                                </td>
+
+
+                                <td>
+
+                                    {{ trek.duration }}
+
+                                    Days
+
+                                </td>
+
+
+                                <td>
+
+                                    {{ trek.start_date }}
+
+                                </td>
+
+
+                                <td>
+
+                                    {{ trek.end_date }}
+
+                                </td>
+
+
+                                <td>
+
+                                    {{ trek.available_slots }}
+
+                                </td>
+
+
+                            </tr>
+
+                            {% else %}
 
 
                             <tr>
 
+                                <td colspan="7"
+                                    class="text-center text-muted">
 
-                                <td>
-
-                                    {{ booking.trek.trek_name }}
-
-                                </td>
-
-
-
-                                <td>
-
-
-                                    <span class="badge text-bg-success">
-
-                                        {{ booking.trek.status.title() }}
-
-                                    </span>
-
+                                    No treks available
 
                                 </td>
-
-
-
-                                <td>
-
-                                    {{ booking.trek.start_date }}
-
-                                </td>
-
-
-
-                                <td class="text-end">
-
-
-                                    <a
-                                        href="#"
-                                        class="btn btn-sm btn-outline-primary">
-
-                                        Details
-
-                                    </a>
-
-
-                                </td>
-
 
                             </tr>
 
@@ -181,6 +181,208 @@ Dashboard
 
 
     </div>
+
+
+</div>
+
+
+
+<!-- My Bookings -->
+
+
+<div class="row mt-4">
+
+
+    <div class="col-12">
+
+
+        <div class="card shadow-sm">
+
+
+            <div class="card-header">
+
+
+                <h5 class="mb-0">
+
+                    My Bookings
+
+                </h5>
+
+
+            </div>
+
+
+
+            <div class="card-body">
+
+
+                <div class="table-responsive">
+
+
+                    <table class="table table-hover align-middle">
+
+
+                        <thead>
+
+
+                            <tr>
+
+
+                                <th>
+
+                                    Booking ID
+
+                                </th>
+
+
+                                <th>
+
+                                    Trek Name
+
+                                </th>
+
+
+                                <th>
+
+                                    Location
+
+                                </th>
+
+
+                                <th>
+
+                                    Status
+
+                                </th>
+
+
+                                <th>
+
+                                    Booking Date
+
+                                </th>
+
+
+                            </tr>
+
+
+                        </thead>
+
+
+
+                        <tbody>
+
+
+                            {% for booking in bookings %}
+
+
+                            <tr>
+
+
+                                <td>
+
+                                    {{ booking.booking_id }}
+
+                                </td>
+
+
+
+                                <td>
+
+                                    {{ booking.trek.trek_name }}
+
+                                </td>
+
+
+
+                                <td>
+
+                                    {{ booking.trek.trek_location }}
+
+                                </td>
+
+
+
+                                <td>
+
+
+                                    <span class="badge
+
+                                        {% if booking.status == 'pending' %}
+
+                                            text-bg-warning
+
+                                        {% elif booking.status == 'confirmed' %}
+
+                                            text-bg-success
+
+                                        {% elif booking.status == 'cancelled' %}
+
+                                            text-bg-danger
+
+                                        {% endif %}
+
+                                    ">
+
+                                        {{ booking.status.title() }}
+
+                                    </span>
+
+
+                                </td>
+
+
+
+                                <td>
+
+                                    {{ booking.booking_date }}
+
+                                </td>
+
+
+
+                            </tr>
+
+
+
+                            {% else %}
+
+
+                            <tr>
+
+
+                                <td colspan="5"
+                                    class="text-center text-muted">
+
+                                    No bookings found
+
+                                </td>
+
+
+                            </tr>
+
+
+
+                            {% endfor %}
+
+
+                        </tbody>
+
+
+                    </table>
+
+
+                </div>
+
+
+            </div>
+
+
+        </div>
+
+
+    </div>
+
 
 </div>
 

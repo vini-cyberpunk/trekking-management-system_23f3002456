@@ -1,0 +1,94 @@
+{% extends 'user/user_base.html' %}
+
+{% block title %}
+Trek History
+{% endblock %}
+
+{% block main_content %}
+
+<div class="card shadow-sm">
+
+    <div class="card-header">
+
+        <h4 class="mb-0">
+
+            Trek History
+
+        </h4>
+
+    </div>
+
+
+    <div class="card-body">
+
+        <div class="table-responsive">
+
+            <table class="table table-hover align-middle mb-0">
+
+                <thead>
+
+                    <tr>
+
+                        <th>Booking ID</th>
+
+                        <th>Trek Name</th>
+
+                        <th>Location</th>
+
+                        <th>Start Date</th>
+
+                        <th>End Date</th>
+
+                        <th>Booking Date</th>
+
+                    </tr>
+
+                </thead>
+
+
+                <tbody>
+
+                    {% for booking in completed_bookings %}
+
+                    <tr>
+
+                        <td>{{ booking.booking_id }}</td>
+
+                        <td>{{ booking.trek.trek_name }}</td>
+
+                        <td>{{ booking.trek.trek_location }}</td>
+
+                        <td>{{ booking.trek.start_date }}</td>
+
+                        <td>{{ booking.trek.end_date }}</td>
+
+                        <td>{{ booking.booking_date }}</td>
+
+                    </tr>
+
+                    {% else %}
+
+                    <tr>
+
+                        <td colspan="6"
+                            class="text-center text-muted">
+
+                            No trekking history found.
+
+                        </td>
+
+                    </tr>
+
+                    {% endfor %}
+
+                </tbody>
+
+            </table>
+
+        </div>
+
+    </div>
+
+</div>
+
+{% endblock %}

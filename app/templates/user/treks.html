@@ -1,0 +1,374 @@
+{% extends 'user/user_base.html' %}
+
+{% block title %}
+
+Explore Treks
+
+{% endblock %}
+
+{% block main_content %}
+
+<div class="card shadow-sm">
+
+
+	<div class="card-header">
+
+		<h4 class="mb-0">
+
+		    Explore Treks
+
+		</h4>
+
+	</div>
+
+
+
+	<div class="card-body">
+
+
+		<form method="GET">
+
+
+		    <div class="row g-3 mb-4">
+
+
+		        <div class="col-md-4">
+
+
+		            <input
+		                type="text"
+		                name="trek_name"
+		                class="form-control"
+		                placeholder="Search Trek"
+		                value="{{ request.args.get('trek_name','') }}">
+
+
+		        </div>
+
+
+
+		        <div class="col-md-3">
+
+
+		            <input
+		                type="text"
+		                name="location"
+		                class="form-control"
+		                placeholder="Location"
+		                value="{{ request.args.get('location','') }}">
+
+
+		        </div>
+
+
+
+		        <div class="col-md-3">
+
+
+		            <select
+		                name="difficulty"
+		                class="form-select">
+
+
+		                <option value="">
+
+		                    All Difficulties
+
+		                </option>
+
+
+		                <option value="easy">
+
+		                    Easy
+
+		                </option>
+
+
+		                <option value="moderate">
+
+		                    Moderate
+
+		                </option>
+
+
+		                <option value="hard">
+
+		                    Hard
+
+		                </option>
+
+
+		            </select>
+
+
+		        </div>
+
+
+
+		        <div class="col-md-2">
+
+
+		            <button
+		                type="submit"
+		                class="btn btn-primary w-100">
+
+
+		                Search
+
+
+		            </button>
+
+
+		        </div>
+
+
+		    </div>
+
+
+		</form>
+
+
+
+
+
+		<div class="table-responsive">
+
+
+		    <table class="table table-hover align-middle">
+
+
+		        <thead>
+
+
+		            <tr>
+
+
+		                <th>
+
+		                    Trek ID
+
+		                </th>
+
+
+		                <th>
+
+		                    Trek Name
+
+		                </th>
+
+
+		                <th>
+
+		                    Location
+
+		                </th>
+
+
+		                <th>
+
+		                    Difficulty
+
+		                </th>
+
+
+		                <th>
+
+		                    Duration
+
+		                </th>
+
+
+		                <th>
+
+		                    Dates
+
+		                </th>
+
+
+		                <th>
+
+		                    Slots
+
+		                </th>
+
+
+		                <th>
+
+		                    Action
+
+		                </th>
+
+
+		            </tr>
+
+
+		        </thead>
+
+
+
+		        <tbody>
+
+
+		            {% for trek in treks %}
+
+
+
+		            <tr>
+
+
+		                <td>
+
+		                    {{ trek.trek_id }}
+
+		                </td>
+
+
+
+		                <td>
+
+		                    {{ trek.trek_name }}
+
+		                </td>
+
+
+
+		                <td>
+
+		                    {{ trek.trek_location }}
+
+		                </td>
+
+
+
+		                <td>
+
+
+		                    <span class="badge
+
+		                        {% if trek.difficulty == 'easy' %}
+
+		                            text-bg-success
+
+
+		                        {% elif trek.difficulty == 'moderate' %}
+
+		                            text-bg-warning
+
+
+		                        {% else %}
+
+		                            text-bg-danger
+
+
+		                        {% endif %}
+
+		                    ">
+
+
+		                        {{ trek.difficulty.title() }}
+
+
+		                    </span>
+
+
+		                </td>
+
+
+
+		                <td>
+
+		                    {{ trek.duration }}
+
+		                    Days
+
+
+		                </td>
+
+
+
+		                <td>
+
+
+		                    {{ trek.start_date }}
+
+		                    <br>
+
+		                    {{ trek.end_date }}
+
+
+		                </td>
+
+
+
+		                <td>
+
+		                    {{ trek.available_slots }}
+
+		                </td>
+
+
+
+		                <td>
+
+
+		                    <a
+
+		                        href="#"
+
+		                        class="btn btn-sm btn-outline-primary">
+
+
+		                        View Details
+
+
+		                    </a>
+
+
+		                </td>
+
+
+
+		            </tr>
+
+
+
+		            {% else %}
+
+
+
+		            <tr>
+
+
+		                <td
+		                    colspan="8"
+		                    class="text-center text-muted">
+
+
+		                    No treks found.
+
+
+		                </td>
+
+
+		            </tr>
+
+
+
+		            {% endfor %}
+
+
+		        </tbody>
+
+
+		    </table>
+
+
+		</div>
+
+
+	</div>
+
+</div>
+
+{% endblock %}
+
