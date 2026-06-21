@@ -81,7 +81,7 @@ def login():
 					staff = Staff.query.filter_by(login_id=current_user.login_id).first()
 					
 					if staff.status in ["inactive", "pending"]:
-						logout_user(user)
+						logout_user()
 						return redirect(url_for('auth.login'))
 				
 					else:
