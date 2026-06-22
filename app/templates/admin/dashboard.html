@@ -131,25 +131,33 @@ Dashboard
 								<td>{{ staff.staff_name }}</td>
 								<td>{{ staff.staff_contact }}</td>
 								<td>
-									<select class="form-select form-select-sm">
-										<option value="active"
-										{% if staff.status == "active" %}selected{% endif %} >
-											Active 
-										</option>
+								
+									<form class="d-flex justify-content-between" method="POST" action="{{ url_for('admin.update_staff_status', staff_id=staff.staff_id) }}">
+									
+										<select name="status" class="form-select form-select-sm">
+											<option value="active"
+											{% if staff.status == "active" %}selected{% endif %} >
+												Active 
+											</option>
+											
+											<option value="inactive"
+											{% if staff.status == "inactive" %}selected{% endif %} >
+												Inactive 
+											</option>
+											
+											<option value="pending"
+											{% if staff.status == "pending" %}selected{% endif %} >
+												Pending 
+											</option>
+										</select>
 										
-										<option value="inactive"
-										{% if staff.status == "inactive" %}selected{% endif %} >
-											Inactive 
-										</option>
+										<button class="btn"> <i class="bi bi-floppy"></i> </button>
 										
-										<option value="pending"
-										{% if staff.status == "pending" %}selected{% endif %} >
-											Pending 
-										</option>
-									</select>
+									</form>
+									
 								</td>
+								
 								<td>
-									<button class="btn"> <i class="bi bi-floppy"></i> </button>
 									<button class="btn"> <i class="bi bi-pencil-square"></i> </button>
 									<button class="btn"> <i class="bi bi-trash"></i> </button>
 								</td>

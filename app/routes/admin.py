@@ -1,4 +1,4 @@
-from flask import Blueprint, render_template, request
+from flask import Blueprint, render_template, request, redirect, url_for
 from flask_login import login_required
 
 admin = Blueprint('admin', __name__)
@@ -83,11 +83,35 @@ def users():
         users=users
     )
 	
+	
 @admin.route('/staff', methods=["GET"])
 @login_required
 def staff():
+	
+	from app.models import Staff
+	
+	staff = Staff.query.all()
+	return render_template('admin/staff.html', staff=staff)
+	
+	
+@admin.route('/staff/<int:staff_id>/update-status', methods=['POST'])
+@login_required
+def update_staff_status(staff_id):
 
-	return render_template('admin/staff.html')
+	from app.models import Staff
+
+	staff = Staff.query.get_or_404(staff_id)
+	status = request.form.get('status')
+
+	if status not in ['pending', 'active', 'inactive']:
+		return redirect(url_for('admin.staff'))
+
+	staff.status = status
+
+	db.session.commit()
+
+	return redirect(url_for('admin.staff'))
+	
 	
 @admin.route('/treks', methods=["GET"])
 @login_required
@@ -101,4 +125,5 @@ def bookings():
 
 	return render_template('admin/bookings.html')
 	
+
 	
