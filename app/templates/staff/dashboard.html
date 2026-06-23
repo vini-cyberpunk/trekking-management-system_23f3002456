@@ -1,0 +1,406 @@
+{% extends "staff/staff_base.html" %}
+
+{% block title %}
+Dashboard
+{% endblock %}
+
+
+{% block main_content %}
+
+
+<h1 class="text-left">
+
+    Welcome {{ staff.staff_name }} !
+
+</h1>
+
+
+
+<div class="row g-3 mt-2">
+
+
+    <div class="col-md-3">
+
+
+        <div class="card shadow-sm">
+
+
+            <div class="card-body">
+
+
+                <h6 class="text-muted">
+
+                    Assigned Treks
+
+                </h6>
+
+
+                <h3>
+
+                    {{ assigned_count }}
+
+                </h3>
+
+
+            </div>
+
+
+        </div>
+
+
+    </div>
+
+
+
+
+    <div class="col-md-3">
+
+
+        <div class="card shadow-sm">
+
+
+            <div class="card-body">
+
+
+                <h6 class="text-muted">
+
+                    Active Treks
+
+                </h6>
+
+
+                <h3>
+
+                    {{ active_count }}
+
+                </h3>
+
+
+            </div>
+
+
+        </div>
+
+
+    </div>
+
+
+
+
+    <div class="col-md-3">
+
+
+        <div class="card shadow-sm">
+
+
+            <div class="card-body">
+
+
+                <h6 class="text-muted">
+
+                    Completed Treks
+
+                </h6>
+
+
+                <h3>
+
+                    {{ completed_count }}
+
+                </h3>
+
+
+            </div>
+
+
+        </div>
+
+
+    </div>
+
+
+
+
+    <div class="col-md-3">
+
+
+        <div class="card shadow-sm">
+
+
+            <div class="card-body">
+
+
+                <h6 class="text-muted">
+
+                    Total Participants
+
+                </h6>
+
+
+                <h3>
+
+                    {{ participant_count }}
+
+                </h3>
+
+
+            </div>
+
+
+        </div>
+
+
+    </div>
+
+
+</div>
+
+
+
+
+
+<div class="row mt-4">
+
+
+    <div class="col-12">
+
+
+        <div class="card shadow-sm">
+
+
+            <div class="card-header">
+
+
+                <h5 class="mb-0">
+
+                    Assigned Treks
+
+                </h5>
+
+
+            </div>
+
+
+
+            <div class="card-body">
+
+
+                <div class="table-responsive">
+
+
+                    <table class="table table-hover align-middle">
+
+
+                        <thead>
+
+
+                            <tr>
+
+
+                                <th>
+
+                                    Trek ID
+
+                                </th>
+
+
+                                <th>
+
+                                    Trek Name
+
+                                </th>
+
+
+                                <th>
+
+                                    Status
+
+                                </th>
+
+
+                                <th>
+
+                                    Slots
+
+                                </th>
+
+
+                                <th>
+
+                                    Participants
+
+                                </th>
+
+
+                                <th>
+
+                                    Action
+
+                                </th>
+
+
+                            </tr>
+
+
+                        </thead>
+
+
+
+                        <tbody>
+
+
+                            {% for trek in assigned_treks %}
+
+
+                            <tr>
+
+
+                                <td>
+
+                                    {{ trek.trek_id }}
+
+                                </td>
+
+
+
+                                <td>
+
+                                    {{ trek.trek_name }}
+
+                                </td>
+
+
+
+                                <td>
+
+
+                                    <span class="badge
+
+                                    {% if trek.status=='open' %}
+
+                                        text-bg-success
+
+
+                                    {% elif trek.status=='closed' %}
+
+                                        text-bg-danger
+
+
+                                    {% elif trek.status=='completed' %}
+
+                                        text-bg-secondary
+
+
+                                    {% else %}
+
+                                        text-bg-warning
+
+
+                                    {% endif %}
+
+                                    ">
+
+
+                                        {{ trek.status.title() }}
+
+
+                                    </span>
+
+
+                                </td>
+
+
+
+                                <td>
+
+                                    {{ trek.available_slots }}
+
+                                </td>
+
+
+
+                                <td>
+
+                                    {{ trek.bookings|length }}
+
+                                </td>
+
+
+
+                                <td>
+
+
+                                    <a
+
+                                        href="{{ url_for('staff.assigned_treks') }}"
+
+                                        class="btn btn-sm btn-outline-primary">
+
+
+                                        Manage
+
+
+                                    </a>
+
+
+                                </td>
+
+
+                            </tr>
+
+
+
+                            {% else %}
+
+
+
+                            <tr>
+
+
+                                <td colspan="6"
+
+                                    class="text-center text-muted">
+
+
+                                    No treks assigned.
+
+
+                                </td>
+
+
+                            </tr>
+
+
+
+                            {% endfor %}
+
+
+
+                        </tbody>
+
+
+
+                    </table>
+
+
+
+                </div>
+
+
+
+            </div>
+
+
+
+        </div>
+
+
+
+    </div>
+
+
+
+</div>
+
+
+{% endblock %}

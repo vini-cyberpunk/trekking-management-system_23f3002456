@@ -99,6 +99,7 @@ def staff():
 def update_staff_status(staff_id):
 
 	from app.models import Staff
+	from app import db
 
 	staff = Staff.query.get_or_404(staff_id)
 	status = request.form.get('status')

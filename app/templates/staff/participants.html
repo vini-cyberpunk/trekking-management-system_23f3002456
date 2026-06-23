@@ -1,0 +1,444 @@
+{% extends "staff/staff_base.html" %}
+
+{% block title %}
+Participants
+{% endblock %}
+
+
+{% block main_content %}
+
+
+<div class="d-flex justify-content-between align-items-center">
+
+
+    <h2>
+
+        Participants - {{ trek.trek_name }}
+
+    </h2>
+
+
+    <a
+        href="{{ url_for('staff.assigned_treks') }}"
+        class="btn btn-outline-secondary">
+
+
+        <i class="bi bi-arrow-left me-1"></i>
+
+        Back
+
+
+    </a>
+
+
+</div>
+
+
+
+
+<div class="row g-3 mt-2">
+
+
+    <div class="col-md-3">
+
+
+        <div class="card shadow-sm">
+
+
+            <div class="card-body">
+
+
+                <h6 class="text-muted">
+
+                    Registered Participants
+
+                </h6>
+
+
+                <h3>
+
+                    {{ participant_count }}
+
+                </h3>
+
+
+            </div>
+
+
+        </div>
+
+
+    </div>
+
+
+
+
+    <div class="col-md-3">
+
+
+        <div class="card shadow-sm">
+
+
+            <div class="card-body">
+
+
+                <h6 class="text-muted">
+
+                    Slots Remaining
+
+                </h6>
+
+
+                <h3>
+
+                    {{ trek.available_slots }}
+
+                </h3>
+
+
+            </div>
+
+
+        </div>
+
+
+    </div>
+
+
+
+
+    <div class="col-md-3">
+
+
+        <div class="card shadow-sm">
+
+
+            <div class="card-body">
+
+
+                <h6 class="text-muted">
+
+                    Status
+
+                </h6>
+
+
+                <h3>
+
+                    {{ trek.status.title() }}
+
+                </h3>
+
+
+            </div>
+
+
+        </div>
+
+
+    </div>
+
+
+
+
+    <div class="col-md-3">
+
+
+        <div class="card shadow-sm">
+
+
+            <div class="card-body">
+
+
+                <h6 class="text-muted">
+
+                    Difficulty
+
+                </h6>
+
+
+                <h3>
+
+                    {{ trek.difficulty.title() }}
+
+                </h3>
+
+
+            </div>
+
+
+        </div>
+
+
+    </div>
+
+
+</div>
+
+
+
+
+
+<div class="card shadow-sm mt-4">
+
+
+    <div class="card-header">
+
+
+        <h5 class="mb-0">
+
+            Search Participants
+
+        </h5>
+
+
+    </div>
+
+
+
+    <div class="card-body">
+
+
+        <form method="GET">
+
+
+            <div class="row g-3">
+
+
+                <div class="col-md-5">
+
+
+                    <input
+                        type="text"
+                        name="participant_id"
+                        class="form-control"
+                        placeholder="Participant ID"
+
+
+                        value="{{ request.args.get('participant_id','') }}">
+
+
+                </div>
+
+
+
+
+                <div class="col-md-5">
+
+
+                    <input
+                        type="text"
+                        name="participant_name"
+                        class="form-control"
+                        placeholder="Participant Name"
+
+
+                        value="{{ request.args.get('participant_name','') }}">
+
+
+                </div>
+
+
+
+
+                <div class="col-md-2">
+
+
+                    <button
+                        type="submit"
+                        class="btn btn-primary w-100">
+
+
+                        Search
+
+
+                    </button>
+
+
+                </div>
+
+
+            </div>
+
+
+        </form>
+
+
+    </div>
+
+
+</div>
+
+
+
+
+
+<div class="card shadow-sm mt-4">
+
+
+    <div class="card-header">
+
+
+        <h5 class="mb-0">
+
+            Participant Details
+
+        </h5>
+
+
+    </div>
+
+
+
+    <div class="card-body">
+
+
+        <div class="table-responsive">
+
+
+            <table class="table table-hover align-middle mb-0">
+
+
+                <thead>
+
+
+                    <tr>
+
+
+                        <th>
+
+                            Booking ID
+
+                        </th>
+
+
+                        <th>
+
+                            User ID
+
+                        </th>
+
+
+                        <th>
+
+                            Name
+
+                        </th>
+
+
+                        <th>
+
+                            Contact
+
+                        </th>
+
+
+                        <th>
+
+                            Booking Date
+
+                        </th>
+
+
+                    </tr>
+
+
+                </thead>
+
+
+
+                <tbody>
+
+
+                    {% for booking in participants %}
+
+
+                    <tr>
+
+
+                        <td>
+
+                            {{ booking.booking_id }}
+
+                        </td>
+
+
+
+                        <td>
+
+                            {{ booking.user.user_id }}
+
+                        </td>
+
+
+
+                        <td>
+
+                            {{ booking.user.user_name }}
+
+                        </td>
+
+
+
+                        <td>
+
+                            {{ booking.user.user_contact }}
+
+                        </td>
+
+
+
+                        <td>
+
+                            {{ booking.booking_date }}
+
+                        </td>
+
+
+                    </tr>
+
+
+
+                    {% else %}
+
+
+
+                    <tr>
+
+
+                        <td colspan="5"
+
+                            class="text-center text-muted">
+
+
+                            No participants found.
+
+
+                        </td>
+
+
+                    </tr>
+
+
+
+                    {% endfor %}
+
+
+
+                </tbody>
+
+
+
+            </table>
+
+
+        </div>
+
+
+    </div>
+
+
+</div>
+
+
+{% endblock %}

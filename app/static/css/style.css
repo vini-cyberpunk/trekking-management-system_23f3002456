@@ -54,18 +54,25 @@
     transition:width 0.3s ease;
 }
 
+.staff-sidebar{
+    width:180px;
+    overflow:hidden;
+    transition:width 0.3s ease;
+}
+
 .sidebar-item{
 	white-space: nowrap;
 }
 
-.sidebar-collapsed .admin-sidebar{
+.sidebar-collapsed .admin-sidebar,
+.sidebar-collapsed .user-sidebar,
+.sidebar-collapsed .staff-sidebar{
     width:30px;
 }
 
-.sidebar-collapsed .user-sidebar{
-    width:30px;
-}
-.sidebar-collapsed .admin-sidebar .user-sidebar span{
+.sidebar-collapsed .admin-sidebar span,
+.sidebar-collapsed .user-sidebar span,
+.sidebar-collapsed .staff-sidebar span{
     display:none;
 }
 
