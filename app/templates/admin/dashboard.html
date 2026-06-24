@@ -6,135 +6,193 @@ Dashboard
 
 {% block main_content %}
 
-<h1 class="dashboard-header text-left"> Admin Dashboard </h1>
+<h1 class="text-left mt-3 mb-0"> Admin Dashboard </h1>
 
-<div class="row">
+
+
+<div class="row mt-5">
+
+	<!-- ########## Total Bookings ########## -->
 	<div class="col">
-		<div class="card d-flex flex-column align-items-center">
-			<div class="card-body">Total Bookings</div>
-			<div class="card-body">{{ total_bookings }}</div>
+		<div class="card shadow-sm">
+			<div class="card-body d-flex flex-column align-items-center">
+			
+				<h6 class="text-muted"> Total Bookings </h6>
+				
+				<h3> {{ total_bookings }} </h3>
+				
+			</div>
 		</div>
 	</div>
 	
+	<!-- ########## Total Treks ########## -->
 	<div class="col">
-		<div class="card d-flex flex-column align-items-center">
-			<div class="card-body">Total Treks</div>
-			<div class="card-body">{{ total_treks }}</div>
+		<div class="card shadow-sm">
+			<div class="card-body d-flex flex-column align-items-center">
+			
+				<h6 class="text-muted"> Total Treks </h6>
+				
+				<h3> {{ total_treks }} </h3>
+				
+			</div>
 		</div>
 	</div>
 	
+	<!-- ########## Total Users ########## -->
 	<div class="col">
-		<div class="card d-flex flex-column align-items-center">
-			<div class="card-body">Total Users</div>
-			<div class="card-body">{{ total_users }}</div>
+		<div class="card shadow-sm">
+			<div class="card-body d-flex flex-column align-items-center">
+			
+				<h6 class="text-muted"> Total Users </h6>
+				
+				<h3> {{ total_users }} </h3>
+				
+			</div>
 		</div>
 	</div>
 	
+	<!-- ########## Total Staff ########## -->
 	<div class="col">
-		<div class="card d-flex flex-column align-items-center">
-			<div class="card-body">Total Staff</div>
-			<div class="card-body">{{ total_staff }}</div>
+		<div class="card shadow-sm">
+			<div class="card-body d-flex flex-column align-items-center">
+			
+				<h6 class="text-muted"> Total Staff </h6>
+				
+				<h3> {{ total_staff }} </h3>
+				
+			</div>
 		</div>
 	</div>
+	
 </div>
 
-<div class="row mt-3">
-	<div class="col">
+
+
+<div class="row mt-5">
+
+	<!-- ########## Recent Bookings ########## -->
+	<div class="col-lg-6">
 		<div class="card">
 		
 			<div class="card-header"> Recent Bookings </div>
 		
 			<div class="card-body table-responsive">
 				<table class="table table-hover">
+				
 					<thead>
 						<tr>
+						
 							<th scope="col"> Booking ID </th>
-							<th scope="col"> User ID </th>
-							<th scope="col"> Trek ID </th>
+							<th scope="col"> User </th>
+							<th scope="col"> Trek </th>
 							<th scope="col"> Booking Date </th>
 							<th scope="col"> Status </th>
-							<th scope="col"> Action </th>
+							
 						</tr>
 					</thead>
 					
 					<tbody>
+					
 						{% if recent_bookings %}
+						
 							{% for booking in recent_bookings %}
 							<tr>
+							
 								<td>{{ booking.booking_id }}</td>
 								<td>{{ booking.user_id }}</td>
 								<td>{{ booking.trek_id }}</td>
 								<td>{{ booking.booking_date }}</td>
 								<td>
+								
 									<select class="form-select form-select-sm">
+									
 										<option value="booked"
-										{% if trek.status == "booked" %}selected{% endif %} >
+										{% if booking.status == "booked" %}selected{% endif %} >
 											Booked 
 										</option>
 										
 										<option value="cancelled"
-										{% if trek.status == "cancelled" %}selected{% endif %} >
+										{% if booking.status == "cancelled" %}selected{% endif %} >
 											Cancelled 
 										</option>
 										
 										<option value="completed"
-										{% if trek.status == "completed" %}selected{% endif %} >
+										{% if booking.status == "completed" %}selected{% endif %} >
 											Completed 
 										</option>
+										
 									</select>
+									
 								</td>
-								<td>
-									<button class="btn"> <i class="bi bi-floppy"></i> </button>
-									<button class="btn"> <i class="bi bi-pencil-square"></i> </button>
-									<button class="btn"> <i class="bi bi-trash"></i> </button>
-								</td>
+								
 							</tr>
 							{% endfor %}
+							
 						{% else %}
 						<tr> 
+						
 							<td colspan="6">No Bookings yet </td>
+							
 						</tr>
 						{% endif %}
+						
 					</tbody>
+					
 				</table>
 			</div>
 			
 			<div class="card-footer">
-				<button class="btn btn-primary"> View All </button>
+			
+				<a class="btn btn-primary" href="{{ url_for('admin.bookings') }}"> View All </a>
+				
 			</div>
 
 		</div>
 	</div>
 
-	<div class="col">
+	<!-- ########## Recent Staff Registrations ########## -->
+	<div class="col-lg-6">
 		<div class="card">
+		
 			<div class="card-header"> Recent Staff Registrations </div>
 
 			<div class="card-body table-responsive">
-
 				<table class="table table-hover">
+				
 					<thead>
 						<tr>
+						
 							<th scope="col"> Staff ID </th>
 							<th scope="col"> Name </th>
 							<th scope="col"> Contact </th>
 							<th scope="col"> Status </th>
-							<th scope="col"> Action </th>
+							<th scope="col" class="text-center"> Action </th>
+							
 						</tr>
 					</thead>
 					
 					<tbody>
+					
 						{% if recent_staff %}
+						
 							{% for staff in recent_staff %}
 							<tr>
+							
 								<td>{{ staff.staff_id }}</td>
 								<td>{{ staff.staff_name }}</td>
 								<td>{{ staff.staff_contact }}</td>
 								<td>
 								
+									{% if staff.status == "pending" %}
+									
+									{{ staff.status }}
+									
+									{% else %}
+									
 									<form class="d-flex justify-content-between" method="POST" action="{{ url_for('admin.update_staff_status', staff_id=staff.staff_id) }}">
 									
 										<select name="status" class="form-select form-select-sm">
+										
 											<option value="active"
 											{% if staff.status == "active" %}selected{% endif %} >
 												Active 
@@ -145,35 +203,72 @@ Dashboard
 												Inactive 
 											</option>
 											
-											<option value="pending"
-											{% if staff.status == "pending" %}selected{% endif %} >
-												Pending 
-											</option>
 										</select>
 										
 										<button class="btn"> <i class="bi bi-floppy"></i> </button>
 										
+										<input type="hidden" name="next" value="{{ url_for('admin.dashboard') }}">
+										
 									</form>
+									
+									{% endif %}
 									
 								</td>
 								
 								<td>
-									<button class="btn"> <i class="bi bi-pencil-square"></i> </button>
-									<button class="btn"> <i class="bi bi-trash"></i> </button>
+								
+									{% if staff.status == "pending" %}
+									
+									<form method="POST" action="{{ url_for('admin.update_staff_status', staff_id=staff.staff_id) }}">
+									
+										<button class="btn btn-success" name="action" value="approve">
+											Approve
+										</button>
+										
+										<button class="btn btn-danger" name="action" value="reject">
+											Reject
+										</button>
+										
+										<input type="hidden" name="next" value="{{ url_for('admin.dashboard') }}">
+									
+									</form>
+									
+									{% else %}
+									
+									<form class="d-flex justify-content-center" method="POST" action="{{ url_for('admin.delete_staff', staff_id = staff.staff_id) }}">
+									
+										<button class="btn btn-danger">
+											<i class="bi bi-trash"></i> 
+										</button>
+										
+										<input type="hidden" name="next" value="{{ url_for('admin.dashboard') }}">
+									
+									</form>
+									
+									{% endif %}
+									
 								</td>
+								
 							</tr>
 							{% endfor %}
+							
 						{% else %}
 						<tr> 
+						
 							<td colspan="6">No Staff Available </td>
+							
 						</tr>
 						{% endif %}
+						
 					</tbody>
+					
 				</table>
 			</div>
 			
 			<div class="card-footer">
+			
 				<button class="btn btn-primary"> View All </button>
+				
 			</div>
 			
 		</div>
@@ -181,34 +276,47 @@ Dashboard
 
 </div>
 
+
+
 <div class="row mt-3">
-	<div class="col">
+
+	<!-- ########## Recent Treks ########## -->
+	<div class="col-lg-6">
 		<div class="card">
 
 			<div class="card-header"> Recent Treks </div>
 
 			<div class="card-body table-responsive">
 				<table class="table table-hover">
+				
 					<thead>
 						<tr>
+						
 							<th scope="col"> Trek ID </th>
 							<th scope="col"> Location </th>
 							<th scope="col"> Start Date </th>
 							<th scope="col"> End Date </th>
 							<th scope="col"> Status </th>
 							<th scope="col"> Action </th>
+							
 						</tr>
 					</thead>
+					
 					<tbody>
+					
 						{% if recent_treks %}
+						
 							{% for trek in recent_treks %}
 							<tr>
+							
 								<td>{{ trek.trek_id }}</td>
 								<td>{{ trek.trek_location }}</td>
 								<td>{{ trek.start_date }}</td>
 								<td>{{ trek.end_date }}</td>
 								<td>
+								
 									<select class="form-select form-select-sm">
+									
 										<option value="pending"
 										{% if trek.status == "pending" %}selected{% endif %} >
 											Pending 
@@ -233,33 +341,51 @@ Dashboard
 										{% if trek.status == "completed" %}selected{% endif %} >
 											Completed 
 										</option>
+										
 									</select>
+									
+									<button class="btn"> <i class="bi bi-floppy"></i> </button>
+									
 								</td>
 								<td>
-									<button class="btn"> <i class="bi bi-floppy"></i> </button>
+								
 									<button class="btn"> <i class="bi bi-pencil-square"></i> </button>
+									
 									<button class="btn"> <i class="bi bi-trash"></i> </button>
+									
 								</td>
+								
 							</tr>
 							{% endfor %}
+							
 						{% else %}
+						
 						<tr> 
+						
 							<td colspan="6">No treks available </td>
+							
 						</tr>
+						
 						{% endif %}
+						
 					</tbody>
+					
 				</table>
 			</div>
 			
 			<div class="card-footer">
+			
 				<button class="btn btn-primary"> Add Trek </button>
+				
 				<button class="btn btn-primary"> View All </button>
+				
 			</div>
 
 		</div>
 	</div>
 
-	<div class="col">
+	<!-- ########## Recent User Registrations ########## -->
+	<div class="col-lg-6">
 		<div class="card">
 
 			<div class="card-header"> Recent User Registrations </div>
@@ -298,7 +424,6 @@ Dashboard
 								</td>
 								<td>
 									<button class="btn"> <i class="bi bi-floppy"></i> </button>
-									<button class="btn"> <i class="bi bi-pencil-square"></i> </button>
 									<button class="btn"> <i class="bi bi-trash"></i> </button>
 								</td>
 							</tr>

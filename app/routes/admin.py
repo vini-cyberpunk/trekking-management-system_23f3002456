@@ -101,17 +101,45 @@ def update_staff_status(staff_id):
 	from app.models import Staff
 	from app import db
 
-	staff = Staff.query.get_or_404(staff_id)
-	status = request.form.get('status')
+	staff = Staff.query.get(staff_id)
 
-	if status not in ['pending', 'active', 'inactive']:
-		return redirect(url_for('admin.staff'))
+	if staff.status == "pending":
+	
+		action = request.form.get('action')
 
-	staff.status = status
-
+		if action == "approve":
+			staff.status = "active"
+			
+		elif action == "reject":
+			db.session.delete(staff)
+			
+		db.session.commit()
+		
+	else:
+	
+		status = request.form.get('status')
+		
+		staff.status = status
+		
+		db.session.commit()
+	
+	next_page = request.form.get('next')
+	return redirect(next_page)
+	
+	
+@admin.route('staff/<int:staff_id>/delete_staff', methods=["POST"])
+@login_required
+def delete_staff(staff_id):
+	
+	from app.models import Staff
+	
+	staff = Staff.query.get(staff_id)
+	
+	db.session.delete(staff)
 	db.session.commit()
-
-	return redirect(url_for('admin.staff'))
+	
+	next_page = request.form.get('action')
+	return render_template(next_page)
 	
 	
 @admin.route('/treks', methods=["GET"])
