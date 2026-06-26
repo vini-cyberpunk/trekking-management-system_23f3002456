@@ -18,6 +18,8 @@ class User(db.Model):
 	username = db.Column(db.String(50), nullable=False)
 	user_contact = db.Column(db.String(10), nullable=True)
 	status = db.Column(db.Enum('active', 'inactive'), nullable=False)
+	
+	bookings = db.relationship("Booking", back_populates = "user")
 
 class Staff(db.Model):
 	__tablename__ = 'staff'
@@ -26,7 +28,8 @@ class Staff(db.Model):
 	staff_name = db.Column(db.String(50), nullable=False)
 	staff_contact = db.Column(db.String(10), nullable=True)
 	status = db.Column(db.Enum('active', 'inactive', 'pending'), nullable=False)
-	assigned_treks = db.relationship('Trek', backref='staff', lazy=True)
+	
+	assigned_trek = db.relationship("Trek", back_populates = "assigned_staff")
 
 class Trek(db.Model):
 	__tablename__ = 'trek'
@@ -39,7 +42,7 @@ class Trek(db.Model):
 	duration = db.Column(db.Integer, nullable=False)
 	start_date = db.Column(db.DateTime, nullable=False)
 	end_date = db.Column(db.DateTime, nullable=False)
-	status = db.Column(db.Enum('pending','approved','open','closed','completed'), nullable=False)
+	status = db.Column(db.Enum('pending','approved','open','closed','started','completed'), nullable=False)
 	
 	__table_args__ = (
 		db.CheckConstraint(
@@ -52,6 +55,9 @@ class Trek(db.Model):
 			name = 'check_date_valid'
 		),
 	)
+	
+	bookings = db.relationship("Booking", back_populates = "trek")
+	assigned_staff = db.relationship("Staff", back_populates = "assigned_trek")
 
 class Booking(db.Model):
 	__tablename__ = 'booking'
@@ -60,5 +66,14 @@ class Booking(db.Model):
 	trek_id = db.Column(db.Integer, db.ForeignKey('trek.trek_id', ondelete='SET NULL'), nullable=True)
 	booking_date = db.Column(db.DateTime, nullable=False)
 	status = db.Column(db.Enum('booked','cancelled','completed'), nullable=False)
+	
+	user = db.relationship("User", back_populates = "bookings")
+	trek = db.relationship("Trek", back_populates = "bookings")
+	
+	
+	
+	
+	
+	
 	
 	
