@@ -85,8 +85,8 @@ Dashboard
 							<th scope="col"> Booking ID </th>
 							<th scope="col"> User </th>
 							<th scope="col"> Trek </th>
-							<th scope="col"> Booking Date </th>
 							<th scope="col"> Status </th>
+							<th scope="col"> Booking Date </th>
 							
 						</tr>
 					</thead>
@@ -99,31 +99,10 @@ Dashboard
 							<tr>
 							
 								<td>{{ booking.booking_id }}</td>
-								<td>{{ booking.user_id }}</td>
-								<td>{{ booking.trek_id }}</td>
+								<td>{{ booking.user.username }}</td>
+								<td>{{ booking.trek.trek_name }}</td>
+								<td>{{ booking.status }}</td>
 								<td>{{ booking.booking_date }}</td>
-								<td>
-								
-									<select class="form-select form-select-sm">
-									
-										<option value="booked"
-										{% if booking.status == "booked" %}selected{% endif %} >
-											Booked 
-										</option>
-										
-										<option value="cancelled"
-										{% if booking.status == "cancelled" %}selected{% endif %} >
-											Cancelled 
-										</option>
-										
-										<option value="completed"
-										{% if booking.status == "completed" %}selected{% endif %} >
-											Completed 
-										</option>
-										
-									</select>
-									
-								</td>
 								
 							</tr>
 							{% endfor %}
@@ -131,7 +110,7 @@ Dashboard
 						{% else %}
 						<tr> 
 						
-							<td colspan="6">No Bookings yet </td>
+							<td colspan="6" class="text-center">No Bookings yet </td>
 							
 						</tr>
 						{% endif %}
@@ -255,7 +234,7 @@ Dashboard
 						{% else %}
 						<tr> 
 						
-							<td colspan="6">No Staff Available </td>
+							<td colspan="6" class="text-center">No Staff Available </td>
 							
 						</tr>
 						{% endif %}
@@ -293,6 +272,7 @@ Dashboard
 						<tr>
 						
 							<th scope="col"> Trek ID </th>
+							<th scope="col"> Trek Name </th>
 							<th scope="col"> Location </th>
 							<th scope="col"> Start Date </th>
 							<th scope="col"> End Date </th>
@@ -362,7 +342,7 @@ Dashboard
 						
 						<tr> 
 						
-							<td colspan="6">No treks available </td>
+							<td colspan="6" class="text-center">No treks available </td>
 							
 						</tr>
 						
@@ -392,53 +372,82 @@ Dashboard
 
 			<div class="card-body table-responsive">
 				<table class="table table-hover">
+				
 					<thead>
 						<tr>
+						
 							<th scope="col"> User ID </th>
 							<th scope="col"> Name </th>
 							<th scope="col"> Contact </th>
 							<th scope="col"> Status </th>
 							<th scope="col"> Action </th>
+							
 						</tr>
 					</thead>
 					
 					<tbody>
+					
 						{% if recent_users %}
+						
 							{% for user in recent_users %}
 							<tr>
+							
 								<td>{{ user.user_id }}</td>
 								<td>{{ user.username }}</td>
 								<td>{{ user.user_contact }}</td>
 								<td>
-									<select class="form-select form-select-sm">
-										<option value="active"
-										{% if user.status == "active" %}selected{% endif %} >
-											Active 
-										</option>
+									
+									<div class="form form-control-sm" method="POST" action="{{ url_for('admin.update_user_status') }}">
+									
+										<select class="form-select form-select-sm">
 										
-										<option value="inactive"
-										{% if user.status == "inactive" %}selected{% endif %} >
-											Inactive 
-										</option>
-									</select>
+											<option value="active"
+											{% if user.status == "active" %}selected{% endif %} >
+												Active 
+											</option>
+											
+											<option value="inactive"
+											{% if user.status == "inactive" %}selected{% endif %} >
+												Inactive 
+											</option>
+											
+										</select>
+										
+										<button class="btn"> <i class="bi bi-floppy"></i> </button>
+										
+										<input type="hidden" name="next" value="{{ url_for('admin.dashboard') }}">
+										
+									</div>
+									
 								</td>
 								<td>
-									<button class="btn"> <i class="bi bi-floppy"></i> </button>
+								
 									<button class="btn"> <i class="bi bi-trash"></i> </button>
+									
 								</td>
+								
 							</tr>
 							{% endfor %}
+							
 						{% else %}
-						<tr> 
-							<td colspan="6">No Users Available </td>
+						
+						<tr>
+						 
+							<td colspan="6" class="text-center">No Users Available </td>
+						
 						</tr>
+						
 						{% endif %}
+					
 					</tbody>
+					
 				</table>
 			</div>
 			
 			<div class="card-footer">
+			
 				<button class="btn btn-primary"> View All </button>
+				
 			</div>
 
 		</div>
