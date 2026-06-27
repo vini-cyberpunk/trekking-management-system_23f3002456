@@ -1,0 +1,169 @@
+{% extends "admin/admin_base.html" %}
+
+{% block title %}
+Create Trek
+{% endblock %}
+
+{% block main_content %}
+
+<h2>Create Trek</h2>
+	
+<div class="card shadow-sm mt-3">
+
+	<div class="card-header d-flex justify-content-end">
+	
+		<a href="{{ previous_page }}">Go Back </a>
+		
+	</div>
+	
+    <div class="card-body">
+
+        <form method="POST">
+        
+        	<input type="hidden" name="next" value="{{ previous_page }}">
+
+            <div class="row g-3">
+
+                <div class="col-md-6">
+                    
+                    <label class="form-label">Trek Name</label>
+                    
+                    <input
+                        type="text"
+                        name="trek_name"
+                        class="form-control"
+                        required>
+                        
+                </div>
+
+                <div class="col-md-6">
+                   
+                    <label class="form-label">Location</label>
+                    
+                    <input
+                        type="text"
+                        name="trek_location"
+                        class="form-control"
+                        required>
+                        
+                </div>
+
+                <div class="col-md-4">
+                    
+                    <label class="form-label">Difficulty</label>
+
+                    <select
+                        name="difficulty"
+                        class="form-select"
+                        required>
+
+                        <option value="easy">Easy</option>
+                        <option value="moderate">Moderate</option>
+                        <option value="hard">Hard</option>
+
+                    </select>
+                    
+                </div>
+
+                <div class="col-md-4">
+                    
+                    <label class="form-label">Duration (Days)</label>
+                    
+                    <input
+                        type="number"
+                        name="duration"
+                        class="form-control"
+                        min="1"
+                        required>
+                        
+                </div>
+
+                <div class="col-md-4">
+                    
+                    <label class="form-label">Available Slots</label>
+                    
+                    <input
+                        type="number"
+                        name="available_slots"
+                        class="form-control"
+                        min="1"
+                        required>
+                        
+                </div>
+
+                <div class="col-md-6">
+                
+                    <label class="form-label">Start Date</label>
+                    
+                    <input
+                        type="date"
+                        name="start_date"
+                        class="form-control"
+                        required>
+                        
+                </div>
+
+                <div class="col-md-6">
+                
+                    <label class="form-label">End Date</label>
+                    
+                    <input
+                        type="date"
+                        name="end_date"
+                        class="form-control"
+                        required>
+                        
+                </div>
+
+                <div class="col-md-6">
+                
+                    <label class="form-label">Assign Staff</label>
+
+                    <select
+                        name="assigned_staff_id"
+                        class="form-select">
+
+                        <option value="">Unassigned</option>
+
+                        {% for s in staff %}
+
+                        <option value="{{ s.staff_id }}">
+                            {{ s.staff_name }}
+                        </option>
+
+                        {% endfor %}
+
+                    </select>
+                    
+                </div>
+
+                <div class="col-md-6">
+                
+                    <label class="form-label">Status</label>
+
+                    <select name="status" class="form-select">
+
+                        <option value="pending">Pending</option>
+                        <option value="approved">Approved</option>
+                        <option value="open">Open</option>
+                        
+                    </select>
+                    
+                </div>
+
+            </div>
+
+            <div class="mt-4 text-end">
+
+                <button type="submit" class="btn btn-primary">
+                    Create Trek
+                </button>
+
+            </div>
+
+        </form>
+
+    </div>
+</div>
+
+{% endblock %}
