@@ -40,9 +40,9 @@ class Trek(db.Model):
 	available_slots = db.Column(db.Integer, nullable=False)
 	assigned_staff_id = db.Column(db.Integer, db.ForeignKey('staff.staff_id', ondelete='SET NULL'), nullable=True)
 	duration = db.Column(db.Integer, nullable=False)
-	start_date = db.Column(db.DateTime, nullable=False)
-	end_date = db.Column(db.DateTime, nullable=False)
-	status = db.Column(db.Enum('pending','approved','open','closed','started','completed'), nullable=False)
+	start_date = db.Column(db.Date, nullable=False)
+	end_date = db.Column(db.Date, nullable=False)
+	status = db.Column(db.Enum('pending','rejected','approved','open','closed','started','completed'), nullable=False)
 	
 	__table_args__ = (
 		db.CheckConstraint(
