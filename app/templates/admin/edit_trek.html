@@ -1,3 +1,4 @@
+```jinja
 {% extends "admin/admin_base.html" %}
 
 {% block title %}
@@ -5,6 +6,8 @@ Edit Trek
 {% endblock %}
 
 {% block main_content %}
+
+{% set lock_details = trek.status in ['started','completed','open','closed'] %}
 
 <h2>Edit Trek</h2>
 
@@ -22,6 +25,7 @@ Edit Trek
                         name="trek_name"
                         class="form-control"
                         value="{{ trek.trek_name }}"
+                        {% if lock_details %}disabled{% endif %}
                         required>
                 </div>
 
@@ -32,6 +36,7 @@ Edit Trek
                         name="trek_location"
                         class="form-control"
                         value="{{ trek.trek_location }}"
+                        {% if lock_details %}disabled{% endif %}
                         required>
                 </div>
 
@@ -41,6 +46,7 @@ Edit Trek
                     <select
                         name="difficulty"
                         class="form-select"
+                        {% if lock_details %}disabled{% endif %}
                         required>
 
                         <option value="easy"
@@ -69,6 +75,7 @@ Edit Trek
                         class="form-control"
                         min="1"
                         value="{{ trek.duration }}"
+                        {% if lock_details %}disabled{% endif %}
                         required>
                 </div>
 
@@ -90,6 +97,7 @@ Edit Trek
                         name="start_date"
                         class="form-control"
                         value="{{ trek.start_date }}"
+                        {% if lock_details %}disabled{% endif %}
                         required>
                 </div>
 
@@ -100,6 +108,7 @@ Edit Trek
                         name="end_date"
                         class="form-control"
                         value="{{ trek.end_date }}"
+                        {% if lock_details %}disabled{% endif %}
                         required>
                 </div>
 
@@ -149,6 +158,11 @@ Edit Trek
                             Open
                         </option>
 
+                        <option value="closed"
+                            {% if trek.status=="closed" %}selected{% endif %}>
+                            Closed
+                        </option>
+
                     </select>
                 </div>
 
@@ -180,6 +194,5 @@ Edit Trek
 </div>
 
 {% endblock %}
-
-
+```
 

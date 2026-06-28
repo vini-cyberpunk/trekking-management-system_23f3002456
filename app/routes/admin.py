@@ -40,52 +40,63 @@ def dashboard():
 @login_required
 def users():
 
-    from app.models import User
-    
-    query = User.query
-    
-    total_users = query.count()
-    active_users = query.filter_by(status="active").count()
-    inactive_users = query.filter_by(status="inactive").count()
+	from app.models import User, Login
 
-    username = request.args.get('username', '').strip()
-    user_id = request.args.get('user_id', '').strip()
-    user_contact = request.args.get('user_contact', '').strip()
-    status = request.args.get('status', '').strip()
+	base_query = User.query.join(Login)
 
-    query = User.query
+	total_users = base_query.count()
+	active_users = base_query.filter(User.status == "active").count()
+	inactive_users = base_query.filter(User.status == "inactive").count()
 
-    if username:
-        query = query.filter(
-            User.username.ilike(f"%{username}%")
-        )
+	query = base_query
 
-    if user_id:
-        query = query.filter(
-            User.user_id == user_id
-        )
+	username = request.args.get('username', '').strip()
+	user_id = request.args.get('user_id', '').strip()
+	user_contact = request.args.get('user_contact', '').strip()
+	email = request.args.get('email', '').strip()
+	status = request.args.get('status', '').strip()
 
-    if user_contact:
-        query = query.filter(
-            User.user_contact.ilike(f"%{user_contact}%")
-        )
+	if username:
+		query = query.filter(
+			User.username.ilike(f"%{username}%")
+		)
 
-    if status:
-        query = query.filter(
-            User.status == status
-        )
+	if user_id:
+		query = query.filter(
+			User.user_id == int(user_id)
+		)
 
-    users = query.order_by(
-        User.user_id.desc()
-    ).all()
+	if user_contact:
+		query = query.filter(
+			User.user_contact.ilike(f"%{user_contact}%")
+		)
 
-    return render_template(
-        'admin/users.html',
-        total_users=total_users,
-        active_users=active_users,
-        inactive_users=inactive_users,
-        users=users
-    )
+	if email:
+		query = query.filter(
+			Login.email.ilike(f"%{email}%")
+		)
+
+	if status:
+		query = query.filter(
+			User.status == status
+		)
+
+	users = query.order_by(
+		User.user_id.desc()
+	).all()
+
+	return render_template(
+		'admin/users.html',
+		total_users=total_users,
+		active_users=active_users,
+		inactive_users=inactive_users,
+		users=users,
+		username=username,
+		user_id=user_id,
+		user_contact=user_contact,
+		email=email,
+		status=status
+	)
 
 
 @admin.route('/users/<int:user_id>/update-status', methods=['POST'])

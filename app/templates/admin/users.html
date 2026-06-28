@@ -75,7 +75,7 @@ Manage Users
 		</div>
 
 
-		<div class="col-lg-4">
+		<div class="col-lg-2">
 			<label class="form-label">User Name</label>
 
 			<div class="input-group">
@@ -91,16 +91,35 @@ Manage Users
 				    placeholder="Search by name">
 			</div>
 		</div>
+		
+		<div class="col-lg-2">
+			<label class="form-label">Email</label>
+
+			<div class="input-group">
+				<span class="input-group-text">
+				    <i class="bi bi-search"></i>
+				</span>
+
+				<input
+				    type="text"
+				    class="form-control"
+				    name="email"
+				    value="{{ request.args.get('email', '') }}"
+				    placeholder="Search by email">
+			</div>
+		</div>
 
 		<div class="col-lg-2">
 			<label class="form-label">Contact</label>
 
 			<input
-				type="text"
+				type="tel"
 				class="form-control"
 				name="user_contact"
 				value="{{ request.args.get('user_contact', '') }}"
-				placeholder="Phone no.">
+				maxlength="10"
+				pattern="[0-9]{10}"
+				placeholder="Enter 10-digit phone no.">
 		</div>
 
 		<div class="col-lg-2">
@@ -139,82 +158,89 @@ Manage Users
 		</span>
 	</div>
 
-	<div class="table-responsive">
-
-		<table class="table table-hover align-middle mb-0">
-
-		    <thead>
-		        <tr>
-		            <th scope="col">ID</th>
-		            <th scope="col">Name</th>
-		            <th scope="col">Contact</th>
-		            <th scope="col">Email</th>
-		            <th scope="col">Status</th>
-		            <th scope="col" class="text-center">Action</th>
-		        </tr>
-		    </thead>
-
-		    <tbody>
-
-		        {% for user in users %}
-
-		        <tr>
-
-		            <td>{{ user.user_id }}</td>
-
-		            <td>{{ user.name }}</td>
-
-		            <td>{{ user.contact }}</td>
-
-		            <td>{{ user.email }}</td>
-
-		            <td>
+<div class="table-responsive">
+	<table class="table table-hover">
+	
+		<thead>
+			<tr>
+			
+				<th scope="col"> User ID </th>
+				<th scope="col"> Name </th>
+				<th scope="col"> Email </th>
+				<th scope="col"> Contact </th>
+				<th scope="col"> Status </th>
+				<th scope="col" class="text-center"> Action </th>
+				
+			</tr>
+		</thead>
+		
+		<tbody>
+		
+			{% if users %}
+			
+				{% for user in users %}
+				<tr>
+				
+					<td>{{ user.user_id }}</td>
+					<td>{{ user.username }}</td>
+					<td>{{ user.login.email }}</td>
+					<td>{{ user.user_contact }}</td>
+					<td>
 						
-		                <span class="badge {% if user.status=='active' %} text-bg-success {% else %} text-bg-secondary {% endif %}">
-		                    {{ user.status }}
-		                </span>
-		                
-		            </td>
-
-		            <td>
-
-		                <div class="d-flex justify-content-center gap-2">
-
-		                    <button
-		                        class="btn btn-sm btn-outline-primary"
-		                        title="Edit">
-		                        <i class="bi bi-pencil-square"></i>
-		                    </button>
-
-		                    <button
-		                        class="btn btn-sm btn-outline-danger"
-		                        title="Delete">
-		                        <i class="bi bi-trash"></i>
-		                    </button>
-
-		                </div>
-
-		            </td>
-
-		        </tr>
-
-		        {% else %}
-
-		        <tr>
-
-		            <td colspan="7" class="text-center py-4">
-		                No users found.
-		            </td>
-
-		        </tr>
-
-		        {% endfor %}
-
-		    </tbody>
-
-		</table>
-
-	</div>
+						<form class="d-flex justify-content-center" method="POST" action="{{ url_for('admin.update_user_status', user_id = user.user_id) }}">
+						
+							<select name="status" class="form-select form-select-sm">
+							
+								<option value="active"
+								{% if user.status == "active" %}selected{% endif %} >
+									Active 
+								</option>
+								
+								<option value="inactive"
+								{% if user.status == "inactive" %}selected{% endif %} >
+									Inactive 
+								</option>
+								
+							</select>
+							
+							<button class="btn"> <i class="bi bi-floppy"></i> </button>
+							
+							<input type="hidden" name="next" value="{{ url_for('admin.dashboard') }}">
+							
+						</form>
+						
+					</td>
+					<td>
+					
+						<form class="d-flex justify-content-center" method="POST" action="{{ url_for('admin.delete_user', user_id = user.user_id) }}">
+						
+							<button class="btn btn-danger">
+								<i class="bi bi-trash"></i> 
+							</button>
+							
+							<input type="hidden" name="next" value="{{ url_for('admin.dashboard') }}">
+						
+						</form>
+						
+					</td>
+					
+				</tr>
+				{% endfor %}
+				
+			{% else %}
+			
+			<tr>
+			 
+				<td colspan="12" class="text-center">No Users Available </td>
+			
+			</tr>
+			
+			{% endif %}
+		
+		</tbody>
+		
+	</table>
+</div>
 
 
 </div>

@@ -274,6 +274,7 @@ Dashboard
 							<th scope="col"> Trek ID </th>
 							<th scope="col"> Trek Name </th>
 							<th scope="col"> Location </th>
+							<th scope="col"> Staff </th>
 							<th scope="col"> Start Date </th>
 							<th scope="col"> End Date </th>
 							<th scope="col"> Status </th>
@@ -292,6 +293,19 @@ Dashboard
 								<td>{{ trek.trek_id }}</td>
 								<td>{{ trek.trek_name }}</td>
 								<td>{{ trek.trek_location }}</td>
+								<td>
+								
+									{% if trek.assigned_staff.staff_name %}
+									
+									{{ trek.assigned_staff.staff_name }}
+									
+									{% else %}
+									
+									None
+									
+									{% endif %}
+								
+								</td>
 								<td>{{ trek.start_date }}</td>
 								<td>{{ trek.end_date }}</td>
 								<td>
@@ -389,7 +403,7 @@ Dashboard
 										
 										<form method="GET" action="{{ url_for('admin.edit_trek', trek_id=trek.trek_id) }}">
 										
-											<button class="btn btn-secondary" {% if trek.status in ['started','completed','rejected','open','closed'] %}disabled{% endif %}>
+											<button class="btn btn-outline-secondary">
 												<i class="bi bi-pencil"></i> 
 											</button>
 											
