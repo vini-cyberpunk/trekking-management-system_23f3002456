@@ -20,6 +20,7 @@ class User(db.Model):
 	status = db.Column(db.Enum('active', 'inactive'), nullable=False)
 	
 	bookings = db.relationship("Booking", back_populates = "user")
+	login = db.relationship("Login")
 
 class Staff(db.Model):
 	__tablename__ = 'staff'
@@ -30,6 +31,7 @@ class Staff(db.Model):
 	status = db.Column(db.Enum('active', 'inactive', 'pending'), nullable=False)
 	
 	assigned_trek = db.relationship("Trek", back_populates = "assigned_staff")
+	login = db.relationship("Login")
 
 class Trek(db.Model):
 	__tablename__ = 'trek'
