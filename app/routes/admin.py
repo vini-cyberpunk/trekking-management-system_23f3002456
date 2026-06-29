@@ -90,12 +90,7 @@ def users():
 		total_users=total_users,
 		active_users=active_users,
 		inactive_users=inactive_users,
-		users=users,
-		username=username,
-		user_id=user_id,
-		user_contact=user_contact,
-		email=email,
-		status=status
+		users=users
 	)
 
 
@@ -138,10 +133,65 @@ def delete_user(user_id):
 @login_required
 def staff():
 	
-	from app.models import Staff
+	from app.models import Staff, Login
 	
-	staff = Staff.query.all()
-	return render_template('admin/staff.html', staff=staff)
+	base_query = Staff.query.join(Login)
+	
+	total_staff = base_query.count()
+	active_staff = base_query.filter(Staff.status=="active").count()
+	inactive_staff = base_query.filter(Staff.status=="inactive").count()
+	pending_staff = base_query.filter(Staff.status=="pending").count()
+	
+	query = base_query
+	
+	staff_id = request.args.get('staff_id', '')
+	staff_name = request.args.get('staff_name', '')
+	email = request.args.get('email', '')
+	staff_contact = request.args.get('contact', '')
+	trek_id = request.args.get('trek_id', '')
+	status = request.args.get('status', '')
+	
+	if staff_id:
+		query = query.filter(
+			Staff.staff_id==int(staff_id)
+		)
+		
+	if staff_name:
+		query = query.filter(
+			Staff.staff_name.ilike(f"%{staff_name}%")
+		)
+		
+	if staff_contact:
+		query = query.filter(
+			Staff.staff_contact.ilike(f"%{staff_contact}%")
+		)
+		
+	if email:
+		query = query.filter(
+			Staff.staff_email.ilike(f"%{email}%")
+		)
+		
+	if trek_id:
+		query = query.filter(
+			Staff.assigned_trek.trek_id==int(trek_id)
+		)
+		
+	if status:
+		query = query.filter(
+			Staff.status==status
+		)
+	
+	
+		
+	staff = query.all()
+	return render_template(
+		'admin/staff.html',
+		staff=staff,
+		total_staff=total_staff,
+		active_staff=active_staff,
+		inactive_staff=inactive_staff,
+		pending_staff=pending_staff
+	)
 	
 	
 @admin.route('/staff/<int:staff_id>/update-status', methods=['POST'])
