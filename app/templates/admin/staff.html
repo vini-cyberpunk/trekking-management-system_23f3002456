@@ -92,7 +92,7 @@ Manage Staff
 		</div>
 
 
-		<div class="col-lg-4">
+		<div class="col-lg-2">
 			<label class="form-label">Staff Name</label>
 
 			<div class="input-group">
@@ -108,16 +108,35 @@ Manage Staff
 				    placeholder="Search by name">
 			</div>
 		</div>
+		
+		<div class="col-lg-2">
+			<label class="form-label">Email</label>
+
+			<div class="input-group">
+				<span class="input-group-text">
+				    <i class="bi bi-search"></i>
+				</span>
+
+				<input
+				    type="text"
+				    class="form-control"
+				    name="email"
+				    value="{{ request.args.get('email', '') }}"
+				    placeholder="Search by Email">
+			</div>
+		</div>
 
 		<div class="col-lg-2">
 			<label class="form-label">Contact</label>
 
 			<input
-				type="text"
+				type="tel"
 				class="form-control"
 				name="staff_contact"
 				value="{{ request.args.get('staff_contact', '') }}"
-				placeholder="Phone no.">
+				pattern="[0-9]{10}"
+				maxlength="10"
+				placeholder="10-digit phone no.">
 		</div>
 		
 		<div class="col-lg-1">
@@ -128,7 +147,7 @@ Manage Staff
 				class="form-control"
 				name="trek_id"
 				value="{{ request.args.get('trek_id', '') }}"
-				placeholder="Trek ID">
+				placeholder="ID">
 		</div>
 
 		<div class="col-lg-2">
@@ -143,7 +162,7 @@ Manage Staff
 		</div>
 
 		<div class="col-lg-2">
-			<div class="d-flex gap-2 justify-content-end">
+			<div class="ms-auto gap-2 d-flex justify-content-end">
 
 				<button type="submit" class="btn btn-primary">
 				    Search
@@ -174,8 +193,9 @@ Manage Staff
 
 		    <thead>
 		        <tr>
-		            <th scope="col">ID</th>
+		            <th scope="col">Staff ID</th>
 		            <th scope="col">Name</th>
+		            <th scope="col">Email</th>
 		            <th scope="col">Contact</th>
 		            <th scope="col">Assigned Treks</th>
 		            <th scope="col">Status</th>
@@ -192,36 +212,88 @@ Manage Staff
 		            <td>{{ s.staff_id }}</td>
 
 		            <td>{{ s.staff_name }}</td>
+		            
+		            <td>{{ s.login.email }}</td>
 
-		            <td>{{ s.staff_contact }}</td>
-
-		            <td>{{ s.assigned_treks }}</td>
+		            <td>{{ s.staff_contact if s.staff_contact else None }}</td>
 
 		            <td>
+		            {% for trek in s.assigned_trek %}
+		            
+		            	{{ trek.trek_name }}{% if not loop.last %}, {% endif %}
+		            	
+		            {% else %}
+		            
+		            None
+		            	
+		            {% endfor %}
+		            </td>
+
+		            <td>
+		            
+		            	{% if s.status == "pending" %}
+		            	
+		            	{{ s.status }}
+		            	
+		            	{% else %}
+		            
+		            	<form class="d-flex justify-content-between" method="POST" action="{{ url_for('admin.update_staff_status', staff_id = s.staff_id) }}">
+		            	
+		            		<select class="form-select form-select-sm" name="status">
+		            		
+		            			<option value="active" {% if s.status == "active" %}selected{% endif %}>
+		            				Active
+		            			</option>
+		            			
+		            			<option value="inactive" {% if s.status == "inactive" %}selected{% endif %}>
+		            				Inactive
+		            			</option>
+		            			
+		            		</select>
+		            		
+		            		<button class="btn" title="Save Status">
+		            			<i class="bi bi-floppy"></i>
+		            		</button>
+		            		
+		            		<input type="hidden" name="next" value="{{ url_for('admin.staff') }}">
+
+						</form>
 						
-		                <span class="badge {% if s.status=='active' %} text-bg-success {% else %} text-bg-secondary {% endif %}">
-		                    {{ s.status }}
-		                </span>
+						{% endif %}
 		                
 		            </td>
 
 		            <td>
+		            
+		            	{% if s.status == "pending" %}
+		            	
+		            	<form class="d-flex justify-content-center" method="POST" action="{{ url_for('admin.update_staff_status', staff_id = s.staff_id) }}">
+		            	
+		            		<input type="hidden" name="next" value="{{ url_for('admin.staff') }}">
+		            		
+		            		<button class="btn btn-success" name="action" value="approve">
+		            			Approve
+		            		</button>
+		            		
+		            		<button class="btn btn-danger" name="action" value="reject">
+		            			Reject
+		            		</button>
+						
+						</form>
+						
+						{% else %}
+						
+						<form class="d-flex justify-content-center" method="POST" action="{{ url_for('admin.delete_staff', staff_id = s.staff_id) }}">
 
-		                <div class="d-flex justify-content-center gap-2">
-
-		                    <button
-		                        class="btn btn-sm btn-outline-primary"
-		                        title="Edit">
-		                        <i class="bi bi-pencil-square"></i>
-		                    </button>
-
-		                    <button
-		                        class="btn btn-sm btn-outline-danger"
-		                        title="Delete">
+		                    <button class="btn btn-sm btn-outline-danger" title="Delete">
 		                        <i class="bi bi-trash"></i>
 		                    </button>
+		                    
+		                    <input type="hidden" name="next" value="{{ url_for('admin.staff') }}">
 
-		                </div>
+		                </form>
+		                
+		                {% endif %}
 
 		            </td>
 
@@ -231,7 +303,7 @@ Manage Staff
 
 		        <tr>
 
-		            <td colspan="7" class="text-center py-4">
+		            <td colspan="12" class="text-center py-4">
 		                No staff found.
 		            </td>
 
