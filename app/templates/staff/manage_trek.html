@@ -1,0 +1,157 @@
+{% extends "staff/staff_base.html" %}
+
+{% block title %}
+Manage Trek
+{% endblock %}
+
+{% block main_content %}
+
+<h2>Manage Trek</h2>
+
+<div class="card shadow-sm mt-3">
+	<div class="card-body">
+
+		<form method="POST">
+
+			<div class="row">
+
+				<div class="col-md-6">
+					<label class="form-label">Trek ID</label>
+					<input
+						type="text"
+						class="form-control"
+						value="{{ trek.trek_id }}"
+						disabled>
+				</div>
+
+				<div class="col-md-6">
+					<label class="form-label">Trek Name</label>
+					<input
+						type="text"
+						class="form-control"
+						value="{{ trek.trek_name }}"
+						disabled>
+				</div>
+
+				<div class="col-md-6">
+					<label class="form-label">Location</label>
+					<input
+						type="text"
+						class="form-control"
+						value="{{ trek.trek_location }}"
+						disabled>
+				</div>
+
+				<div class="col-md-6">
+					<label class="form-label">Duration</label>
+					<input
+						type="text"
+						class="form-control"
+						value="{{ trek.duration }} Days"
+						disabled>
+				</div>
+
+				<div class="col-md-6">
+					<label class="form-label">Start Date</label>
+					<input
+						type="text"
+						class="form-control"
+						value="{{ trek.start_date }}"
+						disabled>
+				</div>
+
+				<div class="col-md-6">
+					<label class="form-label">End Date</label>
+					<input
+						type="text"
+						class="form-control"
+						value="{{ trek.end_date }}"
+						disabled>
+				</div>
+
+				<div class="col-md-6">
+					<label class="form-label">Available Slots</label>
+
+					<input
+						type="number"
+						name="available_slots"
+						class="form-control"
+						min="0"
+						value="{{ trek.available_slots }}"
+						{% if trek.status=="completed" %} disabled {% endif %}
+						required>
+				</div>
+
+				<div class="col-md-6">
+				
+					<label class="form-label">Status</label>
+
+					<select name="status" class="form-select">
+						
+						{% if trek.status=="open" %}
+						
+						<option value="open" selected>
+							Open
+						</option>
+
+						<option value="closed">
+							Close
+						</option>
+						
+						{% elif trek.status=="closed" %}
+						
+						<option value="closed" selected>
+							Closed
+						</option>
+
+						<option value="started">
+							Started
+						</option>
+						
+						{% elif trek.status=="started" %}
+						
+						<option value="started" selected>
+							Started
+						</option>
+
+						<option value="completed">
+							Complete
+						</option>
+						
+						{% else %}
+						
+						<option value="completed">
+							Complete
+						</option>
+						
+						{% endif %}
+
+					</select>
+
+				</div>
+
+			</div>
+
+			<div class="mt-4 text-end">
+
+				<a href="{{ next_page }}" class="btn btn-secondary">
+					Back
+				</a>
+
+				<button type="submit" class="btn btn-primary">
+					Save Changes
+				</button>
+				
+				<input type="hidden" name="next" value={{ next_page }}>
+				
+			</div>
+
+		</form>
+
+	</div>
+</div>
+
+{% endblock %}
+
+
+
