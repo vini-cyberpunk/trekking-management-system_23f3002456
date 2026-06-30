@@ -44,7 +44,7 @@ class Trek(db.Model):
 	duration = db.Column(db.Integer, nullable=False)
 	start_date = db.Column(db.Date, nullable=False)
 	end_date = db.Column(db.Date, nullable=False)
-	status = db.Column(db.Enum('pending','rejected','approved','open','closed','started','completed'), nullable=False)
+	status = db.Column(db.Enum('pending','approved','open','closed','started','completed'), nullable=False)
 	
 	__table_args__ = (
 		db.CheckConstraint(
