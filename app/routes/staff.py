@@ -16,15 +16,18 @@ def dashboard():
 
 	staff = Staff.query.filter_by(login_id=login_id).first()
 
-	assigned_treks = staff.assigned_trek.all()
+	total_treks = staff.assigned_trek.all()
 
 	completed_treks = staff.assigned_trek.filter_by(status="completed").all()
 
-	upcoming_treks = staff.assigned_trek.filter( Trek.start_date > date.today() ).all()
+	upcoming_treks = staff.assigned_trek.filter( 
+		Trek.start_date > date.today(),
+		Trek.status != "completed"
+	).all()
 
 	active_treks = staff.assigned_trek.filter(
 		Trek.start_date <= date.today(),
-		Trek.end_date >= date.today()
+		Trek.end_date >= date.today(),
 	).all()
 
 	total_participants = sum(
@@ -32,14 +35,53 @@ def dashboard():
 		for trek in staff.assigned_trek.all()
 	)
 	
+	trek_id = request.args.get('trek_id', type=int)
+	trek_name = request.args.get('trek_name', '').strip()
+	trek_location = request.args.get('trek_location', '').strip()
+	status = request.args.get('status')
+	
+	current_filter = request.args.get('filter', '')
+	
+	if current_filter == "total":
+		treks = total_treks
+		
+	elif current_filter == "active":
+		treks = active_treks
+		
+	elif current_filter == "upcoming":
+		treks = upcoming_treks
+	
+	elif current_filter == "completed":
+		treks = completed_treks
+		
+	else:
+	
+		query = staff.assigned_trek
+		
+		if trek_id:
+			query = query.filter_by(trek_id=trek_id)
+			
+		if trek_name:
+			query = query.filter(Trek.trek_name.ilike(f"%{trek_name}%"))
+			
+		if trek_location:
+			query = query.filter(Trek.location.ilike(f"%{trek_location}%"))
+			
+		if status:
+			query = query.filter_by(status=status)
+			
+		treks = query.all()
+	
 	return render_template(
 		'staff/dashboard.html',
 		staff = staff,
-		assigned_treks = assigned_treks,
+		total_treks = total_treks,
 		completed_treks = completed_treks,
 		upcoming_treks = upcoming_treks,
 		active_treks = active_treks,
-		total_participants = total_participants
+		total_participants = total_participants,
+		
+		treks = treks
 	)
 	
 	
@@ -98,17 +140,26 @@ def participants(trek_id):
 	)
 	
 	
-@staff.route('/profile', methods=["GET"])
+@staff.route('/profile', methods=["GET", "POST"])
 @login_required
 def profile():
 
 	login_id = current_user.login_id
 	
-	from app.models import Staff
-	
 	staff = Staff.query.filter_by(login_id=login_id).first()
 	
+	if request.method=="POST":
+		staff_name = request.form.get('staff_name', '').strip()
+		staff_contact = request.form.get('staff_contact', '').strip()
+		
+		staff.staff_name = staff_name
+		staff.staff_contact = staff_contact
+		
+		db.session.commit()
+		
+		return redirect(url_for('staff.profile'))
+	
 	return render_template(
-		'staff/profile.html', 
+		'staff/profile.html',
 		staff = staff
 	)
