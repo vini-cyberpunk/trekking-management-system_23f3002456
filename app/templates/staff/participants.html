@@ -8,223 +8,123 @@ Participants
 {% block main_content %}
 
 
-<div class="d-flex justify-content-between align-items-center">
+<div class="d-flex justify-content-between align-items-center mt-2">
 
 
-    <h2>
-
-        Participants - {{ trek.trek_name }}
-
-    </h2>
+    <h2> Participants - {{ trek.trek_name }} </h2>
 
 
-    <a
-        href="{{ url_for('staff.assigned_treks') }}"
-        class="btn btn-outline-secondary">
-
-
+    <a href="{{ next_page }}" class="btn btn-outline-secondary">
+    
         <i class="bi bi-arrow-left me-1"></i>
-
+        
         Back
-
-
+        
     </a>
 
-
 </div>
 
 
-
-
-<div class="row g-3 mt-2">
-
+<div class="row mt-2">
 
     <div class="col-md-3">
 
-
         <div class="card shadow-sm">
-
 
             <div class="card-body">
 
+                <h6 class="text-muted"> Registered Participants </h6>
 
-                <h6 class="text-muted">
-
-                    Registered Participants
-
-                </h6>
-
-
-                <h3>
-
-                    {{ participant_count }}
-
-                </h3>
-
+                <h3> {{ participants }} <h3>
 
             </div>
 
-
         </div>
 
-
     </div>
-
-
-
 
     <div class="col-md-3">
 
-
         <div class="card shadow-sm">
-
 
             <div class="card-body">
 
+                <h6 class="text-muted"> Slots Remaining </h6>
 
-                <h6 class="text-muted">
-
-                    Slots Remaining
-
-                </h6>
-
-
-                <h3>
-
-                    {{ trek.available_slots }}
-
-                </h3>
-
+                <h3> {{ trek.available_slots }} </h3>
 
             </div>
 
-
         </div>
 
-
     </div>
-
-
-
 
     <div class="col-md-3">
 
-
         <div class="card shadow-sm">
-
 
             <div class="card-body">
 
+                <h6 class="text-muted"> Status </h6>
 
-                <h6 class="text-muted">
-
-                    Status
-
-                </h6>
-
-
-                <h3>
-
-                    {{ trek.status.title() }}
-
-                </h3>
-
+                <h3> {{ trek.status.title() }} </h3>
 
             </div>
 
-
         </div>
 
-
     </div>
-
-
-
 
     <div class="col-md-3">
 
-
         <div class="card shadow-sm">
-
 
             <div class="card-body">
 
+                <h6 class="text-muted"> Difficulty </h6>
 
-                <h6 class="text-muted">
-
-                    Difficulty
-
-                </h6>
-
-
-                <h3>
-
-                    {{ trek.difficulty.title() }}
-
-                </h3>
-
+                <h3> {{ trek.difficulty.title() }} <h3>
 
             </div>
 
-
         </div>
 
-
     </div>
-
 
 </div>
-
-
-
 
 
 <div class="card shadow-sm mt-4">
 
-
     <div class="card-header">
 
-
-        <h5 class="mb-0">
-
-            Search Participants
-
-        </h5>
-
+        <h5 class="mb-0"> Search Participants </h5>
 
     </div>
 
-
-
     <div class="card-body">
-
-
+    
         <form method="GET">
 
+            <div class="row">
 
-            <div class="row g-3">
-
-
-                <div class="col-md-5">
-
+                <div class="col-md-2">
 
                     <input
-                        type="text"
-                        name="participant_id"
+                        type="number"
+                        name="booking_id"
                         class="form-control"
-                        placeholder="Participant ID"
+                        placeholder="Booking ID"
 
-
-                        value="{{ request.args.get('participant_id','') }}">
-
+                        value="{{ request.args.get('booking_id','') }}">
 
                 </div>
 
-
-
-
-                <div class="col-md-5">
-
+                <div class="col-md-4">
+                
+                <div class="input-group">
+                
+                	<i class="input-group-text bi bi-search"></i>
 
                     <input
                         type="text"
@@ -232,213 +132,117 @@ Participants
                         class="form-control"
                         placeholder="Participant Name"
 
-
                         value="{{ request.args.get('participant_name','') }}">
+                        
+                </div>
 
+                </div>
+                
+                <div class="col-md-2">
+
+                    <input
+                        type="tel"
+                        name="participant_contact"
+                        class="form-control"
+                        placeholder="10-digit phone no."
+                        maxlength="10"
+                        pattern="[0-9]{10}"
+                        
+                        value="{{ request.args.get('participant_contact','') }}">
 
                 </div>
 
-
-
-
-                <div class="col-md-2">
-
+                <div class="col-md-4 d-flex justify-content-center gap-2">
 
                     <button
                         type="submit"
-                        class="btn btn-primary w-100">
-
-
+                        class="btn btn-primary">
                         Search
-
-
                     </button>
-
+                    
+                    <a class="btn btn-danger" href="{{ url_for('staff.participants', trek_id=trek.trek_id) }}">
+                		Reset
+                	</a>
 
                 </div>
 
-
             </div>
-
 
         </form>
 
-
     </div>
 
-
 </div>
-
-
-
 
 
 <div class="card shadow-sm mt-4">
 
-
     <div class="card-header">
 
-
-        <h5 class="mb-0">
-
-            Participant Details
-
-        </h5>
-
+        <h5 class="mb-0"> Participant Details </h5>
 
     </div>
-
-
 
     <div class="card-body">
 
-
         <div class="table-responsive">
-
 
             <table class="table table-hover align-middle mb-0">
 
-
                 <thead>
-
 
                     <tr>
 
+                        <th> Booking ID </th>
 
-                        <th>
+                        <th> Userame </th>
 
-                            Booking ID
+                        <th> User Contact </th>
 
-                        </th>
-
-
-                        <th>
-
-                            User ID
-
-                        </th>
-
-
-                        <th>
-
-                            Name
-
-                        </th>
-
-
-                        <th>
-
-                            Contact
-
-                        </th>
-
-
-                        <th>
-
-                            Booking Date
-
-                        </th>
-
+                        <th> Booking Date </th>
 
                     </tr>
-
 
                 </thead>
 
-
-
                 <tbody>
 
-
-                    {% for booking in participants %}
-
+                    {% for booking in trek.bookings %}
 
                     <tr>
 
+                        <td> {{ booking.booking_id }} </td>
 
-                        <td>
+                        <td> {{ booking.user.user_name }} </td>
 
-                            {{ booking.booking_id }}
+                        <td> {{ booking.user.user_contact }} </td>
 
-                        </td>
-
-
-
-                        <td>
-
-                            {{ booking.user.user_id }}
-
-                        </td>
-
-
-
-                        <td>
-
-                            {{ booking.user.user_name }}
-
-                        </td>
-
-
-
-                        <td>
-
-                            {{ booking.user.user_contact }}
-
-                        </td>
-
-
-
-                        <td>
-
-                            {{ booking.booking_date }}
-
-                        </td>
-
+                        <td> {{ booking.booking_date }} </td>
 
                     </tr>
-
-
 
                     {% else %}
 
-
-
                     <tr>
 
-
-                        <td colspan="5"
-
-                            class="text-center text-muted">
-
-
-                            No participants found.
-
-
-                        </td>
-
+                        <td colspan="4" class="text-center text-muted"> No participants found. </td>
 
                     </tr>
 
-
-
                     {% endfor %}
-
-
 
                 </tbody>
 
-
-
             </table>
-
 
         </div>
 
-
     </div>
-
 
 </div>
 
-
 {% endblock %}
+
+
+
+
