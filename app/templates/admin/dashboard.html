@@ -198,13 +198,13 @@ Dashboard
 								
 									{% if staff.status == "pending" %}
 									
-									<form method="POST" action="{{ url_for('admin.update_staff_status', staff_id=staff.staff_id) }}">
+									<form class="d-flex justify-content-center gap-2" method="POST" action="{{ url_for('admin.update_staff_status', staff_id=staff.staff_id) }}">
 									
-										<button class="btn btn-success" name="action" value="approve">
+										<button class="btn btn-sm btn-success" name="action" value="approve">
 											Approve
 										</button>
 										
-										<button class="btn btn-danger" name="action" value="reject">
+										<button class="btn btn-sm btn-danger" name="action" value="reject">
 											Reject
 										</button>
 										
@@ -374,11 +374,11 @@ Dashboard
 									
 									<form method="POST" action="{{ url_for('admin.update_trek_status', trek_id=trek.trek_id) }}">
 									
-										<button class="btn btn-success" name="action" value="approve">
+										<button class="btn btn-sm btn-success" name="action" value="approve">
 											Approve
 										</button>
 										
-										<button class="btn btn-danger" name="action" value="reject">
+										<button class="btn btn-sm btn-danger" name="action" value="reject">
 											Reject
 										</button>
 										
@@ -388,10 +388,10 @@ Dashboard
 									
 									{% else %}
 									
-									<div class="d-flex justify-content-between">
+									<div class="d-flex justify-content-center gap-2">
 										<form method="POST" action="{{ url_for('admin.delete_trek', trek_id=trek.trek_id) }}">
 										
-											<button class="btn btn-danger" {% if trek.status in ['started','completed','open','closed'] %}disabled{% endif %}>
+											<button class="btn btn-sm btn-danger" {% if trek.status in ['started','completed','open','closed'] %}disabled{% endif %}>
 												<i class="bi bi-trash"></i> 
 											</button>
 											
@@ -401,7 +401,7 @@ Dashboard
 										
 										<form method="GET" action="{{ url_for('admin.edit_trek', trek_id=trek.trek_id) }}">
 										
-											<button class="btn btn-outline-secondary">
+											<button class="btn btn-sm btn-outline-secondary">
 												<i class="bi bi-pencil"></i> 
 											</button>
 											
