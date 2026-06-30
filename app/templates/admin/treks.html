@@ -77,7 +77,8 @@ Manage Treks
 </div>
 
 
-<form method="GET" action="{{ url_for('admin.users') }}">
+<form method="GET" action="{{ url_for('admin.treks') }}">
+
 	<div class="row mt-2 g-3 align-items-end">
 	
 		<div class="col-lg-1">
@@ -90,7 +91,6 @@ Manage Treks
 				value="{{ request.args.get('trek_id', '') }}"
 				placeholder="ID">
 		</div>
-
 
 		<div class="col-lg-4">
 			<label class="form-label">Trek Name</label>
@@ -161,6 +161,7 @@ Manage Treks
 		</div>
 
 	</div>
+	
 </form>
 
 

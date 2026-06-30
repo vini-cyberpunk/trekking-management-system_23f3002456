@@ -268,7 +268,7 @@ def update_trek_status(trek_id):
 			trek.status = "approved"
 			
 		elif action == "reject":
-			trek.status = "rejected"
+			db.session.delete(trek)
 			
 		db.session.commit()
 		
