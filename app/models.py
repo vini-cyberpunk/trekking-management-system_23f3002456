@@ -30,7 +30,7 @@ class Staff(db.Model):
 	staff_contact = db.Column(db.String(10), nullable=True)
 	status = db.Column(db.Enum('active', 'inactive', 'pending'), nullable=False)
 	
-	assigned_trek = db.relationship("Trek", back_populates = "assigned_staff")
+	assigned_trek = db.relationship("Trek", back_populates = "assigned_staff", lazy="dynamic")
 	login = db.relationship("Login")
 
 class Trek(db.Model):
@@ -58,7 +58,7 @@ class Trek(db.Model):
 		),
 	)
 	
-	bookings = db.relationship("Booking", back_populates = "trek")
+	bookings = db.relationship("Booking", back_populates = "trek", lazy="dynamic")
 	assigned_staff = db.relationship("Staff", back_populates = "assigned_trek")
 
 class Booking(db.Model):
