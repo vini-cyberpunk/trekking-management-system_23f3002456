@@ -8,367 +8,259 @@ Explore Treks
 
 {% block main_content %}
 
-<div class="card shadow-sm">
-
+<div class="card shadow-sm mt-4">
 
 	<div class="card-header">
 
-		<h4 class="mb-0">
-
-		    Explore Treks
-
-		</h4>
+		<h4 class="mb-0"> Explore Treks </h4>
 
 	</div>
 
-
-
 	<div class="card-body">
-
 
 		<form method="GET">
 
+		    <div class="row row-cols-lg-5 row-cols-md-3 row-cols-1 g-3 align-items-end">
 
-		    <div class="row g-3 mb-4">
+		        <div class="col">
+		        
+		        	<label class="form-label"> Trek Name </label>
+		        
+				    <div class="input-group">
+				    	
+				    	<span class="input-group-text">
+				    		<i class="bi bi-search"></i>
+				    	</span>
 
-
-		        <div class="col-md-4">
-
-
-		            <input
-		                type="text"
-		                name="trek_name"
-		                class="form-control"
-		                placeholder="Search Trek"
-		                value="{{ request.args.get('trek_name','') }}">
-
-
-		        </div>
-
-
-
-		        <div class="col-md-3">
-
-
-		            <input
-		                type="text"
-		                name="location"
-		                class="form-control"
-		                placeholder="Location"
-		                value="{{ request.args.get('location','') }}">
-
+				        <input
+				            type="text"
+				            name="trek_name"
+				            class="form-control"
+				            placeholder="Search Trek"
+				            value="{{ request.args.get('trek_name','') }}">
+				            
+					</div>
 
 		        </div>
 
 
+				<div class="col">
+				
+					<label class="form-label"> Location </label>
 
-		        <div class="col-md-3">
+					<div class="input-group">
 
+						<span class="input-group-text">
+							<i class="bi bi-geo-alt-fill"></i>
+						</span>
 
-		            <select
-		                name="difficulty"
-		                class="form-select">
+						<input
+							type="text"
+							class="form-control"
+							name="location"
+							value="{{ request.args.get('location', '') }}"
+							placeholder="Search by location">
 
+					</div>
+					
+				</div>
 
-		                <option value="">
+		        <div class="col">
 
-		                    All Difficulties
+					<label class="form-label"> Difficulty </label>
+					
+					<div class="input-group">
+						
+						<span class="input-group-text">
+							<i class="bi bi-speedometer2"></i>
+						</span>
 
-		                </option>
+				        <select name="difficulty" class="form-select">
 
+				            <option value="" {% if request.args.get('difficulty', '') == "" %} selected {% endif %}>
+				            	All Difficulties
+				            </option>
 
-		                <option value="easy">
+				            <option value="easy" {% if request.args.get('difficulty', '') == "easy" %} selected {% endif %}>
+				            	Easy
+				            </option>
 
-		                    Easy
+				            <option value="moderate" {% if request.args.get('difficulty', '') == "moderate" %} selected {% endif %}>
+				            	Moderate
+				            </option>
 
-		                </option>
+				            <option value="hard" {% if request.args.get('difficulty', '') == "hard" %} selected {% endif %}v>
+				            	Hard
+				            </option>
 
-
-		                <option value="moderate">
-
-		                    Moderate
-
-		                </option>
-
-
-		                <option value="hard">
-
-		                    Hard
-
-		                </option>
-
-
-		            </select>
-
+				        </select>
+				        
+				    </div>
 
 		        </div>
+		        
+		        <div class="col">
+				
+					<label class="form-label"> Start Date </label>
 
+					<div class="input-group">
 
+						<span class="input-group-text">
+							<i class="bi bi-calendar-event"></i>
+						</span>
 
-		        <div class="col-md-2">
+						<input
+							type="date"
+							class="form-control"
+							name="start_date"
+							value="{{ request.args.get('start_date', '') }}"
+							placeholder="Select Starting Date">
 
+					</div>
+					
+				</div>
+				
+				<div class="col">
+				
+					<label class="form-label"> End Date </label>
 
-		            <button
-		                type="submit"
-		                class="btn btn-primary w-100">
+					<div class="input-group">
 
+						<span class="input-group-text">
+							<i class="bi bi-calendar-check"></i>
+						</span>
 
+						<input
+							type="date"
+							class="form-control"
+							name="end_date"
+							value="{{ request.args.get('end_date', '') }}"
+							placeholder="Select Ending Date">
+
+					</div>
+					
+				</div>
+
+		        <div class="ms-auto col d-flex gap-2 justify-content-end">
+
+		            <button type="submit" class="btn btn-outline-primary">
 		                Search
-
-
 		            </button>
-
+		            
+		            <a class="btn btn-secondary" href="{{ url_for('user.treks') }}">
+		            	Reset
+		            </a>
 
 		        </div>
-
 
 		    </div>
-
 
 		</form>
 
 
-
-
-
-		<div class="table-responsive">
-
+		<div class="table-responsive mt-2">
 
 		    <table class="table table-hover align-middle">
 
-
 		        <thead>
-
 
 		            <tr>
 
+		                <th> Trek Name </th>
 
-		                <th>
+		                <th> Location </th>
 
-		                    Trek ID
+		                <th> Difficulty </th>
 
-		                </th>
+		                <th> Duration </th>
 
+		                <th> Start Date </th>
+		                
+		                <th> End Date </th>
 
-		                <th>
+		                <th> Slots </th>
 
-		                    Trek Name
-
-		                </th>
-
-
-		                <th>
-
-		                    Location
-
-		                </th>
-
-
-		                <th>
-
-		                    Difficulty
-
-		                </th>
-
-
-		                <th>
-
-		                    Duration
-
-		                </th>
-
-
-		                <th>
-
-		                    Dates
-
-		                </th>
-
-
-		                <th>
-
-		                    Slots
-
-		                </th>
-
-
-		                <th>
-
-		                    Action
-
-		                </th>
-
+		                <th class="text-center"> Action </th>
 
 		            </tr>
-
 
 		        </thead>
 
-
-
 		        <tbody>
-
 
 		            {% for trek in treks %}
 
-
-
 		            <tr>
 
+		                <td> {{ trek.trek_name }} </td>
+
+		                <td> {{ trek.trek_location }} </td>
 
 		                <td>
-
-		                    {{ trek.trek_id }}
-
-		                </td>
-
-
-
-		                <td>
-
-		                    {{ trek.trek_name }}
-
-		                </td>
-
-
-
-		                <td>
-
-		                    {{ trek.trek_location }}
-
-		                </td>
-
-
-
-		                <td>
-
-
 		                    <span class="badge
 
 		                        {% if trek.difficulty == 'easy' %}
-
 		                            text-bg-success
 
-
 		                        {% elif trek.difficulty == 'moderate' %}
-
 		                            text-bg-warning
 
-
 		                        {% else %}
-
 		                            text-bg-danger
 
-
 		                        {% endif %}
-
+		                        
 		                    ">
-
 
 		                        {{ trek.difficulty.title() }}
 
-
 		                    </span>
 
-
 		                </td>
 
+		                <td> {{ trek.duration }} Days </td>
 
+		                <td> {{ trek.start_date }} </td>
 
-		                <td>
+		                <td> {{ trek.end_date }} </td>
 
-		                    {{ trek.duration }}
+		                <td> {{ trek.available_slots }} </td>
 
-		                    Days
+		                <td class="text-center">
 
-
-		                </td>
-
-
-
-		                <td>
-
-
-		                    {{ trek.start_date }}
-
-		                    <br>
-
-		                    {{ trek.end_date }}
-
-
-		                </td>
-
-
-
-		                <td>
-
-		                    {{ trek.available_slots }}
-
-		                </td>
-
-
-
-		                <td>
-
-
-		                    <a
-
-		                        href="#"
-
-		                        class="btn btn-sm btn-outline-primary">
-
-
-		                        View Details
-
-
+		                    <a href="#" class="btn btn-sm btn-primary text-nowrap">
+		                        Book Now
 		                    </a>
 
-
 		                </td>
 
-
-
 		            </tr>
-
-
 
 		            {% else %}
 
-
-
 		            <tr>
-
-
-		                <td
-		                    colspan="8"
-		                    class="text-center text-muted">
-
+		            
+		                <td colspan="8" class="text-center text-muted">
 
 		                    No treks found.
 
-
 		                </td>
-
 
 		            </tr>
 
-
-
 		            {% endfor %}
-
 
 		        </tbody>
 
-
 		    </table>
 
-
 		</div>
-
 
 	</div>
 
 </div>
 
 {% endblock %}
+
+
 

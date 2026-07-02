@@ -191,7 +191,8 @@ Dashboard
 					<option value="" {% if request.args.get('status', '') == '' %} selected {% endif %} >All</option>
 					<option value="pending" {% if request.args.get('status', '') == 'pending' %} selected {% endif %} >Pending</option>
 					<option value="approved" {% if request.args.get('status', '') == 'approved' %} selected {% endif %} >Approved</option>
-					<option value="open" {% if request.args.get('status', '') == 'open' %} selected {% endif %} >Open</option>
+					<opti
+					on value="open" {% if request.args.get('status', '') == 'open' %} selected {% endif %} >Open</option>
 					<option value="closed" {% if request.args.get('status', '') == 'closed' %} selected {% endif %} >Closed</option>
 					<option value="completed" {% if request.args.get('status', '') == 'completed' %} selected {% endif %} >Completed</option>
 				</select>
