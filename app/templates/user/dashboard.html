@@ -28,16 +28,16 @@ Dashboard
 		
 	</div>
 	
-	<!-- Booked Treks -->
+	<!-- Active Treks -->
 	<div class="col">
 	
 		<div class="card shadow-sm">
 	
 			<div class="card-body d-flex flex-column align-items-center">
 			
-				<h6 class="text-muted"> Booked Treks </h6>
+				<h6 class="text-muted"> Active Treks </h6>
 				
-				<h3> {{ booked_treks|length }} </h3>
+				<h3> {{ active_treks|length }} </h3>
 				
 			</div>
 			
@@ -121,7 +121,7 @@ Dashboard
 
                             <th>Slots</th>
                             
-                            <th>Action</th>
+                            <th class="text-center">Action</th>
 
                         </tr>
 
@@ -148,7 +148,23 @@ Dashboard
 
                             <td> {{ trek.available_slots }} </td>
                             
-                            <td> Book Now </td>
+                            <td>
+                            
+                            	<form class="d-flex justify-content-center" method="GET" action="{{ url_for('user.book_trek', trek_id=trek.trek_id) }}">
+                            	
+                            		<input type="hidden" name="next" value="{{ url_for('user.dashboard') }}">
+                            		
+                            		<button class="btn btn-sm btn-primary">
+                            			
+                            			<span class="text-nowrap">
+                            				Book Now
+                            			</span>
+                            			
+                            		</button>
+                            		
+                            	</form>
+                            
+                            </td>
 
                         </tr>
 
@@ -211,10 +227,14 @@ Dashboard
                             <th> Trek Name </th>
 
                             <th> Location </th>
-
-                            <th> Status </th>
+                            
+                            <th> Start Date </th>
+                            
+                            <th> End Date </th>
 
                             <th> Booking Date </th>
+
+							<th> Status </th>
 
                         </tr>
 
@@ -231,16 +251,22 @@ Dashboard
                             <td> {{ booking.trek.trek_name }} </td>
 
                             <td> {{ booking.trek.trek_location }} </td>
+                            
+                            <td> {{ booking.trek.start_date }} </td>
+                            
+                            <td> {{ booking.trek.end_date }} </td>
+                            
+                            <td> {{ booking.booking_date }} </td>
 
                             <td>
                             
                                 <span class="badge
 
-                                    {% if booking.status == 'pending' %}
+                                    {% if booking.status == 'completed' %}
 
-                                        text-bg-warning
+                                        text-bg-secondary
 
-                                    {% elif booking.status == 'confirmed' %}
+                                    {% elif booking.status == 'booked' %}
 
                                         text-bg-success
 
@@ -258,15 +284,13 @@ Dashboard
 
                             </td>
 
-                            <td> {{ booking.booking_date }} </td>
-
                         </tr>
 
                         {% else %}
 
                         <tr>
                         
-                            <td colspan="5" class="text-center text-muted">
+                            <td colspan="7" class="text-center text-muted">
                             
                                 No bookings found
 

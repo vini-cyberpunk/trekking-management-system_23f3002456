@@ -1,8 +1,10 @@
-from flask import Blueprint, render_template, url_for, request, flash
+from flask import Blueprint, render_template, url_for, redirect, request, flash
 from flask_login import login_required, current_user
 
 from app import db
 from app.models import User, Trek, Booking
+from datetime import datetime
+
 
 user = Blueprint('user', __name__)
 
@@ -16,13 +18,27 @@ def dashboard():
 	
 	available_treks = Trek.query.filter_by(status='open').all()
 	
-	booked_treks = user.bookings
+	bookings = user.bookings
+
+	today = datetime.now()
+
+	upcoming_treks = Trek.query.filter( Trek.start_date >= today ).all()
+
+	completed_treks = Trek.query.filter( Trek.end_date < today ).all()
+	
+	active_treks = Trek.query.filter(
+		Trek.start_date <= today,
+		Trek.end_date >= today
+	).all()
 
 	return render_template(
 		'user/dashboard.html',
 		user=user,
 		available_treks=available_treks,
-		booked_treks=booked_treks
+		bookings=bookings,
+		upcoming_treks=upcoming_treks,
+		completed_treks=completed_treks,
+		active_treks=active_treks
 	)
 	
 	
@@ -64,15 +80,52 @@ def treks():
 @user.route('/bookings', methods=["GET"])
 @login_required
 def bookings():
+
+	login_id = current_user.get_id()
 	
-	return render_template('user/bookings.html')
+	user = User.query.filter_by(login_id=login_id).first()
+	
+	bookings = user.bookings
+	
+	return render_template(
+		'user/bookings.html',
+		bookings=bookings
+	)
 	
 	
-@user.route('/history', methods=["GET"])
+@user.route('/book_trek/<int:trek_id>', methods=["GET"])
 @login_required
-def history():
+def book_trek(trek_id):
+
+	login_id = current_user.get_id()
 	
-	return render_template('user/history.html')
+	user = User.query.filter_by(login_id=login_id).first()
+	trek = Trek.query.get(trek_id)
+	
+	existing_booking = Booking.query.filter_by( user_id=user.user_id, trek_id=trek.trek_id ).first()
+	
+	if existing_booking:
+		flash("Booking Already Exists!", "warning")
+	
+	elif trek.status=="open" and trek.available_slots > 0:
+		trek.available_slots -= 1
+		
+		booking = Booking(
+			user_id=user.user_id,
+			trek_id=trek_id,
+			booking_date=datetime.now(),
+			status="booked"
+		)
+		
+		flash("Successfully Booked!", "success")
+		
+		db.session.add(booking)
+		db.session.commit()
+		
+		
+	
+	next_page = request.args.get('next')
+	return redirect(next_page)
 	
 	
 @user.route('/profile', methods=["GET"])

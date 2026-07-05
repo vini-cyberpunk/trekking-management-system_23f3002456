@@ -226,13 +226,23 @@ Explore Treks
 
 		                <td> {{ trek.available_slots }} </td>
 
-		                <td class="text-center">
-
-		                    <a href="#" class="btn btn-sm btn-primary text-nowrap">
-		                        Book Now
-		                    </a>
-
-		                </td>
+						<td>
+                        
+                        	<form class="d-flex justify-content-center" method="GET" action="{{ url_for('user.book_trek', trek_id=trek.trek_id) }}">
+                        	
+                        		<input type="hidden" name="next" value="{{ url_for('user.treks') }}">
+                        		
+                        		<button class="btn btn-sm btn-primary">
+                        			
+                        			<span class="text-nowrap">
+                        				Book Now
+                        			</span>
+                        			
+                        		</button>
+                        		
+                        	</form>
+                        
+                        </td>
 
 		            </tr>
 
