@@ -1,75 +1,44 @@
 {% extends 'user/user_base.html' %}
 
 {% block title %}
-
 My Profile
-
 {% endblock %}
 
 
 {% block main_content %}
 
-
 <div class="row justify-content-center">
-
 
     <div class="col-lg-8">
 
-
         <div class="card shadow-sm">
-
 
             <div class="card-header">
 
-
-                <h4 class="mb-0">
-
-                    My Profile
-
-                </h4>
-
+                <h4 class="mb-0"> My Profile </h4>
 
             </div>
 
-
-
             <div class="card-body">
-
 
                 <form method="POST">
 
-
                     <div class="mb-3">
 
-
-                        <label class="form-label">
-
-                            Name
-
-                        </label>
-
+                        <label class="form-label"> Name </label>
 
                         <input
                             type="text"
-                            name="user_name"
+                            name="username"
                             class="form-control"
-                            value="{{ user_name }}"
+                            value="{{ user.username }}"
                             required>
-
 
                     </div>
 
-
-
                     <div class="mb-3">
 
-
-                        <label class="form-label">
-
-                            Email
-
-                        </label>
-
+                        <label class="form-label"> Email </label>
 
                         <input
                             type="email"
@@ -77,69 +46,43 @@ My Profile
                             value="{{ current_user.email }}"
                             disabled>
 
-
                         <small class="text-muted">
-
                             Email cannot be changed.
-
                         </small>
-
 
                     </div>
 
-
-
                     <div class="mb-4">
 
-
-                        <label class="form-label">
-
-                            Contact
-
-                        </label>
-
+                        <label class="form-label"> Contact </label>
 
                         <input
                             type="text"
                             name="user_contact"
                             class="form-control"
-                            value="{{ user_contact }}">
-
+                            value="{{ user.user_contact }}">
 
                     </div>
-
-
 
                     <div class="text-end">
 
-
-                        <button
-                            type="submit"
-                            class="btn btn-primary">
-
-
+                        <button type="submit" class="btn btn-primary">
                             Update Profile
-
-
                         </button>
-
 
                     </div>
 
-
                 </form>
-
 
             </div>
 
-
         </div>
-
 
     </div>
 
-
 </div>
 
-
 {% endblock %}
+
+
+
