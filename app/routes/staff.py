@@ -152,8 +152,11 @@ def profile():
 		staff_name = request.form.get('staff_name', '').strip()
 		staff_contact = request.form.get('staff_contact', '').strip()
 		
-		staff.staff_name = staff_name
-		staff.staff_contact = staff_contact
+		if staff_name:
+			staff.staff_name = staff_name
+		
+		if staff_contact:
+			staff.staff_contact = staff_contact
 		
 		db.session.commit()
 		
