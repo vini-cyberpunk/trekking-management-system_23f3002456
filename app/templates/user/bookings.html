@@ -42,6 +42,8 @@ My Bookings
                         <th> Booking Date </th>
 
                         <th> Status </th>
+                        
+                        <th class="text-center"> Action </th>
 
                     </tr>
 
@@ -57,13 +59,13 @@ My Bookings
 
                         <td> {{ booking.trek.trek_name }} </td>
 
-                        <td> {{ booking.trek.location }} </td>
+                        <td> {{ booking.trek.trek_location }} </td>
                         
                         <td> {{ booking.trek.start_date }} </td>
                         
                         <td> {{ booking.trek.end_date }} </td>
 
-                        <td> {{ booking.booking_date }} </td>
+                        <td> {{ booking.booking_date.strftime("%d %b %Y, %I:%M %p") }} </td>
 
                         <td>
 
@@ -86,6 +88,28 @@ My Bookings
 
                             </span>
 
+                        </td>
+                        
+                        <td>
+                        
+                        	{% if booking.status == "booked" %}
+                        	
+                        	<form class="d-flex justify-content-center" method="GET" action="{{ url_for('user.cancel_booking', booking_id=booking.booking_id) }}">
+                        	
+                        		<button class="btn btn-sm btn-danger">
+									Cancel
+								</button>
+								
+								<input type="hidden" name="next" value="{{ url_for('user.bookings') }}">
+								
+							</form>
+							
+							{% else %}
+							
+							<div class="text-muted text-center"> - </div>
+							
+							{% endif %}
+                        	
                         </td>
 
                     </tr>

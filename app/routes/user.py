@@ -13,22 +13,24 @@ user = Blueprint('user', __name__)
 def dashboard():
 
 	login_id = current_user.get_id()
-	
 	user = User.query.filter_by(login_id=login_id).first()
 	
 	available_treks = Trek.query.filter_by(status='open').all()
-	
-	bookings = user.bookings
+	bookings = Booking.query.filter_by(user_id=user.user_id)
 
 	today = datetime.now()
-
-	upcoming_treks = Trek.query.filter( Trek.start_date >= today ).all()
-
-	completed_treks = Trek.query.filter( Trek.end_date < today ).all()
 	
-	active_treks = Trek.query.filter(
+	upcoming_treks = bookings.filter(
+		Trek.start_date >= today,
+		Booking.status == "booked"
+	).all()
+	
+	completed_treks = bookings.filter_by( status="completed" ).all()
+	
+	active_treks = bookings.filter(
 		Trek.start_date <= today,
-		Trek.end_date >= today
+		Trek.end_date >= today,
+		Booking.status == "booked"
 	).all()
 
 	return render_template(
@@ -126,10 +128,47 @@ def book_trek(trek_id):
 	
 	next_page = request.args.get('next')
 	return redirect(next_page)
+
+
+@user.route('/cancel_booking/<int:booking_id>', methods=["GET"])
+@login_required
+def cancel_booking(booking_id):
+	booking = Booking.query.get(booking_id)
 	
+	if booking:
+		booking.status="cancelled"
+		db.session.commit()
+		flash("Booking Cancelled Sucessfully!", "success")
 	
-@user.route('/profile', methods=["GET"])
+	next_page = request.args.get("next")
+	return redirect(next_page)
+
+	
+@user.route('/profile', methods=["GET","POST"])
 @login_required
 def profile():
+
+	login_id = current_user.login_id
 	
-	return render_template('user/profile.html')
+	user = User.query.filter_by(login_id=login_id).first()
+	
+	if request.method=="POST":
+		username = request.form.get('username', '').strip()
+		user_contact = request.form.get('user_contact', '').strip()
+		
+		if username:
+			user.username = username
+			
+		if user_contact:
+			user.user_contact = user_contact
+		
+		db.session.commit()
+		
+		flash("Profile Updated!", "success")
+		
+		return redirect(url_for('user.profile'))
+	
+	return render_template(
+		'user/profile.html',
+		user = user
+	)

@@ -235,6 +235,8 @@ Dashboard
                             <th> Booking Date </th>
 
 							<th> Status </th>
+							
+							<th class="text-center"> Action </th>
 
                         </tr>
 
@@ -256,7 +258,7 @@ Dashboard
                             
                             <td> {{ booking.trek.end_date }} </td>
                             
-                            <td> {{ booking.booking_date }} </td>
+                            <td> {{ booking.booking_date.replace(microsecond=0) }} </td>
 
                             <td>
                             
@@ -283,6 +285,28 @@ Dashboard
                                 </span>
 
                             </td>
+                            
+		                    <td>
+		                    
+		                    	{% if booking.status == "booked" %}
+		                    	
+		                    	<form class="d-flex justify-content-center" method="GET" action="{{ url_for('user.cancel_booking', booking_id=booking.booking_id) }}">
+		                    	
+		                    		<button class="btn btn-sm btn-danger">
+										Cancel
+									</button>
+									
+									<input type="hidden" name="next" value="{{ url_for('user.dashboard') }}">
+									
+								</form>
+								
+								{% else %}
+								
+								<div class="text-muted text-center"> - </div>
+								
+								{% endif %}
+		                    	
+		                    </td>
 
                         </tr>
 
