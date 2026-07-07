@@ -125,6 +125,26 @@
 			</div>
 			
 			<div class="col min-vh-100">
+			
+				{% with messages = get_flashed_messages(with_categories=true) %}
+				
+					{% if messages %}
+					
+						{% for category, message in messages %}
+						
+							<div class="alert alert-{{ category }} alert-dismissable fade show mt-3" role="alert">
+							
+								<h6>{{ message }}</h6>
+								
+								<button class="btn-close" type="button" data-bs-dismiss="alert"></button>
+								
+							</div>
+						
+						{% endfor %}
+						
+					{% endif %}
+					
+				{% endwith %}
 
 				{% block main_content %}
 				
