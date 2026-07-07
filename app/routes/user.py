@@ -32,6 +32,8 @@ def dashboard():
 		Trek.end_date >= today,
 		Booking.status == "booked"
 	).all()
+	
+	bookings = bookings.order_by(Booking.booking_date.desc()).limit(5).all()
 
 	return render_template(
 		'user/dashboard.html',
@@ -104,7 +106,7 @@ def book_trek(trek_id):
 	user = User.query.filter_by(login_id=login_id).first()
 	trek = Trek.query.get(trek_id)
 	
-	existing_booking = Booking.query.filter_by( user_id=user.user_id, trek_id=trek.trek_id ).first()
+	existing_booking = Booking.query.filter_by( user_id=user.user_id, trek_id=trek.trek_id, status="booked" ).first()
 	
 	if existing_booking:
 		flash("Booking Already Exists!", "warning")
@@ -124,6 +126,9 @@ def book_trek(trek_id):
 		db.session.add(booking)
 		db.session.commit()
 		
+	else:
+		flash("Either booking is closed or slots not available", "danger")
+		
 		
 	
 	next_page = request.args.get('next')
@@ -135,10 +140,18 @@ def book_trek(trek_id):
 def cancel_booking(booking_id):
 	booking = Booking.query.get(booking_id)
 	
+	trek_id = booking.trek_id
+	trek = Trek.query.get(trek_id)
+	
 	if booking:
 		booking.status="cancelled"
+		trek.available_slots += 1
+		
 		db.session.commit()
 		flash("Booking Cancelled Sucessfully!", "success")
+		
+	else:
+		flash("Booking not found", "danger")
 	
 	next_page = request.args.get("next")
 	return redirect(next_page)
