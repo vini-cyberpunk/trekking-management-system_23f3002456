@@ -89,7 +89,7 @@ def bookings():
 	
 	user = User.query.filter_by(login_id=login_id).first()
 	
-	bookings = user.bookings
+	bookings = Booking.query.filter_by(user_id=user.user_id).order_by(Booking.booking_date.desc()).all()
 	
 	return render_template(
 		'user/bookings.html',
