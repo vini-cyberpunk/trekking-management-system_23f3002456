@@ -19,7 +19,7 @@ def home():
 		else:
 			return redirect(url_for('user.dashboard'))
 
-	return render_template('base.html')
+	return redirect(url_for('auth.login'))
 	
 
 #################### REGISTER ####################
