@@ -5,7 +5,7 @@ from flask_login import login_required
 admin = Blueprint('admin', __name__)
 
 #################### ADMIN ####################
-@admin.route('/dashboard', methods=['GET'])
+@admin.route('/dashboard', methods=['GET', 'POST'])
 @login_required
 def dashboard():
 
@@ -168,7 +168,7 @@ def staff():
 		
 	if email:
 		query = query.filter(
-			Staff.staff_email.ilike(f"%{email}%")
+			Login.email.ilike(f"%{email}%")
 		)
 		
 	if trek_id:
@@ -390,76 +390,83 @@ def edit_trek(trek_id):
 	trek = Trek.query.get(trek_id)
 
 	staff = Staff.query.filter_by(status='active').all()
+	
+	next_page = request.args.get("next", "")
+	print(next_page)
 
 	if request.method == 'POST':
 
-		start_date = datetime.strptime(
-			request.form.get('start_date'),
-			'%Y-%m-%d'
-		).date()
-
-		end_date = datetime.strptime(
-			request.form.get('end_date'),
-			'%Y-%m-%d'
-		).date()
-
+		start_date = request.form.get('start_date', '')
+		end_date = request.form.get('end_date', '')
+		trek_location = request.form.get('trek_location', '')
+		trek_name = request.form.get('trek_name', '')
+		difficulty = request.form.get('difficulty')
+		duration = request.form.get('duration')
+		status = request.form.get('status')
+		assigned_staff_id = request.form.get('assigned_staff_id')
+		new_slots = int(request.form.get('available_slots'))
+		
+		if start_date:
+			start_date = datetime.strptime(start_date, "%Y-%m-%d").date()
+		
+		if end_date:
+			end_date = datetime.strptime(end_date, "%Y-%m-%d").date()
+		
 		if end_date < start_date:
 
+			flash('End date cannot be earlier than start date.', 'danger')
+
+			return redirect(url_for(
+					'admin.edit_trek',
+					trek_id=trek_id,
+					trek=trek,
+					next_page=next_page
+				))
+
+		booked_slots = trek.bookings.filter_by(status="booked").count()
+
+		if new_slots < booked_slots:
+
 			flash(
-				'End date cannot be earlier than start date.',
+				f'Available slots cannot be less than registered participants ({booked_slots}).',
 				'danger'
 			)
 
 			return redirect(
 				url_for(
 					'admin.edit_trek',
-					trek_id=trek_id
+					trek_id=trek_id,
+					trek=trek,
+					next_page=next_page
 				)
 			)
-
-		booked = len(trek.bookings)
-
-		new_slots = int(request.form.get('available_slots'))
-
-		if new_slots < booked:
-
-			flash(
-				f'Available slots cannot be less than registered participants ({booked}).',
-				'danger'
-			)
-
-			return redirect(
-				url_for(
-					'admin.edit_trek',
-					trek_id=trek_id
-				)
-			)
-
-		trek.trek_name = request.form.get('trek_name')
-
-		trek.trek_location = request.form.get('trek_location')
-
-		trek.difficulty = request.form.get('difficulty')
-
-		trek.duration = int(
-			request.form.get('duration')
-		)
-
-		trek.available_slots = new_slots
-
-		assigned_staff_id = request.form.get('assigned_staff_id')
-
-		trek.assigned_staff_id = (
-			int(assigned_staff_id)
-			if assigned_staff_id
-			else None
-		)
-
-		trek.status = request.form.get('status')
-
-		trek.start_date = start_date
-
-		trek.end_date = end_date
+		
+		if trek_name:
+			trek.trek_name = trek_name
+			
+		if trek_location:
+			trek.trek_location = trek_location
+			
+		if difficulty:
+			trek.difficulty = difficulty
+		
+		if duration:
+			trek.duration = int(duration)
+			
+		if new_slots:
+			trek.available_slots = new_slots
+			
+		if assigned_staff_id:
+			trek.assigned_staff_id = (int(assigned_staff_id))
+			
+		if status:
+			trek.status = status
+			
+		if start_date:
+			trek.start_date = start_date
+			
+		if end_date:
+			trek.end_date = end_date
 
 		db.session.commit()
 
@@ -468,14 +475,14 @@ def edit_trek(trek_id):
 			'success'
 		)
 
-		return redirect(
-			url_for('admin.treks')
-		)
+		return redirect(next_page)
 
 	return render_template(
 		'admin/edit_trek.html',
+		trek_id=trek_id,
 		trek=trek,
-		staff=staff
+		staff=staff,
+		next_page=next_page
 	)
 
 	

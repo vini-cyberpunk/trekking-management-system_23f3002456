@@ -6,11 +6,11 @@ Dashboard
 
 {% block main_content %}
 
-<h1 class="text-left mt-3 mb-0"> Admin Dashboard </h1>
+<h1 class="text-left mt-2 mb-0"> Welcome Admin ! </h1>
 
 
 
-<div class="row mt-5">
+<div class="row row-cols-lg-4 row-cols-2 g-3 mt-4">
 
 	<!-- ########## Total Bookings ########## -->
 	<div class="col">
@@ -68,13 +68,15 @@ Dashboard
 
 
 
-<div class="row mt-5">
+<div class="row row-cols-lg-2 row-cols-1 g-3 mt-5">
 
 	<!-- ########## Recent Bookings ########## -->
-	<div class="col-lg-6">
+	<div class="col">
 		<div class="card">
 		
-			<div class="card-header"> Recent Bookings </div>
+			<div class="card-header">
+				<h6 class="text-muted mb-0"> Recent Bookings </h6>
+			</div>
 		
 			<div class="card-body table-responsive">
 				<table class="table table-hover">
@@ -82,11 +84,11 @@ Dashboard
 					<thead>
 						<tr>
 						
-							<th scope="col"> Booking ID </th>
-							<th scope="col"> User </th>
-							<th scope="col"> Trek </th>
-							<th scope="col"> Status </th>
-							<th scope="col"> Booking Date </th>
+							<th class="text-nowrap"> Booking ID </th>
+							<th> User </th>
+							<th> Trek </th>
+							<th> Status </th>
+							<th class="text-nowrap"> Booking Date </th>
 							
 						</tr>
 					</thead>
@@ -101,8 +103,27 @@ Dashboard
 								<td>{{ booking.booking_id }}</td>
 								<td>{{ booking.user.username }}</td>
 								<td>{{ booking.trek.trek_name }}</td>
-								<td>{{ booking.status }}</td>
-								<td>{{ booking.booking_date }}</td>
+								<td>
+								
+									<span class="badge
+
+										{% if booking.status == "booked" %} text-bg-success
+
+										{% elif booking.status == "cancelled" %} text-bg-danger
+
+										{% elif booking.status == "completed" %} text-bg-primary
+
+										{% endif %}
+										
+									">
+										
+										{{ booking.status.title() }}
+										
+									</span>
+									
+								</td>
+								
+								<td>{{ booking.booking_date.strftime("%d %B %Y, %I:%M %p") }}</td>
 								
 							</tr>
 							{% endfor %}
@@ -110,7 +131,7 @@ Dashboard
 						{% else %}
 						<tr> 
 						
-							<td colspan="6" class="text-center">No Bookings yet </td>
+							<td colspan="5" class="text-center">No Bookings yet </td>
 							
 						</tr>
 						{% endif %}
@@ -120,7 +141,7 @@ Dashboard
 				</table>
 			</div>
 			
-			<div class="card-footer">
+			<div class="card-footer d-flex justify-content-end">
 			
 				<a class="btn btn-primary" href="{{ url_for('admin.bookings') }}"> View All </a>
 				
@@ -130,10 +151,12 @@ Dashboard
 	</div>
 
 	<!-- ########## Recent Staff Registrations ########## -->
-	<div class="col-lg-6">
+	<div class="col">
 		<div class="card">
 		
-			<div class="card-header"> Recent Staff Registrations </div>
+			<div class="card-header">
+				<h6 class="text-muted mb-0"> Recent Staff Registrations </h6>
+			</div>
 
 			<div class="card-body table-responsive">
 				<table class="table table-hover">
@@ -141,11 +164,11 @@ Dashboard
 					<thead>
 						<tr>
 						
-							<th scope="col"> Staff ID </th>
-							<th scope="col"> Name </th>
-							<th scope="col"> Contact </th>
-							<th scope="col"> Status </th>
-							<th scope="col" class="text-center"> Action </th>
+							<th class="text-nowrap"> Staff ID </th>
+							<th> Name </th>
+							<th> Contact </th>
+							<th> Status </th>
+							<th class="text-center"> Action </th>
 							
 						</tr>
 					</thead>
@@ -159,7 +182,7 @@ Dashboard
 							
 								<td>{{ staff.staff_id }}</td>
 								<td>{{ staff.staff_name }}</td>
-								<td>{{ staff.staff_contact }}</td>
+								<td>{{ staff.staff_contact if staff.staff_contact else "None" }}</td>
 								<td>
 								
 									{% if staff.status == "pending" %}
@@ -216,7 +239,7 @@ Dashboard
 									
 									<form class="d-flex justify-content-center" method="POST" action="{{ url_for('admin.delete_staff', staff_id = staff.staff_id) }}">
 									
-										<button class="btn btn-danger">
+										<button class="btn btn-sm btn-danger">
 											<i class="bi bi-trash"></i> 
 										</button>
 										
@@ -234,7 +257,7 @@ Dashboard
 						{% else %}
 						<tr> 
 						
-							<td colspan="6" class="text-center">No Staff Available </td>
+							<td colspan="5" class="text-center">No Staff Available </td>
 							
 						</tr>
 						{% endif %}
@@ -244,26 +267,22 @@ Dashboard
 				</table>
 			</div>
 			
-			<div class="card-footer">
+			<div class="card-footer d-flex justify-content-end">
 			
-				<button class="btn btn-primary"> View All </button>
+				<a class="btn btn-primary" href="{{ url_for('admin.staff') }}"> View All </a>
 				
 			</div>
 			
 		</div>
 	</div>
 
-</div>
-
-
-
-<div class="row mt-3">
-
 	<!-- ########## Recent Treks ########## -->
-	<div class="col-lg-6">
+	<div class="col">
 		<div class="card">
 
-			<div class="card-header"> Recent Treks </div>
+			<div class="card-header">
+				<h6 class="text-muted mb-0"> Recent Treks </h6>
+			</div>
 
 			<div class="card-body table-responsive">
 				<table class="table table-hover">
@@ -271,13 +290,14 @@ Dashboard
 					<thead>
 						<tr>
 						
-							<th scope="col"> Trek Name </th>
-							<th scope="col"> Location </th>
-							<th scope="col"> Staff </th>
-							<th scope="col"> Start Date </th>
-							<th scope="col"> End Date </th>
-							<th scope="col"> Status </th>
-							<th scope="col" class="text-center"> Action </th>
+							<th class="text-nowrap"> Trek Name </th>
+							<th> Location </th>
+							<th> Staff </th>
+							<th> Slots </th>
+							<th class="text-nowrap"> Start Date </th>
+							<th class="text-nowrap"> End Date </th>
+							<th> Status </th>
+							<th class="text-center"> Action </th>
 							
 						</tr>
 					</thead>
@@ -304,8 +324,9 @@ Dashboard
 									{% endif %}
 								
 								</td>
-								<td>{{ trek.start_date }}</td>
-								<td>{{ trek.end_date }}</td>
+								<td>{{ trek.available_slots }}</td>
+								<td>{{ trek.start_date.strftime("%d %B %Y") }}</td>
+								<td>{{ trek.end_date.strftime("%d %B %Y") }}</td>
 								<td>
 								
 									{% if trek.status == "pending" %}
@@ -391,8 +412,12 @@ Dashboard
 									<div class="d-flex justify-content-center gap-2">
 										<form method="POST" action="{{ url_for('admin.delete_trek', trek_id=trek.trek_id) }}">
 										
-											<button class="btn btn-sm btn-danger" {% if trek.status in ['started','completed','open','closed'] %}disabled{% endif %}>
-												<i class="bi bi-trash"></i> 
+											<button
+												class="btn btn-sm btn-danger" 
+												{% if trek.status in ['started','completed','open','closed'] %}disabled{% endif %}>
+												
+												<i class="bi bi-trash"></i>
+
 											</button>
 											
 											<input type="hidden" name="next" value="{{ url_for('admin.dashboard') }}">
@@ -401,8 +426,12 @@ Dashboard
 										
 										<form method="GET" action="{{ url_for('admin.edit_trek', trek_id=trek.trek_id) }}">
 										
-											<button class="btn btn-sm btn-outline-secondary">
-												<i class="bi bi-pencil"></i> 
+											<button 
+												class="btn btn-sm btn-outline-secondary"
+												{% if trek.status == "completed" %} disabled {% endif %}>
+												
+												<i class="bi bi-pencil"></i>
+
 											</button>
 											
 											<input type="hidden" name="next" value="{{ url_for('admin.dashboard') }}">
@@ -421,7 +450,7 @@ Dashboard
 						
 						<tr> 
 						
-							<td colspan="6" class="text-center">No treks available </td>
+							<td colspan="7" class="text-center">No treks available </td>
 							
 						</tr>
 						
@@ -432,7 +461,7 @@ Dashboard
 				</table>
 			</div>
 			
-			<div class="card-footer">
+			<div class="card-footer d-flex justify-content-end gap-2">
 			
 				<a class="btn btn-primary" href="{{ url_for('admin.add_trek', previous=url_for('admin.dashboard') ) }}"> Add Trek </a>
 				
@@ -444,10 +473,12 @@ Dashboard
 	</div>
 
 	<!-- ########## Recent User Registrations ########## -->
-	<div class="col-lg-6">
+	<div class="col">
 		<div class="card">
 
-			<div class="card-header"> Recent User Registrations </div>
+			<div class="card-header">
+				<h6 class="text-muted mb-0"> Recent User Registrations </h6>
+			</div>
 
 			<div class="card-body table-responsive">
 				<table class="table table-hover">
@@ -455,11 +486,11 @@ Dashboard
 					<thead>
 						<tr>
 						
-							<th scope="col"> User ID </th>
-							<th scope="col"> Name </th>
-							<th scope="col"> Contact </th>
-							<th scope="col"> Status </th>
-							<th scope="col" class="text-center"> Action </th>
+							<th class="text-nowrap"> User ID </th>
+							<th> Name </th>
+							<th> Contact </th>
+							<th> Status </th>
+							<th class="text-center"> Action </th>
 							
 						</tr>
 					</thead>
@@ -473,7 +504,7 @@ Dashboard
 							
 								<td>{{ user.user_id }}</td>
 								<td>{{ user.username }}</td>
-								<td>{{ user.user_contact }}</td>
+								<td>{{ user.user_contact if user.user_contact else None }}</td>
 								<td>
 									
 									<form class="d-flex justify-content-center" method="POST" action="{{ url_for('admin.update_user_status', user_id = user.user_id) }}">
@@ -503,7 +534,7 @@ Dashboard
 								
 									<form class="d-flex justify-content-center" method="POST" action="{{ url_for('admin.delete_user', user_id = user.user_id) }}">
 									
-										<button class="btn btn-danger">
+										<button class="btn btn-sm btn-danger">
 											<i class="bi bi-trash"></i> 
 										</button>
 										
@@ -520,7 +551,7 @@ Dashboard
 						
 						<tr>
 						 
-							<td colspan="6" class="text-center">No Users Available </td>
+							<td colspan="5" class="text-center">No Users Available </td>
 						
 						</tr>
 						
@@ -531,9 +562,9 @@ Dashboard
 				</table>
 			</div>
 			
-			<div class="card-footer">
+			<div class="card-footer d-flex justify-content-end">
 			
-				<button class="btn btn-primary"> View All </button>
+				<a class="btn btn-primary" href="{{ url_for('admin.users') }}"> View All </a>
 				
 			</div>
 

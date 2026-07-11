@@ -1,4 +1,3 @@
-```jinja
 {% extends "admin/admin_base.html" %}
 
 {% block title %}
@@ -87,6 +86,7 @@ Edit Trek
                         class="form-control"
                         min="1"
                         value="{{ trek.available_slots }}"
+                        {% if trek.status in ["started", "completed"] %}disabled{% endif %}
                         required>
                 </div>
 
@@ -117,7 +117,8 @@ Edit Trek
 
                     <select
                         name="assigned_staff_id"
-                        class="form-select">
+                        class="form-select"
+                        {% if trek.status == "completed" %}disabled{% endif %}>
 
                         <option value="">Unassigned</option>
 
@@ -142,11 +143,8 @@ Edit Trek
                     <select
                         name="status"
                         class="form-select">
-
-                        <option value="pending"
-                            {% if trek.status=="pending" %}selected{% endif %}>
-                            Pending
-                        </option>
+                        
+                        {% if trek.status=="approved" %}
 
                         <option value="approved"
                             {% if trek.status=="approved" %}selected{% endif %}>
@@ -157,11 +155,49 @@ Edit Trek
                             {% if trek.status=="open" %}selected{% endif %}>
                             Open
                         </option>
+                        
+                        {% elif trek.status=="open" %}
+
+                        <option value="open"
+                            {% if trek.status=="open" %}selected{% endif %}>
+                            Open
+                        </option>
 
                         <option value="closed"
                             {% if trek.status=="closed" %}selected{% endif %}>
                             Closed
                         </option>
+                        
+                        {% elif trek.status=="closed" %}
+                        
+                        <option value="open"
+                            {% if trek.status=="open" %}selected{% endif %}>
+                            Open
+                        </option>
+                        
+                        <option value="closed"
+                            {% if trek.status=="closed" %}selected{% endif %}>
+                            Closed
+                        </option>
+                        
+                        <option value="started"
+                            {% if trek.status=="started" %}selected{% endif %}>
+                            Started
+                        </option>
+                        
+                        {% elif trek.status=="started" %}
+                        
+                        <option value="started"
+                            {% if trek.status=="started" %}selected{% endif %}>
+                            Started
+                        </option>
+                        
+                        <option value="completed"
+                            {% if trek.status=="completed" %}selected{% endif %}>
+                            Completed
+                        </option>
+                        
+                        {% endif %}
 
                     </select>
                 </div>
@@ -171,7 +207,7 @@ Edit Trek
             <div class="mt-4 text-end">
 
                 <a
-                    href="{{ url_for('admin.treks') }}"
+                    href="{{ next_page }}"
                     class="btn btn-secondary">
 
                     Cancel
