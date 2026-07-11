@@ -1,6 +1,9 @@
 from flask import Blueprint, render_template, request, redirect, url_for, flash
 from flask_login import login_required
 
+from datetime import datetime
+from app.models import User, Login, Trek, Booking, Staff
+from app import db
 
 admin = Blueprint('admin', __name__)
 
@@ -8,8 +11,6 @@ admin = Blueprint('admin', __name__)
 @admin.route('/dashboard', methods=['GET', 'POST'])
 @login_required
 def dashboard():
-
-	from app.models import User, Login, Trek, Booking, Staff
 	
 	total_bookings = Booking.query.count()
 	total_users = User.query.count()
@@ -39,8 +40,6 @@ def dashboard():
 @admin.route('/users', methods=['GET'])
 @login_required
 def users():
-
-	from app.models import User, Login
 
 	base_query = User.query.join(Login)
 
@@ -98,9 +97,6 @@ def users():
 @login_required
 def update_user_status(user_id):
 	
-	from app import db
-	from app.models import User
-	
 	user = User.query.get(user_id)
 	status = request.form.get('status')
 	
@@ -132,8 +128,6 @@ def delete_user(user_id):
 @admin.route('/staff', methods=["GET"])
 @login_required
 def staff():
-	
-	from app.models import Staff, Login
 	
 	base_query = Staff.query.join(Login)
 	
@@ -198,9 +192,6 @@ def staff():
 @login_required
 def update_staff_status(staff_id):
 
-	from app.models import Staff
-	from app import db
-
 	staff = Staff.query.get(staff_id)
 
 	if staff.status == "pending":
@@ -231,9 +222,6 @@ def update_staff_status(staff_id):
 @login_required
 def delete_staff(staff_id):
 	
-	from app import db
-	from app.models import Staff
-	
 	staff = Staff.query.get(staff_id)
 	
 	db.session.delete(staff)
@@ -254,9 +242,6 @@ def treks():
 @admin.route('/trek/<int:trek_id>/update-status', methods=['POST'])
 @login_required
 def update_trek_status(trek_id):
-
-	from app.models import Trek
-	from app import db
 
 	trek = Trek.query.get(trek_id)
 
@@ -287,10 +272,7 @@ def update_trek_status(trek_id):
 @admin.route('trek/<int:trek_id>/delete_trek', methods=["POST"])
 @login_required
 def delete_trek(trek_id):
-	
-	from app.models import Trek
-	from app import db
-	
+
 	trek = Trek.query.get(trek_id)
 	
 	db.session.delete(trek)
@@ -303,10 +285,6 @@ def delete_trek(trek_id):
 @admin.route('trek/add_trek', methods=['GET', 'POST'])
 @login_required
 def add_trek():
-
-	from datetime import datetime
-	from app.models import Trek, Staff
-	from app import db
 	
 	staff = Staff.query.filter_by(status='active').all()
 	
@@ -382,10 +360,6 @@ def add_trek():
 @admin.route('/edit_trek/<int:trek_id>', methods=['GET', 'POST'])
 @login_required
 def edit_trek(trek_id):
-
-	from datetime import datetime
-	from app import db
-	from app.models import Trek, Staff
 
 	trek = Trek.query.get(trek_id)
 
@@ -492,7 +466,60 @@ def edit_trek(trek_id):
 @login_required
 def bookings():
 
-	return render_template('admin/bookings.html')
+	total_bookings = Booking.query.order_by(Booking.booking_id.desc()).all()
+	confirmed_bookings = Booking.query.filter_by(status="booked").order_by(Booking.booking_id.desc()).all()
+	cancelled_bookings = Booking.query.filter_by(status="cancelled").order_by(Booking.booking_id.desc()).all()
+	completed_bookings = Booking.query.filter_by(status="completed").order_by(Booking.booking_id.desc()).all()
+	
+	current_filter = request.args.get('filter', '')
+	
+	if current_filter == "confirmed":
+		bookings = confirmed_bookings
+		
+	elif current_filter == "cancelled":
+		bookings = cancelled_bookings
+		
+	elif current_filter == "completed":
+		bookings = completed_bookings
+		
+	elif current_filter == "total":
+		bookings = total_bookings
+		
+	else:
+		booking_id = request.args.get('booking_id', '')
+		username = request.args.get('username', '').strip()
+		staff_name = request.args.get('staff_id', '').strip()
+		trek_name = request.args.get('trek_name', '').strip()
+		trek_location = request.args.get('trek_location', '').strip()
+		status = request.args.get('status', '')
+		
+		query = Booking.query.join(Booking.user).join(Booking.trek)
+		
+		if booking_id:
+			query = query.filter_by(booking_id=booking_id)
+			
+		if username:
+			query = query.filter(User.username.ilike(f"%{username}%"))
+		
+		if trek_name:
+			query = query.filter(Trek.trek_name.ilike(f"%{trek_name}%"))
+			
+		if trek_location:
+			query = query.filter(Trek.trek_location.ilike(f"%{trek_location}%"))
+			
+		if status:
+			query = query.filter_by(status=status)
+			
+		bookings = query.all()
+
+	return render_template(
+		'admin/bookings.html',
+		total_bookings=total_bookings,
+		confirmed_bookings=confirmed_bookings,
+		cancelled_bookings=cancelled_bookings,
+		completed_bookings=completed_bookings,
+		bookings=bookings
+	)
 	
 
 	
