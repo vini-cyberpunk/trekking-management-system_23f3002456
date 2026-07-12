@@ -41,48 +41,58 @@ def dashboard():
 @login_required
 def users():
 
-	base_query = User.query.join(Login)
+	base_query = User.query.join(User.login)
 
-	total_users = base_query.count()
-	active_users = base_query.filter(User.status == "active").count()
-	inactive_users = base_query.filter(User.status == "inactive").count()
+	total_users = base_query.order_by(User.user_id.desc()).all()
+	active_users = base_query.filter(User.status == "active").order_by(User.user_id.desc()).all()
+	inactive_users = base_query.filter(User.status == "inactive").order_by(User.user_id.desc()).all()
+	
+	current_filter = request.args.get('filter', '')
+	
+	if current_filter == "total":
+		users = total_users
+		
+	elif current_filter == "active":
+		users = active_users
+		
+	elif current_filter == "inactive":
+		users = inactive_users
+		
+	else:
+		query = base_query
+		
+		username = request.args.get('username', '').strip()
+		user_id = request.args.get('user_id', '').strip()
+		user_contact = request.args.get('user_contact', '').strip()
+		email = request.args.get('email', '').strip()
+		status = request.args.get('status', '').strip()
 
-	query = base_query
+		if username:
+			query = query.filter(
+				User.username.ilike(f"%{username}%")
+			)
 
-	username = request.args.get('username', '').strip()
-	user_id = request.args.get('user_id', '').strip()
-	user_contact = request.args.get('user_contact', '').strip()
-	email = request.args.get('email', '').strip()
-	status = request.args.get('status', '').strip()
+		if user_id:
+			query = query.filter(
+				User.user_id == int(user_id)
+			)
 
-	if username:
-		query = query.filter(
-			User.username.ilike(f"%{username}%")
-		)
+		if user_contact:
+			query = query.filter(
+				User.user_contact.ilike(f"%{user_contact}%")
+			)
 
-	if user_id:
-		query = query.filter(
-			User.user_id == int(user_id)
-		)
+		if email:
+			query = query.filter(
+				Login.email.ilike(f"%{email}%")
+			)
 
-	if user_contact:
-		query = query.filter(
-			User.user_contact.ilike(f"%{user_contact}%")
-		)
+		if status:
+			query = query.filter(
+				User.status == status
+			)
 
-	if email:
-		query = query.filter(
-			Login.email.ilike(f"%{email}%")
-		)
-
-	if status:
-		query = query.filter(
-			User.status == status
-		)
-
-	users = query.order_by(
-		User.user_id.desc()
-	).all()
+		users = query.order_by(User.user_id.desc()).all()
 
 	return render_template(
 		'admin/users.html',
@@ -111,16 +121,19 @@ def update_user_status(user_id):
 @admin.route('user/<int:user_id>/delete_user', methods=["POST"])
 @login_required
 def delete_user(user_id):
+
+	if user_id:
+		user = User.query.get(user_id)
+		
+		db.session.delete(user)
+		db.session.commit()
+		
+		flash("User Deleted Sucessfully!", "success")
+		
+	else:
+		flash("Invalid User ID", "danger")
 	
-	from app import db
-	from app.models import User
-	
-	user = User.query.get(user_id)
-	
-	db.session.delete(user)
-	db.session.commit()
-	
-	next_page = request.form.get('action')
+	next_page = request.form.get('next')
 	return render_template(next_page)
 	
 	
