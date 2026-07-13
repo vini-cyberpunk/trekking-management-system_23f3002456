@@ -142,55 +142,65 @@ def delete_user(user_id):
 @login_required
 def staff():
 	
-	base_query = Staff.query.join(Login)
+	base_query = Staff.query.join(Login).join(Trek)
 	
-	total_staff = base_query.count()
-	active_staff = base_query.filter(Staff.status=="active").count()
-	inactive_staff = base_query.filter(Staff.status=="inactive").count()
-	pending_staff = base_query.filter(Staff.status=="pending").count()
+	total_staff = base_query.order_by(Staff.staff_id.desc()).all()
+	active_staff = base_query.filter(Staff.status=="active").order_by(Staff.staff_id.desc()).all()
+	inactive_staff = base_query.filter(Staff.status=="inactive").order_by(Staff.staff_id.desc()).all()
+	pending_staff = base_query.filter(Staff.status=="pending").order_by(Staff.staff_id.desc()).all()
 	
-	query = base_query
+	current_filter = request.args.get('filter', '')
 	
-	staff_id = request.args.get('staff_id', '')
-	staff_name = request.args.get('staff_name', '')
-	email = request.args.get('email', '')
-	staff_contact = request.args.get('contact', '')
-	trek_id = request.args.get('trek_id', '')
-	status = request.args.get('status', '')
+	if current_filter == "total":
+		staff = total_staff
+		
+	elif current_filter == "active":
+		staff = active_staff
+		
+	elif current_filter == "inactive":
+		staff = inactive_staff
+		
+	elif current_filter == "pending":
+		staff = pending_staff
+		
+	else:
+		query = base_query
 	
-	if staff_id:
-		query = query.filter(
-			Staff.staff_id==int(staff_id)
-		)
+		staff_id = request.args.get('staff_id', '')
+		staff_name = request.args.get('staff_name', '')
+		email = request.args.get('email', '')
+		staff_contact = request.args.get('staff_contact', '')
+		trek_name = request.args.get('trek_name', '')
+		status = request.args.get('status', '')
 		
-	if staff_name:
-		query = query.filter(
-			Staff.staff_name.ilike(f"%{staff_name}%")
-		)
+		if staff_id:
+			query = query.filter(Staff.staff_id==staff_id)
+			
+		if staff_name:
+			query = query.filter(
+				Staff.staff_name.ilike(f"%{staff_name}%")
+			)
+			
+		if staff_contact:
+			query = query.filter(
+				Staff.staff_contact.ilike(f"%{staff_contact}%")
+			)
+			
+		if email:
+			query = query.filter(
+				Login.email.ilike(f"%{email}%")
+			)
+			
+		if trek_name:
+			query = query.filter(
+				Trek.trek_name.ilike(f"%{trek_name}%")
+			)
+			
+		if status:
+			query = query.filter(Staff.status==status)
 		
-	if staff_contact:
-		query = query.filter(
-			Staff.staff_contact.ilike(f"%{staff_contact}%")
-		)
+		staff = query.order_by(Staff.staff_id.desc()).all()
 		
-	if email:
-		query = query.filter(
-			Login.email.ilike(f"%{email}%")
-		)
-		
-	if trek_id:
-		query = query.filter(
-			Staff.assigned_trek.trek_id==int(trek_id)
-		)
-		
-	if status:
-		query = query.filter(
-			Staff.status==status
-		)
-	
-	
-		
-	staff = query.all()
 	return render_template(
 		'admin/staff.html',
 		staff=staff,

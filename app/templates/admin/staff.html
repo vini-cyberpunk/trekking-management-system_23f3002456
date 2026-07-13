@@ -6,71 +6,87 @@ Manage Staff
 
 {% block main_content %}
 
-<h1 class="dashboard-header text-left"> Manage Staff </h1>
+<h1 class="text-left mt-2"> Manage Staff </h1>
 
-<div class="row p-3 mt-2">
+<div class="row row-cols-lg-4 row-cols-2 g-3 mt-4">
 
 	<div class="col">
 	
-		<div class="card d-flex align-items-center">
-		
-			<div class="card-body">
-				Total Staff
+		<a class="text-decoration-none text-reset" href="?filter=total">
+	
+			<div class="card shadow-sm">
+			
+				<div class="card-body d-flex flex-column align-items-center">
+				
+					<h6 class="text-muted">	Total Staff </h6>
+				
+					<h3>{{ total_staff|length }}</h3>
+					
+				</div>
+				
 			</div>
 			
-			<div class="card-body">
-				{{ total_staff }}
-			</div>
-			
-		</div>
+		</a>
 			
 	</div>
 	
 	<div class="col">
 	
-		<div class="card d-flex align-items-center">
-		
-			<div class="card-body">
-				Active Staff
+		<a class="text-decoration-none text-reset" href="?filter=active">
+	
+			<div class="card shadow-sm">
+			
+				<div class="card-body d-flex flex-column align-items-center">
+				
+					<h6 class="text-muted">	Active Staff </h6>
+				
+					<h3>{{ active_staff|length }}</h3>
+					
+				</div>
+				
 			</div>
 			
-			<div class="card-body">
-				{{ active_staff }}
-			</div>
-			
-		</div>
+		</a>
 		
 	</div>
 
 	<div class="col">
 		
-		<div class="card d-flex align-items-center">
-		
-			<div class="card-body">
-				Pending Staff
+		<a class="text-decoration-none text-reset" href="?filter=pending">
+	
+			<div class="card shadow-sm">
+			
+				<div class="card-body d-flex flex-column align-items-center">
+				
+					<h6 class="text-muted">	Pending Staff </h6>
+				
+					<h3>{{ pending_staff|length }}</h3>
+					
+				</div>
+				
 			</div>
 			
-			<div class="card-body">
-				{{ pending_staff }}
-			</div>
-			
-		</div>
+		</a>
 		
 	</div>
 	
 	<div class="col">
 		
-		<div class="card d-flex align-items-center">
-		
-			<div class="card-body">
-				Blacklisted Staff
+		<a class="text-decoration-none text-reset" href="?filter=inactive">
+	
+			<div class="card shadow-sm">
+			
+				<div class="card-body d-flex flex-column align-items-center">
+				
+					<h6 class="text-muted">	Blacklisted Staff </h6>
+				
+					<h3>{{ inactive_staff|length }}</h3>
+					
+				</div>
+				
 			</div>
 			
-			<div class="card-body">
-				{{ inactive_staff }}
-			</div>
-			
-		</div>
+		</a>
 		
 	</div>
 
@@ -78,10 +94,10 @@ Manage Staff
 
 
 <form method="GET" action="{{ url_for('admin.staff') }}">
-	<div class="row mt-2 g-3 align-items-end">
+	<div class="row row-cols-lg-6 row-cols-md-3 row-cols-1 mt-2 g-3 align-items-end">
 	
-		<div class="col-lg-1">
-			<label class="form-label">Staff ID</label>
+		<div class="col">
+			<label class="form-label text-nowrap">Staff ID</label>
 
 			<input
 				type="number"
@@ -92,8 +108,8 @@ Manage Staff
 		</div>
 
 
-		<div class="col-lg-2">
-			<label class="form-label">Staff Name</label>
+		<div class="col">
+			<label class="form-label text-nowrap">Staff Name</label>
 
 			<div class="input-group">
 				<span class="input-group-text">
@@ -109,7 +125,7 @@ Manage Staff
 			</div>
 		</div>
 		
-		<div class="col-lg-2">
+		<div class="col">
 			<label class="form-label">Email</label>
 
 			<div class="input-group">
@@ -126,7 +142,7 @@ Manage Staff
 			</div>
 		</div>
 
-		<div class="col-lg-2">
+		<div class="col">
 			<label class="form-label">Contact</label>
 
 			<input
@@ -139,18 +155,18 @@ Manage Staff
 				placeholder="10-digit phone no.">
 		</div>
 		
-		<div class="col-lg-1">
-			<label class="form-label">Trek ID</label>
+		<div class="col">
+			<label class="form-label text-nowrap">Trek Name</label>
 
 			<input
-				type="number"
+				type="text"
 				class="form-control"
-				name="trek_id"
-				value="{{ request.args.get('trek_id', '') }}"
-				placeholder="ID">
+				name="trek_name"
+				value="{{ request.args.get('trek_name', '') }}"
+				placeholder="Trekname">
 		</div>
 
-		<div class="col-lg-2">
+		<div class="col">
 			<label class="form-label">Status</label>
 
 			<select class="form-select" name="status">
@@ -161,18 +177,16 @@ Manage Staff
 			</select>
 		</div>
 
-		<div class="col-lg-2">
-			<div class="ms-auto gap-2 d-flex justify-content-end">
+		<div class="col ms-auto gap-2 d-flex justify-content-end">
 
-				<button type="submit" class="btn btn-primary">
-				    Search
-				</button>
+			<button type="submit" class="btn btn-primary">
+			    Search
+			</button>
 
-				<a class="btn btn-outline-secondary" href="{{ url_for('admin.staff') }}">
-				    Reset
-				</a>
-
-			</div>
+			<a class="btn btn-outline-secondary" href="{{ url_for('admin.staff') }}">
+			    Reset
+			</a>
+				
 		</div>
 
 	</div>
@@ -193,13 +207,13 @@ Manage Staff
 
 		    <thead>
 		        <tr>
-		            <th scope="col">Staff ID</th>
-		            <th scope="col">Name</th>
-		            <th scope="col">Email</th>
-		            <th scope="col">Contact</th>
-		            <th scope="col">Assigned Treks</th>
-		            <th scope="col">Status</th>
-		            <th scope="col" class="text-center">Action</th>
+		            <th class="text-nowrap">Staff ID</th>
+		            <th>Name</th>
+		            <th>Email</th>
+		            <th>Contact</th>
+		            <th class="text-nowrap">Assigned Treks</th>
+		            <th>Status</th>
+		            <th class="text-center">Action</th>
 		        </tr>
 		    </thead>
 
