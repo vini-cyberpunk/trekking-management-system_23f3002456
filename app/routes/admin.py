@@ -519,7 +519,7 @@ def bookings():
 		query = Booking.query.join(Booking.user).join(Booking.trek)
 		
 		if booking_id:
-			query = query.filter_by(booking_id=booking_id)
+			query = query.filter(Booking.booking_id==booking_id)
 			
 		if username:
 			query = query.filter(User.username.ilike(f"%{username}%"))
@@ -531,9 +531,9 @@ def bookings():
 			query = query.filter(Trek.trek_location.ilike(f"%{trek_location}%"))
 			
 		if status:
-			query = query.filter_by(status=status)
+			query = query.filter(Status.status==status)
 			
-		bookings = query.all()
+		bookings = query.order_by(Booking.booking_id.desc()).all()
 
 	return render_template(
 		'admin/bookings.html',
