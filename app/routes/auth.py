@@ -11,20 +11,21 @@ auth = Blueprint('auth', __name__)
 @auth.route('/')
 def home():
 
-	if current_user.is_authenticated:
-		if current_user.role == 'admin':
-			return redirect(url_for('admin.dashboard'))
-		elif current_user.role == 'staff':
-			return redirect(url_for('staff.dashboard'))
-		else:
-			return redirect(url_for('user.dashboard'))
-
 	return redirect(url_for('auth.login'))
+		
 	
 
 #################### REGISTER ####################
 @auth.route('/register', methods=['GET','POST'])
 def register():
+	
+	next_page, msg, msg_type = validate_login(current_user)
+	
+	if next_page:
+		if msg:
+			flash(msg, msg_type)
+		return redirect(next_page)
+	
 	if request.method == 'GET':
 		return render_template('auth/register.html')
 
@@ -73,6 +74,14 @@ def register():
 @auth.route('/login', methods=['GET','POST'])
 def login():
 
+	next_page, msg, msg_type = validate_login(current_user)
+	
+	if next_page:
+		if msg:
+			flash(msg, msg_type)
+			
+		return redirect(next_page)
+
 	if request.method == 'GET':
 				
 		return render_template('auth/login.html')
@@ -90,38 +99,18 @@ def login():
 			
 				login_user(login)
 				
-				if current_user.role == 'admin':
-					return redirect(url_for('admin.dashboard'))
-				
-				elif current_user.role == 'staff':
-				
-					staff = Staff.query.filter_by(login_id=current_user.login_id).first()
+				next_page, msg, msg_type = validate_login(current_user)
+				if msg:
+					flash(msg, msg_type)
 					
-					if staff.status in ["inactive", "pending"]:
-						flash( "Account is inactive", "danger")
-						return redirect(url_for('auth.login'))
-				
-					else:
-						return redirect(url_for('staff.dashboard'))
-				
-				else:
-				
-					from app.models import User
-					user = User.query.filter_by(login_id=current_user.login_id).first()
-					
-					print(user)
-					
-					if user.status == "inactive":
-						logout_user(user)
-						return redirect(url_for('auth.login'))
-						
-					else:
-						return redirect(url_for('user.dashboard'))
+				return redirect(next_page)
 					
 			else:
+				flash("Invalid Password!", "danger")
 				return redirect(url_for('auth.login'))
 				
 		else:
+			flash("Invalid Credentials!", "danger")
 			return redirect(url_for('auth.login'))
 			
 			
@@ -130,3 +119,52 @@ def login():
 def logout():
 	logout_user()
 	return redirect(url_for('auth.login'))
+	
+	
+#################### CUSTOM FUNCTIONS ####################
+def validate_login(current_user):
+	
+	msg = ""
+	msg_type = ""
+	next_page = ""
+
+	if current_user.is_authenticated:
+	
+		login_id = current_user.get_id()
+		if current_user.role == 'admin':
+			msg = "Login Successful!"
+			msg_type = "success"
+			return url_for('admin.dashboard'), msg, msg_type
+			
+		elif current_user.role == 'staff':
+		
+			staff = Staff.query.filter_by(login_id=login_id).first()
+			if staff.status == "inactive":
+				msg = "Your account is currently inactive! Try again later."
+				msg_type = "danger"
+				logout_user()
+				return url_for('auth.login'), msg, msg_type
+				
+			elif staff.status == "active":
+				msg = "Login Successful!"
+				msg_type = "success"
+				return url_for('staff.dashboard'), msg, msg_type
+				
+		elif current_user.role == 'trekker':
+		
+			user = User.query.filter_by(login_id=login_id).first()
+			if user.status == "inactive":
+				msg = "Your account is currently inactive! Try again later."
+				msg_type = "danger"
+				logout_user()
+				return url_for('auth.login'), msg, msg_type
+				
+			elif user.status == "active":
+				msg = "Login Successful!"
+				msg_type = "success"
+				return url_for('user.dashboard'), msg, msg_type
+				
+	else:
+		return next_page, msg, msg_type
+				
+
