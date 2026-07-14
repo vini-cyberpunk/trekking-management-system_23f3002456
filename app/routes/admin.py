@@ -550,6 +550,15 @@ def edit_trek(trek_id):
 			trek.assigned_staff_id = assigned_staff_id
 			
 		if status:
+			if status=="completed":
+				bookings = Booking.query.filter_by(
+					trek_id = trek.trek_id,
+					status = "booked"
+				).all()
+				
+				for booking in bookings:
+					booking.status = "completed"
+				
 			trek.status = status
 			
 		if start_date:

@@ -59,9 +59,9 @@ My Bookings
 
                         <td> {{ trek.trek_location }} </td>
                         
-                        <td> {{ trek.start_date }} </td>
+                        <td> {{ trek.start_date.strftime("%d %B %Y") }} </td>
                         
-                        <td> {{ trek.end_date }} </td>
+                        <td> {{ trek.end_date.strftime("%d %B %Y") }} </td>
                         
                         <td> {{ trek.assigned_staff.staff_name }} </td>
                         

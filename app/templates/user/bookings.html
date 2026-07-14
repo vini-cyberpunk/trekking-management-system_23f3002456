@@ -29,17 +29,17 @@ My Bookings
 
                     <tr>
 
-                        <th> Booking ID </th>
+                        <th class="text-nowrap"> Booking ID </th>
 
-                        <th> Trek Name </th>
+                        <th class="text-nowrap"> Trek Name </th>
 
                         <th> Location </th>
                         
-                        <th> Start Date </th>
+                        <th class="text-nowrap"> Start Date </th>
                         
-                        <th> End Date </th>
+                        <th class="text-nowrap"> End Date </th>
 
-                        <th> Booking Date </th>
+                        <th class="text-nowrap"> Booking Date </th>
 
                         <th> Status </th>
                         
@@ -61,9 +61,9 @@ My Bookings
 
                         <td> {{ booking.trek.trek_location }} </td>
                         
-                        <td> {{ booking.trek.start_date }} </td>
+                        <td> {{ booking.trek.start_date.strftime("%d %B %Y") }} </td>
                         
-                        <td> {{ booking.trek.end_date }} </td>
+                        <td> {{ booking.trek.end_date.strftime("%d %B %Y") }} </td>
 
                         <td> {{ booking.booking_date.strftime("%d %b %Y, %I:%M %p") }} </td>
 

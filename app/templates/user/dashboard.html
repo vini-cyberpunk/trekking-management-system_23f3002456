@@ -107,17 +107,15 @@ Dashboard
 
                         <tr>
 
-                            <th>Trek ID</th>
-
-                            <th>Trek Name</th>
+                            <th class="text-nowrap">Trek Name</th>
 
                             <th>Location</th>
 
                             <th>Duration</th>
 
-                            <th>Start Date</th>
+                            <th class="text-nowrap">Start Date</th>
 
-                            <th>End Date</th>
+                            <th class="text-nowrap">End Date</th>
 
                             <th>Slots</th>
                             
@@ -133,9 +131,7 @@ Dashboard
                         {% for trek in available_treks %}
 
                         <tr>
-
-                            <td> {{ trek.trek_id }} </td>
-
+                        
                             <td> {{ trek.trek_name }} </td>
 
                             <td> {{ trek.trek_location }} </td>
@@ -222,17 +218,17 @@ Dashboard
 
                         <tr>
 
-                            <th> Booking ID </th>
+                            <th class="text-nowrap"> Booking ID </th>
 
-                            <th> Trek Name </th>
+                            <th class="text-nowrap"> Trek Name </th>
 
                             <th> Location </th>
                             
-                            <th> Start Date </th>
+                            <th class="text-nowrap"> Start Date </th>
                             
-                            <th> End Date </th>
+                            <th class="text-nowrap"> End Date </th>
 
-                            <th> Booking Date </th>
+                            <th class="text-nowrap"> Booking Date </th>
 
 							<th> Status </th>
 							

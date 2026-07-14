@@ -20,14 +20,14 @@ def dashboard():
 
 	today = datetime.now()
 	
-	upcoming_treks = bookings.filter(
+	upcoming_treks = bookings.join(Booking.trek).filter(
 		Trek.start_date >= today,
 		Booking.status == "booked"
 	).all()
 	
 	completed_treks = bookings.filter_by( status="completed" ).all()
 	
-	active_treks = bookings.filter(
+	active_treks = bookings.join(Booking.trek).filter(
 		Trek.start_date <= today,
 		Trek.end_date >= today,
 		Booking.status == "booked"
