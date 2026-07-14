@@ -239,15 +239,15 @@ Dashboard
 
                         <tr>
 							
-							<th scope="col"> Trek ID </th>
+							<th class="text-nowrap"> Trek ID </th>
 							
-                            <th scope="col"> Trek Name </th>
+                            <th class="text-nowrap"> Trek Name </th>
                             
-                            <th scope="col"> Location </th>
+                            <th> Location </th>
                             
-                            <th scope="col"> Start Date </th>
+                            <th class="text-nowrap"> Start Date </th>
 
-							<th scope="col"> End Date </th>
+							<th class="text-nowrap"> End Date </th>
 
                             <th scope="col"> Slots </th>
 
@@ -273,9 +273,9 @@ Dashboard
 
                             <td> {{ trek.trek_location }} </td>
                             
-                            <td> {{ trek.start_date }} </td>
+                            <td class="text-nowrap"> {{ trek.start_date.strftime("%d %B %Y") }} </td>
                             
-                            <td> {{ trek.end_date }} </td>
+                            <td class="text-nowrap"> {{ trek.end_date.strftime("%d %B %Y") }} </td>
                             
                             <td> {{ trek.available_slots }} </td>
                             
@@ -344,6 +344,11 @@ Dashboard
                             </td>
 
                         </tr>
+                        
+                        {% else %}
+                        
+                        <tr>
+                        	<td colspan="9" class="text-center"> No Trek Found. </td>
                         
                         {% endfor %}
 
