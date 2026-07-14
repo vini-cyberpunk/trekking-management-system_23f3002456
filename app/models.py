@@ -65,7 +65,7 @@ class Booking(db.Model):
 	__tablename__ = 'booking'
 	booking_id = db.Column(db.Integer, primary_key=True)
 	user_id = db.Column(db.Integer, db.ForeignKey('user.user_id', ondelete='RESTRICT'), nullable=False)
-	trek_id = db.Column(db.Integer, db.ForeignKey('trek.trek_id', ondelete='SET NULL'), nullable=True)
+	trek_id = db.Column(db.Integer, db.ForeignKey('trek.trek_id', ondelete='RESTRICT'), nullable=False)
 	booking_date = db.Column(db.DateTime, nullable=False)
 	status = db.Column(db.Enum('booked','cancelled','completed'), nullable=False)
 	
