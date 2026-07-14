@@ -1,0 +1,121 @@
+{% extends 'user/user_base.html' %}
+
+
+{% block title %}
+
+My Bookings
+
+{% endblock %}
+
+
+
+{% block main_content %}
+
+<div class="card shadow-sm mt-4">
+
+    <div class="card-header">
+
+        <h4 class="mb-0"> Trek History </h4>
+
+    </div>
+
+    <div class="card-body">
+
+        <div class="table-responsive">
+
+            <table class="table table-hover align-middle mb-0">
+
+                <thead>
+
+                    <tr>
+
+                        <th class="text-nowrap"> Trek Name </th>
+
+                        <th> Location </th>
+                        
+                        <th class="text-nowrap"> Start Date </th>
+                        
+                        <th class="text-nowrap"> End Date </th>
+
+                        <th class="text-nowrap"> Staff Name </th>
+                        
+                        <th class="text-nowrap"> Staff Contact </th>
+                        
+                        <th> Difficulty </th>
+
+                        <th> Status </th>
+
+                    </tr>
+
+                </thead>
+
+                <tbody>
+
+                    {% for trek in treks %}
+
+                    <tr>
+
+                        <td> {{ trek.trek_name }} </td>
+
+                        <td> {{ trek.trek_location }} </td>
+                        
+                        <td> {{ trek.start_date }} </td>
+                        
+                        <td> {{ trek.end_date }} </td>
+                        
+                        <td> {{ trek.assigned_staff.staff_name }} </td>
+                        
+                        <td> {{ trek.assigned_staff.staff_contact }} </td>
+                        
+                        <td>
+		                    <span class="badge
+
+		                        {% if trek.difficulty == 'easy' %}
+		                            text-bg-success
+
+		                        {% elif trek.difficulty == 'moderate' %}
+		                            text-bg-warning
+
+		                        {% else %}
+		                            text-bg-danger
+
+		                        {% endif %}
+		                        
+		                    ">
+
+		                        {{ trek.difficulty.title() }}
+
+		                    </span>
+
+		                </td>
+
+                        <td> {{ trek.status.title() }} </td>
+
+                    </tr>
+
+                    {% else %}
+
+                    <tr>
+
+                        <td colspan="8" class="text-center text-muted">
+                            No Trek found.
+                        </td>
+
+                    </tr>
+
+                    {% endfor %}
+
+                </tbody>
+
+            </table>
+
+        </div>
+
+    </div>
+
+</div>
+
+{% endblock %}
+
+
+

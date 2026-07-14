@@ -155,6 +155,18 @@ def cancel_booking(booking_id):
 	
 	next_page = request.args.get("next")
 	return redirect(next_page)
+	
+
+@user.route('/trek_history', methods=["GET"])
+@login_required
+def trek_history():
+	user = User.query.filter_by(login_id=current_user.get_id()).first()
+	user_id = user.user_id
+	treks = Trek.query.filter(
+		Trek.bookings.any(Booking.user_id == user_id)
+	).all()
+	
+	return render_template('user/trek_history.html', treks=treks)
 
 	
 @user.route('/profile', methods=["GET","POST"])
