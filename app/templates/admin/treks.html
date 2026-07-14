@@ -6,37 +6,128 @@ Manage Treks
 
 {% block main_content %}
 
-<h1 class="dashboard-header text-left"> Manage Treks </h1>
+<h1 class="text-left mt-2"> Manage Treks </h1>
 
-<div class="row p-3 mt-2">
+<div class="row row-cols-lg-4 row-cols-md-3 row-cols-2 g-3 mt-2 mx-md-5 justify-content-center">
 
 	<div class="col">
 	
-		<div class="card d-flex align-items-center">
+		<div class="card shadow-sm">
 		
-			<div class="card-body">
-				Total Treks
-			</div>
-			
-			<div class="card-body">
-				{{ total_treks }}
-			</div>
+			<a class="text-decoration-none text-reset" href="?filter=total">
+		
+				<div class="card-body d-flex flex-column align-items-center">
+				
+					<h6 class="text-muted"> Total Treks </h6>
+				
+					<h3> {{ total_treks|length }} </h3>
+					
+				</div>
+				
+			</a>
 			
 		</div>
 			
 	</div>
 	
+		
+	<div class="col">
+		
+		<div class="card shadow-sm">
+		
+			<a class="text-decoration-none text-reset" href="?filter=pending">
+		
+				<div class="card-body d-flex flex-column align-items-center">
+				
+					<h6 class="text-muted"> Pending Treks </h6>
+				
+					<h3> {{ pending_treks|length }} </h3>
+					
+				</div>
+				
+			</a>
+			
+		</div>
+		
+	</div>
+	
+	
 	<div class="col">
 	
-		<div class="card d-flex align-items-center">
+		<div class="card shadow-sm">
 		
-			<div class="card-body">
-				Open Treks
-			</div>
+			<a class="text-decoration-none text-reset" href="?filter=approved">
+		
+				<div class="card-body d-flex flex-column align-items-center">
+				
+					<h6 class="text-muted"> Approved Treks </h6>
+				
+					<h3> {{ approved_treks|length }} </h3>
+					
+				</div>
+				
+			</a>
 			
-			<div class="card-body">
-				{{ open_treks }}
-			</div>
+		</div>
+		
+	</div>
+	
+	<div class="col">
+	
+		<div class="card shadow-sm">
+		
+			<a class="text-decoration-none text-reset" href="?filter=open">
+		
+				<div class="card-body d-flex flex-column align-items-center">
+				
+					<h6 class="text-muted"> Open Treks </h6>
+				
+					<h3> {{ open_treks|length }} </h3>
+					
+				</div>
+				
+			</a>
+			
+		</div>
+		
+	</div>
+	
+	<div class="col">
+		
+		<div class="card shadow-sm">
+		
+			<a class="text-decoration-none text-reset" href="?filter=active">
+		
+				<div class="card-body d-flex flex-column align-items-center">
+				
+					<h6 class="text-muted"> Ongoing Treks </h6>
+				
+					<h3> {{ active_treks|length }} </h3>
+					
+				</div>
+				
+			</a>
+			
+		</div>
+		
+	</div>
+	
+
+	<div class="col">
+		
+		<div class="card shadow-sm">
+		
+			<a class="text-decoration-none text-reset" href="?filter=closed">
+		
+				<div class="card-body d-flex flex-column align-items-center">
+				
+					<h6 class="text-muted"> Closed Treks </h6>
+				
+					<h3> {{ closed_treks|length }} </h3>
+					
+				</div>
+				
+			</a>
 			
 		</div>
 		
@@ -44,15 +135,19 @@ Manage Treks
 
 	<div class="col">
 		
-		<div class="card d-flex align-items-center">
+		<div class="card shadow-sm">
 		
-			<div class="card-body">
-				Closed Treks
-			</div>
-			
-			<div class="card-body">
-				{{ closed_treks }}
-			</div>
+			<a class="text-decoration-none text-reset" href="?filter=unassigned">
+		
+				<div class="card-body d-flex flex-column align-items-center">
+				
+					<h6 class="text-muted"> Unassigned Treks </h6>
+				
+					<h3> {{ unassigned_treks|length }} </h3>
+					
+				</div>
+				
+			</a>
 			
 		</div>
 		
@@ -60,15 +155,19 @@ Manage Treks
 	
 	<div class="col">
 		
-		<div class="card d-flex align-items-center">
+		<div class="card shadow-sm">
 		
-			<div class="card-body">
-				Unassigned Treks
-			</div>
-			
-			<div class="card-body">
-				{{ unassigned_treks }}
-			</div>
+			<a class="text-decoration-none text-reset" href="?filter=completed">
+		
+				<div class="card-body d-flex flex-column align-items-center">
+				
+					<h6 class="text-muted"> Completed Treks </h6>
+				
+					<h3> {{ completed_treks|length }} </h3>
+					
+				</div>
+				
+			</a>
 			
 		</div>
 		
@@ -79,9 +178,9 @@ Manage Treks
 
 <form method="GET" action="{{ url_for('admin.treks') }}">
 
-	<div class="row mt-2 g-3 align-items-end">
+	<div class="row row-cols-lg-6 row-cols-md-3 row-cols-1 mt-2 g-3 align-items-end">
 	
-		<div class="col-lg-1">
+		<div class="col">
 			<label class="form-label">Trek ID</label>
 
 			<input
@@ -92,7 +191,7 @@ Manage Treks
 				placeholder="ID">
 		</div>
 
-		<div class="col-lg-4">
+		<div class="col">
 			<label class="form-label">Trek Name</label>
 
 			<div class="input-group">
@@ -109,7 +208,7 @@ Manage Treks
 			</div>
 		</div>
 
-		<div class="col-lg-2">
+		<div class="col">
 			<label class="form-label">Location</label>
 
 			<input
@@ -120,18 +219,18 @@ Manage Treks
 				placeholder="Location">
 		</div>
 		
-		<div class="col-lg-1">
-			<label class="form-label">Staff ID</label>
+		<div class="col">
+			<label class="form-label">Staff Name</label>
 
 			<input
-				type="number"
+				type="text"
 				class="form-control"
-				name="staff_id"
-				value="{{ request.args.get('staff_id', '') }}"
-				placeholder="Trek ID">
+				name="staff_name"
+				value="{{ request.args.get('staff_name', '') }}"
+				placeholder="Staffname">
 		</div>
 
-		<div class="col-lg-2">
+		<div class="col">
 		
 			<label class="form-label">Status</label>
 
@@ -146,14 +245,14 @@ Manage Treks
 			
 		</div>
 
-		<div class="col-lg-2">
+		<div class="col">
 			<div class="d-flex gap-2 justify-content-end">
 
 				<button type="submit" class="btn btn-primary">
 				    Search
 				</button>
 
-				<a class="btn btn-outline-secondary" href="{{ url_for('admin.users') }}">
+				<a class="btn btn-outline-secondary" href="{{ url_for('admin.treks') }}">
 				    Reset
 				</a>
 
@@ -171,7 +270,7 @@ Manage Treks
 	
 		<div class="me-auto">
 
-			<a href="#" class="btn btn-primary">
+			<a href="{{ url_for('admin.add_trek', previous=url_for('admin.treks') ) }}" class="btn btn-primary">
 
 				<i class="bi bi-plus me-1"></i>
 
@@ -196,7 +295,7 @@ Manage Treks
 		            <th scope="col">Name</th>
 		            <th scope="col">Location</th>
 		            <th scope="col">Difficulty</th>
-		            <th scope="col">Available Slots<th>
+		            <th scope="col">Available Slots</th>
 		            <th scope="col">Assigned Staff</th>
 		            <th scope="col">Start Date</th>
 		            <th scope="col">End Date</th>
@@ -221,7 +320,7 @@ Manage Treks
 		            
 		            <td>{{ trek.available_slots }}</td>
 		            
-		            <td>{{ trek.assigned_staff_id }}</td>
+		            <td>{{ trek.assigned_staff.staff_name }}</td>
 		            
 		            <td>{{ trek.start_date }}</td>
 		            
@@ -264,18 +363,30 @@ Manage Treks
 		            <td>
 
 		                <div class="d-flex justify-content-center gap-2">
+		                
+		                	<form method="GET" action="{{ url_for('admin.edit_trek', trek_id=trek.trek_id) }}">
+				                
+				                <button
+				                    class="btn btn-sm btn-outline-primary"
+				                    title="Edit">
+				                    <i class="bi bi-pencil-square"></i>
+				                </button>
+				                
+				                <input type="hidden" name="next" value="{{ url_for('admin.treks') }}">
+				                
+				            </form>
+				            
+				            <form method="POST" action="{{ url_for('admin.delete_trek', trek_id=trek.trek_id) }}">
 
-		                    <button
-		                        class="btn btn-sm btn-outline-primary"
-		                        title="Edit">
-		                        <i class="bi bi-pencil-square"></i>
-		                    </button>
-
-		                    <button
-		                        class="btn btn-sm btn-outline-danger"
-		                        title="Delete">
-		                        <i class="bi bi-trash"></i>
-		                    </button>
+				                <button
+				                    class="btn btn-sm btn-outline-danger"
+				                    title="Delete">
+				                    <i class="bi bi-trash"></i>
+				                </button>
+				                
+				                <input type="hidden" name="next" value="{{ url_for('admin.treks') }}">
+				                
+				            </form>
 
 		                </div>
 

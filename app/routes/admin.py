@@ -259,7 +259,81 @@ def delete_staff(staff_id):
 @login_required
 def treks():
 
-	return render_template('admin/treks.html')
+	base_query = Trek.query
+	
+	total_treks = base_query.order_by(Trek.trek_id.desc()).all()
+	pending_treks = base_query.filter_by(status="pending").order_by(Trek.trek_id.desc()).all()
+	approved_treks = base_query.filter_by(status="approved").order_by(Trek.trek_id.desc()).all()
+	open_treks = base_query.filter_by(status="open").order_by(Trek.trek_id.desc()).all()
+	closed_treks = base_query.filter_by(status="closed").order_by(Trek.trek_id.desc()).all()
+	active_treks = base_query.filter_by(status="started").order_by(Trek.trek_id.desc()).all()
+	completed_treks = base_query.filter_by(status="completed").order_by(Trek.trek_id.desc()).all()
+	unassigned_treks = base_query.filter( Trek.assigned_staff == None ).order_by(Trek.trek_id.desc()).all()
+
+	current_filter = request.args.get('filter', '')
+	
+	if current_filter == "total":
+		treks = total_treks
+		
+	elif current_filter == "active":
+		treks = active_treks
+		
+	elif current_filter == "open":
+		treks = open_treks
+		
+	elif current_filter == "pending":
+		treks = pending_treks
+		
+	elif current_filter == "approved":
+		treks = approved_treks
+		
+	elif current_filter == "closed":
+		treks = closed_treks
+		
+	elif current_filter == "completed":
+		treks = completed_treks
+		
+	elif current_filter == "unassigned":
+		treks = unassigned_treks
+		
+	else:
+		query = base_query
+		
+		trek_id = request.args.get('trek_id', '')
+		trek_name = request.args.get('trek_name', '').strip()
+		trek_location = request.args.get('trek_location', '').strip()
+		staff_name = request.args.get('staff_name', '').strip()
+		status = request.args.get('status', '')
+		
+		if trek_id:
+			query = query.filter(Trek.trek_id==trek_id)
+			
+		if trek_name:
+			query = query.filter(Trek.trek_name.ilike(f"%{trek_name}%"))
+			
+		if trek_location:
+			query = query.filter(Trek.trek_location.ilike(f"%{trek_location}%"))
+			
+		if staff_name:
+			query = query.join(Staff, Staff.staff_id==Trek.assigned_staff).filter(Staff.staff_name.ilike(f"%{staff_name}%"))
+			
+		if status:
+			query = query.filter(Trek.status==status)
+		
+		treks=query.order_by(Trek.trek_id.desc()).all()
+
+	return render_template(
+		'admin/treks.html',
+		total_treks=total_treks,
+		pending_treks=pending_treks,
+		approved_treks=approved_treks,
+		open_treks=open_treks,
+		closed_treks=closed_treks,
+		active_treks=active_treks,
+		completed_treks=completed_treks,
+		unassigned_treks=unassigned_treks,
+		treks=treks
+	)
 	
 	
 @admin.route('/trek/<int:trek_id>/update-status', methods=['POST'])
@@ -300,6 +374,8 @@ def delete_trek(trek_id):
 	
 	db.session.delete(trek)
 	db.session.commit()
+	
+	flash("Trek Deleted Successfully!", "success")
 	
 	next_page = request.form.get('next')
 	return redirect(next_page)
@@ -376,7 +452,6 @@ def add_trek():
 		return redirect(next_page)
 
 	previous_page = request.args.get('previous')
-	print(previous_page)
 	return render_template('admin/add_trek.html',staff=staff, previous_page=previous_page)
 	
 	
@@ -401,7 +476,7 @@ def edit_trek(trek_id):
 		duration = request.form.get('duration')
 		status = request.form.get('status')
 		assigned_staff_id = request.form.get('assigned_staff_id')
-		new_slots = int(request.form.get('available_slots'))
+		new_slots = int(request.form.get('total_slots'))
 		
 		if start_date:
 			start_date = datetime.strptime(start_date, "%Y-%m-%d").date()
@@ -451,7 +526,7 @@ def edit_trek(trek_id):
 			trek.duration = int(duration)
 			
 		if new_slots:
-			trek.available_slots = new_slots
+			trek.available_slots = new_slots - booked_slots
 			
 		if assigned_staff_id:
 			trek.assigned_staff_id = (int(assigned_staff_id))
@@ -473,12 +548,21 @@ def edit_trek(trek_id):
 		)
 
 		return redirect(next_page)
+		
+	total_slots = (
+		trek.available_slots +
+		Booking.query.filter_by(
+		    trek_id=trek.trek_id,
+		    status="booked"
+		).count()
+	)
 
 	return render_template(
 		'admin/edit_trek.html',
 		trek_id=trek_id,
 		trek=trek,
 		staff=staff,
+		total_slots=total_slots,
 		next_page=next_page
 	)
 

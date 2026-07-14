@@ -15,9 +15,9 @@ Edit Trek
 
         <form method="POST">
 
-            <div class="row g-3">
+            <div class="row row-cols-lg-3 row-cols-md-2 row-cols-1 g-3">
 
-                <div class="col-md-6">
+                <div class="col">
                     <label class="form-label">Trek Name</label>
                     <input
                         type="text"
@@ -28,7 +28,7 @@ Edit Trek
                         required>
                 </div>
 
-                <div class="col-md-6">
+                <div class="col">
                     <label class="form-label">Location</label>
                     <input
                         type="text"
@@ -39,7 +39,7 @@ Edit Trek
                         required>
                 </div>
 
-                <div class="col-md-4">
+                <div class="col">
                     <label class="form-label">Difficulty</label>
 
                     <select
@@ -66,7 +66,7 @@ Edit Trek
                     </select>
                 </div>
 
-                <div class="col-md-4">
+                <div class="col">
                     <label class="form-label">Duration (Days)</label>
                     <input
                         type="number"
@@ -78,19 +78,19 @@ Edit Trek
                         required>
                 </div>
 
-                <div class="col-md-4">
-                    <label class="form-label">Available Slots</label>
+                <div class="col">
+                    <label class="form-label">Total Slots</label>
                     <input
                         type="number"
-                        name="available_slots"
+                        name="total_slots"
                         class="form-control"
                         min="1"
-                        value="{{ trek.available_slots }}"
+                        value="{{ total_slots }}"
                         {% if trek.status in ["started", "completed"] %}disabled{% endif %}
                         required>
                 </div>
 
-                <div class="col-md-6">
+                <div class="col">
                     <label class="form-label">Start Date</label>
                     <input
                         type="date"
@@ -101,7 +101,7 @@ Edit Trek
                         required>
                 </div>
 
-                <div class="col-md-6">
+                <div class="col">
                     <label class="form-label">End Date</label>
                     <input
                         type="date"
@@ -112,7 +112,7 @@ Edit Trek
                         required>
                 </div>
 
-                <div class="col-md-6">
+                <div class="col">
                     <label class="form-label">Assign Staff</label>
 
                     <select
@@ -137,12 +137,10 @@ Edit Trek
                     </select>
                 </div>
 
-                <div class="col-md-6">
+                <div class="col">
                     <label class="form-label">Status</label>
 
-                    <select
-                        name="status"
-                        class="form-select">
+                    <select name="status" class="form-select" {% if trek.status=="completed" %}disabled{% endif %}>
                         
                         {% if trek.status=="approved" %}
 
@@ -193,6 +191,13 @@ Edit Trek
                         </option>
                         
                         <option value="completed"
+                            {% if trek.status=="completed" %}selected{% endif %}>
+                            Completed
+                        </option>
+                        
+                        {% else %}
+                        
+                         <option value="completed"
                             {% if trek.status=="completed" %}selected{% endif %}>
                             Completed
                         </option>
