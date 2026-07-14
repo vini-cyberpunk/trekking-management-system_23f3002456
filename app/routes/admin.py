@@ -358,6 +358,15 @@ def update_trek_status(trek_id):
 	
 		status = request.form.get('status')
 		
+		if status == "completed":
+			bookings = Booking.query.filter_by(
+				trek_id = trek.trek_id,
+				status = "booked"
+			).all()
+			
+			for booking in bookings:
+				booking.status = "completed"
+		
 		trek.status = status
 		
 		db.session.commit()
@@ -371,6 +380,14 @@ def update_trek_status(trek_id):
 def delete_trek(trek_id):
 
 	trek = Trek.query.get(trek_id)
+	
+	bookings = Booking.query.filter_by(
+		trek_id = trek.trek_id,
+		status = "booked"
+	).all()
+	
+	for booking in bookings:
+		booking.status = "cancelled"
 	
 	db.session.delete(trek)
 	db.session.commit()
@@ -475,8 +492,8 @@ def edit_trek(trek_id):
 		difficulty = request.form.get('difficulty')
 		duration = request.form.get('duration')
 		status = request.form.get('status')
-		assigned_staff_id = request.form.get('assigned_staff_id')
-		new_slots = int(request.form.get('total_slots'))
+		assigned_staff_id = request.form.get('assigned_staff_id', '')
+		new_slots = request.form.get('total_slots', '')
 		
 		if start_date:
 			start_date = datetime.strptime(start_date, "%Y-%m-%d").date()
@@ -494,24 +511,6 @@ def edit_trek(trek_id):
 					trek=trek,
 					next_page=next_page
 				))
-
-		booked_slots = trek.bookings.filter_by(status="booked").count()
-
-		if new_slots < booked_slots:
-
-			flash(
-				f'Available slots cannot be less than registered participants ({booked_slots}).',
-				'danger'
-			)
-
-			return redirect(
-				url_for(
-					'admin.edit_trek',
-					trek_id=trek_id,
-					trek=trek,
-					next_page=next_page
-				)
-			)
 		
 		if trek_name:
 			trek.trek_name = trek_name
@@ -526,10 +525,29 @@ def edit_trek(trek_id):
 			trek.duration = int(duration)
 			
 		if new_slots:
-			trek.available_slots = new_slots - booked_slots
+		
+			booked_slots = trek.bookings.filter_by(status="booked").count()
+
+			if int(new_slots) < booked_slots:
+
+				flash(
+					f'Available slots cannot be less than registered participants ({booked_slots}).',
+					'danger'
+				)
+
+				return redirect(
+					url_for(
+						'admin.edit_trek',
+						trek_id=trek_id,
+						trek=trek,
+						next_page=next_page
+					)
+				)
+		
+			trek.available_slots = int(new_slots) - booked_slots
 			
 		if assigned_staff_id:
-			trek.assigned_staff_id = (int(assigned_staff_id))
+			trek.assigned_staff_id = assigned_staff_id
 			
 		if status:
 			trek.status = status
