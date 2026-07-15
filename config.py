@@ -4,10 +4,9 @@ from dotenv import load_dotenv
 load_dotenv()
 
 class Config:
-	SECRET_KEY = os.environ.get('SECRET_KEY')
-	SQLALCHEMY_DATABASE_URI = os.environ.get('DATABASE_URI')
+	SECRET_KEY = os.getenv('SECRET_KEY', 'secret-key')
+	SQLALCHEMY_DATABASE_URI = os.getenv('DATABASE_URI', 'sqlite:///tmsdb.sqlite3')
 	SQLALCHEMY_TRACK_MODIFICATIONS = False
 	
-	ADMIN_EMAIL = os.environ.get('ADMIN_EMAIL')
-	ADMIN_PASSWORD = os.environ.get('ADMIN_PASSWORD')
-
+	ADMIN_EMAIL = os.getenv('ADMIN_EMAIL', 'admin@treko.com')
+	ADMIN_PASSWORD = os.getenv('ADMIN_PASSWORD', 'admin#123')
