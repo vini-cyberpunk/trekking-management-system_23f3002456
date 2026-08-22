@@ -3,6 +3,7 @@ from flask_sqlalchemy import SQLAlchemy
 from flask_login import LoginManager
 from config import Config
 from werkzeug.security import generate_password_hash
+from flasgger import Swagger
 
 db = SQLAlchemy()
 login = LoginManager()
@@ -10,6 +11,7 @@ login = LoginManager()
 def create_app():
 	app = Flask(__name__)
 	app.config.from_object(Config)
+	swagger = Swagger(app)
 
 	db.init_app(app)
 	login.init_app(app)
@@ -47,4 +49,5 @@ def create_app():
 			db.session.commit()
 			
 	return app
+
 

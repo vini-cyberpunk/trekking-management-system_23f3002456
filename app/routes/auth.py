@@ -18,7 +18,36 @@ def home():
 #################### REGISTER ####################
 @auth.route('/register', methods=['GET','POST'])
 def register():
-	
+	"""
+	Register a new user (trekker or staff)
+	---
+	tags:
+	  - Auth parameters:
+	  - name: email
+	    in: formData
+	    type: string
+	    required: true
+	  - name: name
+	    in: formData
+	    type: string
+	    required: true
+	  - name: contact
+	    in: formData
+	    type: string
+	    required: true
+	  - name: password
+	    in: formData
+	    type: string
+	    required: true
+	  - name: role
+	    in: formData
+	    type: string
+	    enum: [trekker, staff]
+	    required: true
+	responses:
+	  200:
+	    description: Registration page rendered or user redirected to login
+	"""
 	next_page, msg, msg_type = validate_login(current_user)
 	
 	if next_page:
@@ -73,7 +102,25 @@ def register():
 #################### LOGIN ####################
 @auth.route('/login', methods=['GET','POST'])
 def login():
-
+	"""
+	Log in an existing user
+	---
+	tags:
+	  - Auth parameters:
+	  - name: email
+	    in: formData
+	    type: string
+	    required: true
+	  - name: password
+	    in: formData
+	    type: string
+	    required: true
+	responses:
+	  200:
+	    description: Login page rendered or user redirected to role-based dashboard
+	  401:
+	    description: Invalid credentials
+	"""
 	next_page, msg, msg_type = validate_login(current_user)
 	
 	if next_page:
