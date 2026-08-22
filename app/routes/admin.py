@@ -642,7 +642,7 @@ def bookings():
 			query = query.filter(Trek.trek_location.ilike(f"%{trek_location}%"))
 			
 		if status:
-			query = query.filter(Status.status==status)
+			query = query.filter(Booking.status==status)
 			
 		bookings = query.order_by(Booking.booking_id.desc()).all()
 
