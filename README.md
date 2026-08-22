@@ -2,6 +2,12 @@
 
 A Flask-based web application for managing trekking operations with separate dashboards for Admin, Staff, and Trekker users. The application provides trek management, booking management, staff assignment, and user authentication.
 
+## 🔗 Live Demo
+[http://54.79.134.94](http://54.79.134.94)
+
+## 📄 API Documentation
+[http://54.79.134.94/apidocs/](http://54.79.134.94/apidocs/)
+
 ## Features
 
 - Role-based authentication using Flask-Login
